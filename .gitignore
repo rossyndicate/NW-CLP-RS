@@ -1,5 +1,8 @@
 ## filepaths
 0_locs_poly_setup/out/*
+tmp/*
+env/*
+data
 
 ## General R files ----
 # History files
