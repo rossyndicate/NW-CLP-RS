@@ -34,7 +34,8 @@ packages <- c('tidyverse',
               'tarchetypes',
               'nhdplusTools',
               'polylabelr',
-              'sf')
+              'sf',
+              'readxl')
 lapply(packages, package_installer)
 ```
 
