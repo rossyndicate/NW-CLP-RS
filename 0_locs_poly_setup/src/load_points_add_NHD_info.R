@@ -1,3 +1,16 @@
+#' Function to load a {sf} of points from a tibble and add the associated information
+#' from the NHDPlusHR polygon associated with that point.
+#' 
+#' @param points a tibble of locations with columns Latitude and Longitude in
+#' EPSG:4326 (WGS 84)
+#' @param polygons NHDPlusHR polygons {sf}
+#' @returns filepath for new {sf} file that contains the information from the 
+#' NHDPlusHR polygon associated with it
+#' 
+#' @note This has a hardcoded `data_group` and `location_type` variable in it
+#' such that this function is not generalizable.
+#' 
+#' 
 load_points_add_NHD_info <- function(points, polygons) {
   pts_sf <- st_as_sf(points, 
            crs = 'EPSG:4326', 

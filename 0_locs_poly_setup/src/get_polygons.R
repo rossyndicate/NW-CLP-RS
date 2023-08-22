@@ -1,3 +1,13 @@
+#' Function to download NHDPlusHR HUC-4 geopackages that contain all NHD layers from 
+#' a HUC
+#' 
+#' @param HUC a 4-digit or longer HUC value
+#' @param minimum_sqkm a numeric threshold value to filter waterbodies, in square 
+#' kilometers; if specified as NA_real_, no filter will be applied
+#' @returns filepath for new {sf} file that contains the filtered polygons
+#' 
+#' 
+#' 
 get_polygons <-  function(HUC, minimum_sqkm) {
   #check for out folder, create if not present
   if (dir.exists('0_locs_poly_setup/out/') == FALSE) {
@@ -34,6 +44,4 @@ get_polygons <-  function(HUC, minimum_sqkm) {
     write_sf(huc_wbd, paste0('0_locs_poly_setup/out/', huc_type, '_', HUC, '_NHDPlusHR_polygons.gpkg'), append = F)
   }
   return(paste0('0_locs_poly_setup/out/', huc_type, '_', HUC, '_NHDPlusHR_polygons.gpkg'))
-  # remove tmp folder and contents
-  unlink('tmp', recursive = T)
 }
