@@ -1,4 +1,4 @@
-#' Function to convert a {sf} of points to a tibble, retaining the Latitude and 
+#' Function to convert a {sf} of points to a .csv, retaining the Latitude and 
 #' Longitude measures
 #' 
 #' @param points a {sf} points object 

@@ -15,12 +15,12 @@ get_polygons <-  function(HUC, minimum_sqkm) {
   }
   
   # get temp directory for download of HR .gdb files
-  temp_dir = tempdir()
+  temp_dir <- tempdir()
   
   #set timeout for longer per issue #341: https://github.com/DOI-USGS/nhdplusTools/issues
   options(timeout = 60000)
 
-  huc_type = paste0('huc', nchar(HUC))
+  huc_type <- paste0('huc', nchar(HUC))
   # and download the HUC4 HR file
   huc4 <- str_sub(HUC, 1, 4)
   
