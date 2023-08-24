@@ -9,8 +9,10 @@ tar_option_set(
 
 # source functions
 tar_source(files = c(
-  '0_locs_poly_setup.R'
+  '0_locs_poly_setup.R',
+  '1_historical_RS_data_collation.R'
 ))
 
 # Full targets list
-c(p0_targets_list)
+c(p0_targets_list,
+  p1_targets_list)
