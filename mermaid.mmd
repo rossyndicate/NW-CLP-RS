@@ -9,44 +9,61 @@ graph LR
   end
   subgraph Graph
     direction LR
-    x50563b84aeff812f(["p0_make_NW_CLP_centers"]):::uptodate --> x18334dc3bd308c80(["p0_NW_CLP_centers_file"]):::uptodate
     x0da305746ca4c2ac["p0_get_NW_polygons"]:::uptodate --> x4293b59ae813e46d(["p0_NW_polygons_file"]):::uptodate
-    xe20ea0f06825fcb2(["p0_collated_pts_file_file"]):::uptodate --> xd335ab5b83d379a4(["p0_collated_pts_file"]):::uptodate
     x8646bc4bbb368426(["p0_NW_locs_file_file"]):::uptodate --> xca652bad5dca7079(["p0_NW_locs_file"]):::uptodate
-    xd420f12bba7d9bb5(["p0_make_NW_station_points"]):::uptodate --> x48fad8921fed8075(["p0_NW_station_points_file"]):::uptodate
-    xf7e743aae0fe878c(["p0_collated_pts_to_csv"]):::uptodate --> xe20ea0f06825fcb2(["p0_collated_pts_file_file"]):::uptodate
-    xaf07a05bf3aaf1b9>"get_hucs_from_points"]:::uptodate --> x41b0973033fc4193(["p0_get_NW_hucs"]):::uptodate
-    xca652bad5dca7079(["p0_NW_locs_file"]):::uptodate --> x41b0973033fc4193(["p0_get_NW_hucs"]):::uptodate
-    xdec52b017fc2c2ab(["p0_make_collated_points"]):::uptodate --> x108ae07a71408143(["p0_collated_points_file"]):::uptodate
-    x15e6a9c96ca0d2e4(["p0_make_CLP_polygon"]):::uptodate --> x4b02b324118878ed(["p0_CLP_polygons_file"]):::uptodate
-    x381670d2b9b2e829>"get_polygons"]:::uptodate --> x15e6a9c96ca0d2e4(["p0_make_CLP_polygon"]):::uptodate
-    x381670d2b9b2e829>"get_polygons"]:::uptodate --> xc6a497bc8fa76c9a["p0_get_NW_NHD"]:::uptodate
-    x41b0973033fc4193(["p0_get_NW_hucs"]):::uptodate --> xc6a497bc8fa76c9a["p0_get_NW_NHD"]:::uptodate
-    x5e3bef274e2f4473(["p0_NW_CLP_polygons_file"]):::uptodate --> x2ee286d7ae06cbde(["p0_NW_CLP_polygons"]):::uptodate
-    xc22133783951f2d0(["p0_NW_station_locs_file"]):::uptodate --> x237ecf9f93eb4158(["p0_NW_station_locs"]):::uptodate
-    x48fad8921fed8075(["p0_NW_station_points_file"]):::uptodate --> x0610546e195b120e(["p0_NW_station_points"]):::uptodate
-    x4b02b324118878ed(["p0_CLP_polygons_file"]):::uptodate --> x42c031fba8debd32(["p0_CLP_polygons"]):::uptodate
+    x81eb2ab69a337002>"get_AOI_centers"]:::uptodate --> x50563b84aeff812f(["p0_make_NW_CLP_centers"]):::uptodate
+    x2ee286d7ae06cbde(["p0_NW_CLP_polygons"]):::uptodate --> x50563b84aeff812f(["p0_make_NW_CLP_centers"]):::uptodate
+    x925445b64f5515ad>"combine_metadata_with_pulls"]:::uptodate --> x82c1fa3998fea655(["p1_combined_regional_metadata_data"]):::uptodate
+    x6ddd0a421aacf5ca(["p1_collate_historical_regional"]):::uptodate --> x82c1fa3998fea655(["p1_combined_regional_metadata_data"]):::uptodate
+    x18334dc3bd308c80(["p0_NW_CLP_centers_file"]):::uptodate --> xb80fb9337d7b279c(["p0_NW_CLP_centers"]):::uptodate
+    x108ae07a71408143(["p0_collated_points_file"]):::uptodate --> xb8ec1e5bb773db16(["p0_collated_points"]):::uptodate
+    x8a2822f6635bd6b5>"collate_csvs_from_drive"]:::uptodate --> x03f12ac7fcdb560d(["p1_collate_historical_NW_CLP"]):::uptodate
+    x21d7f9521d9a748c(["p1_download_historical_NW_CLP"]):::uptodate --> x03f12ac7fcdb560d(["p1_collate_historical_NW_CLP"]):::uptodate
+    x8a2822f6635bd6b5>"collate_csvs_from_drive"]:::uptodate --> x6ddd0a421aacf5ca(["p1_collate_historical_regional"]):::uptodate
+    xf0c6747b4b8ee477(["p1_download_historical_regional"]):::uptodate --> x6ddd0a421aacf5ca(["p1_collate_historical_regional"]):::uptodate
     xbd672cf7550f2af2>"load_points_add_NHD_info"]:::uptodate --> xd420f12bba7d9bb5(["p0_make_NW_station_points"]):::uptodate
     x087868ac22b27bfc(["p0_NW_polygons"]):::uptodate --> xd420f12bba7d9bb5(["p0_make_NW_station_points"]):::uptodate
     x237ecf9f93eb4158(["p0_NW_station_locs"]):::uptodate --> xd420f12bba7d9bb5(["p0_make_NW_station_points"]):::uptodate
-    xb8ec1e5bb773db16(["p0_collated_points"]):::uptodate --> xf7e743aae0fe878c(["p0_collated_pts_to_csv"]):::uptodate
-    x5b61bf087fabd667>"points_to_csv"]:::uptodate --> xf7e743aae0fe878c(["p0_collated_pts_to_csv"]):::uptodate
+    xc22133783951f2d0(["p0_NW_station_locs_file"]):::uptodate --> x237ecf9f93eb4158(["p0_NW_station_locs"]):::uptodate
+    xd420f12bba7d9bb5(["p0_make_NW_station_points"]):::uptodate --> x48fad8921fed8075(["p0_NW_station_points_file"]):::uptodate
+    x5e3bef274e2f4473(["p0_NW_CLP_polygons_file"]):::uptodate --> x2ee286d7ae06cbde(["p0_NW_CLP_polygons"]):::uptodate
+    x4b02b324118878ed(["p0_CLP_polygons_file"]):::uptodate --> x42c031fba8debd32(["p0_CLP_polygons"]):::uptodate
     xfbf236c5a2d16b7f>"combine_and_simplify_sfs"]:::uptodate --> x25a0c6bfeddbfd1c(["p0_make_NW_CLP_polygons"]):::uptodate
     x42c031fba8debd32(["p0_CLP_polygons"]):::uptodate --> x25a0c6bfeddbfd1c(["p0_make_NW_CLP_polygons"]):::uptodate
     x087868ac22b27bfc(["p0_NW_polygons"]):::uptodate --> x25a0c6bfeddbfd1c(["p0_make_NW_CLP_polygons"]):::uptodate
-    x25a0c6bfeddbfd1c(["p0_make_NW_CLP_polygons"]):::uptodate --> x5e3bef274e2f4473(["p0_NW_CLP_polygons_file"]):::uptodate
+    x48fad8921fed8075(["p0_NW_station_points_file"]):::uptodate --> x0610546e195b120e(["p0_NW_station_points"]):::uptodate
     x4293b59ae813e46d(["p0_NW_polygons_file"]):::uptodate --> x087868ac22b27bfc(["p0_NW_polygons"]):::uptodate
-    x18334dc3bd308c80(["p0_NW_CLP_centers_file"]):::uptodate --> xb80fb9337d7b279c(["p0_NW_CLP_centers"]):::uptodate
+    xe6114c4964b2ed63>"download_csvs_from_drive"]:::uptodate --> x21d7f9521d9a748c(["p1_download_historical_NW_CLP"]):::uptodate
+    xd335ab5b83d379a4(["p0_collated_pts_file"]):::uptodate --> x21d7f9521d9a748c(["p1_download_historical_NW_CLP"]):::uptodate
+    x25a0c6bfeddbfd1c(["p0_make_NW_CLP_polygons"]):::uptodate --> x5e3bef274e2f4473(["p0_NW_CLP_polygons_file"]):::uptodate
+    xdec52b017fc2c2ab(["p0_make_collated_points"]):::uptodate --> x108ae07a71408143(["p0_collated_points_file"]):::uptodate
+    x925445b64f5515ad>"combine_metadata_with_pulls"]:::uptodate --> x69b69692f485061f(["p1_combined_NW_CLP_metadata_data"]):::uptodate
+    x03f12ac7fcdb560d(["p1_collate_historical_NW_CLP"]):::uptodate --> x69b69692f485061f(["p1_combined_NW_CLP_metadata_data"]):::uptodate
+    x15e6a9c96ca0d2e4(["p0_make_CLP_polygon"]):::uptodate --> x4b02b324118878ed(["p0_CLP_polygons_file"]):::uptodate
+    xb8ec1e5bb773db16(["p0_collated_points"]):::uptodate --> xf7e743aae0fe878c(["p0_collated_pts_to_csv"]):::uptodate
+    x5b61bf087fabd667>"points_to_csv"]:::uptodate --> xf7e743aae0fe878c(["p0_collated_pts_to_csv"]):::uptodate
     xfbf236c5a2d16b7f>"combine_and_simplify_sfs"]:::uptodate --> xdec52b017fc2c2ab(["p0_make_collated_points"]):::uptodate
     xb80fb9337d7b279c(["p0_NW_CLP_centers"]):::uptodate --> xdec52b017fc2c2ab(["p0_make_collated_points"]):::uptodate
     x0610546e195b120e(["p0_NW_station_points"]):::uptodate --> xdec52b017fc2c2ab(["p0_make_collated_points"]):::uptodate
-    x108ae07a71408143(["p0_collated_points_file"]):::uptodate --> xb8ec1e5bb773db16(["p0_collated_points"]):::uptodate
+    xe20ea0f06825fcb2(["p0_collated_pts_file_file"]):::uptodate --> xd335ab5b83d379a4(["p0_collated_pts_file"]):::uptodate
+    x381670d2b9b2e829>"get_polygons"]:::uptodate --> x15e6a9c96ca0d2e4(["p0_make_CLP_polygon"]):::uptodate
     xc6a497bc8fa76c9a["p0_get_NW_NHD"]:::uptodate --> x0da305746ca4c2ac["p0_get_NW_polygons"]:::uptodate
     xca652bad5dca7079(["p0_NW_locs_file"]):::uptodate --> x0da305746ca4c2ac["p0_get_NW_polygons"]:::uptodate
     xb6046b564c2b17c1>"select_polygons_by_points"]:::uptodate --> x0da305746ca4c2ac["p0_get_NW_polygons"]:::uptodate
     x41b0973033fc4193(["p0_get_NW_hucs"]):::uptodate --> x0da305746ca4c2ac["p0_get_NW_polygons"]:::uptodate
-    x81eb2ab69a337002>"get_AOI_centers"]:::uptodate --> x50563b84aeff812f(["p0_make_NW_CLP_centers"]):::uptodate
-    x2ee286d7ae06cbde(["p0_NW_CLP_polygons"]):::uptodate --> x50563b84aeff812f(["p0_make_NW_CLP_centers"]):::uptodate
+    xe6114c4964b2ed63>"download_csvs_from_drive"]:::uptodate --> xf0c6747b4b8ee477(["p1_download_historical_regional"]):::uptodate
+    xd335ab5b83d379a4(["p0_collated_pts_file"]):::uptodate --> xf0c6747b4b8ee477(["p1_download_historical_regional"]):::uptodate
+    xf7e743aae0fe878c(["p0_collated_pts_to_csv"]):::uptodate --> xe20ea0f06825fcb2(["p0_collated_pts_file_file"]):::uptodate
+    x50563b84aeff812f(["p0_make_NW_CLP_centers"]):::uptodate --> x18334dc3bd308c80(["p0_NW_CLP_centers_file"]):::uptodate
+    x69b69692f485061f(["p1_combined_NW_CLP_metadata_data"]):::uptodate --> x09dc50a129275f2e(["p1_collated_files"]):::uptodate
+    x82c1fa3998fea655(["p1_combined_regional_metadata_data"]):::uptodate --> x09dc50a129275f2e(["p1_collated_files"]):::uptodate
+    x381670d2b9b2e829>"get_polygons"]:::uptodate --> xc6a497bc8fa76c9a["p0_get_NW_NHD"]:::uptodate
+    x41b0973033fc4193(["p0_get_NW_hucs"]):::uptodate --> xc6a497bc8fa76c9a["p0_get_NW_NHD"]:::uptodate
+    xdcbbc71ec73ed665>"baseline_QAQC_RS_data"]:::uptodate --> x1b38c722e2296193["p1_QAQC_filter_data"]:::uptodate
+    x09dc50a129275f2e(["p1_collated_files"]):::uptodate --> x1b38c722e2296193["p1_QAQC_filter_data"]:::uptodate
+    xaf07a05bf3aaf1b9>"get_hucs_from_points"]:::uptodate --> x41b0973033fc4193(["p0_get_NW_hucs"]):::uptodate
+    xca652bad5dca7079(["p0_NW_locs_file"]):::uptodate --> x41b0973033fc4193(["p0_get_NW_hucs"]):::uptodate
+    xec0704e9d53864a1{{"p1_targets_list"}}:::outdated --> xec0704e9d53864a1{{"p1_targets_list"}}:::outdated
     x251b431606ed97b5{{"p0_targets_list"}}:::outdated --> x251b431606ed97b5{{"p0_targets_list"}}:::outdated
   end
   classDef uptodate stroke:#000000,color:#ffffff,fill:#354823;
@@ -57,4 +74,5 @@ graph LR
   linkStyle 2 stroke-width:0px;
   linkStyle 3 stroke-width:0px;
   linkStyle 4 stroke-width:0px;
-  linkStyle 43 stroke-width:0px;
+  linkStyle 59 stroke-width:0px;
+  linkStyle 60 stroke-width:0px;
