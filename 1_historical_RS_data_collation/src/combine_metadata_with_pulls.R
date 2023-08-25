@@ -1,3 +1,19 @@
+#function to grab the row id
+grabRowid <- function(sys_idx){
+  parsed <- str_split(sys_idx, '_')
+  str_len <- length(unlist(parsed))
+  unlist(parsed)[str_len]
+}
+
+#function to grab the system index
+grabSystemIndex <- function(sys_idx){
+  parsed <- str_split(sys_idx, '_')
+  str_len <- length(unlist(parsed))
+  parsed_sub <- unlist(parsed)[1:(str_len-1)]
+  str_flatten(parsed_sub, collapse = '_')
+}
+
+
 #' Function to combine a reduced set of metadata with the upstream pull data
 #'
 #' @param file_prefix specified string that matches the file group to collate
@@ -40,8 +56,13 @@ combine_metadata_with_pulls <- function(file_prefix, version_identifier) {
   # check for point files
   if (any(grepl("point", files))) {
     point_file <- files[grepl("point", files)]
-    points <- read_feather(point_file) %>%
-      rename(system.index = `system:index`) %>%
+    points <- read_feather(point_file)
+    # format system index for join - right now it has a rowid and the unique LS id
+    # could also do this rowwise, but this method is a little faster
+    points$rowid <- as.character(map(points$`system:index`, grabRowid))
+    points$system.index <- as.character(map(points$`system:index`, grabSystemIndex))
+    points <- points %>% 
+      select(-`system:index`) %>% 
       left_join(., metadata_light) %>% 
       mutate(DSWE = str_sub(source, -28, -24))
     # break out the DSWE 1 data
@@ -71,8 +92,13 @@ combine_metadata_with_pulls <- function(file_prefix, version_identifier) {
   # check to see if there are any center point data
   if (any(grepl("centers", files))) {
     center_file <- files[grepl("centers", files)]
-    centers <- read_feather(center_file) %>%
-      rename(system.index = `system:index`) %>%
+    centers <- read_feather(center_file)
+    # format system index for join - right now it has a rowid and the unique LS id
+    # could also do this rowwise, but this method is a little faster
+    centers$rowid <- as.character(map(centers$`system:index`, grabRowid))
+    centers$system.index <- as.character(map(centers$`system:index`, grabSystemIndex))
+    centers <- centers %>% 
+      select(-`system:index`) %>% 
       left_join(., metadata_light) %>% 
       mutate(DSWE = str_sub(source, -28, -24))
     # break out the DSWE 1 data
@@ -102,8 +128,13 @@ combine_metadata_with_pulls <- function(file_prefix, version_identifier) {
   # check for polygons files
   if (any(grepl("poly", files))) {
     poly_file <- files[grepl("poly", files)]
-    poly <- read_feather(poly_file) %>% 
-      rename(system.index = `system:index`) %>% 
+    poly <- read_feather(poly_file)
+    # format system index for join - right now it has a rowid and the unique LS id
+    # could also do this rowwise, but this method is a little faster
+    poly$rowid <- as.character(map(poly$`system:index`, grabRowid))
+    poly$system.index <- as.character(map(poly$`system:index`, grabSystemIndex))
+    poly <- poly %>% 
+      select(-`system:index`) %>% 
       left_join(., metadata_light) %>% 
       mutate(DSWE = str_sub(source, -28, -24))
     # break out the DSWE 1 data
