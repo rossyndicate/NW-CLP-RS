@@ -9,6 +9,7 @@ tar_source("1_historical_RS_data_collation/src/")
 # At this time, this is run outside of the {targets} workflow presented here. 
 
 p1_targets_list <- list(
+  # download the NW and CLP data from Google Drive
   tar_target(
     name = p1_download_historical_NW_CLP,
     command = {
@@ -17,6 +18,7 @@ p1_targets_list <- list(
       },
     packages = c("tidyverse", "googledrive")
   ),
+  # and do the same for the regional data
   tar_target(
     name = p1_download_historical_regional,
     command = {
@@ -25,6 +27,8 @@ p1_targets_list <- list(
       },
     packages = c("tidyverse", "googledrive")
   ),
+  # and load/collate those data, with each type as a new feather file
+  # first with the NW/CLP data
   tar_target(
     name = p1_collate_historical_NW_CLP,
     command = {
@@ -33,6 +37,7 @@ p1_targets_list <- list(
       },
     packages = c("tidyverse", "feather")
   ),
+  # and now for the regional data
   tar_target(
     name = p1_collate_historical_regional,
     command = {
@@ -41,6 +46,8 @@ p1_targets_list <- list(
       },
     packages = c("tidyverse", "feather")
   ),
+  # now, add metadata to tabular summaries and break out the DSWE 1/3 data
+  # first for the regional data
   tar_target(
     name = p1_combined_regional_metadata_data,
     command = {
@@ -49,6 +56,7 @@ p1_targets_list <- list(
     },
     packages = c("tidyverse", "feather")
   ),
+  # and then for the NW/CLP data
   tar_target(
     name = p1_combined_NW_CLP_metadata_data,
     command = {
@@ -57,6 +65,7 @@ p1_targets_list <- list(
     },
     packages = c("tidyverse", "feather")
   ),
+  # make a list of the collated files to branch over
   tar_target(
     name = p1_collated_files,
     command = {
@@ -68,6 +77,7 @@ p1_targets_list <- list(
         .[grepl('collated', .)]
       }
   ),
+  # pass the QAQC filter over each of the listed files, creating filtered files
   tar_target(
     name = p1_QAQC_filter_data,
     command = baseline_QAQC_RS_data(p1_collated_files),
