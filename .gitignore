@@ -6,6 +6,8 @@
 2_calculate_handoff_coefficients/mid/*
 2_calculate_handoff_coefficients/figs/*
 2_calculate_handoff_coefficients/out/*
+3_apply_handoff_coefficients/out/*
+3_apply_handoff_coefficients/figs/*
 tmp/*
 env/*
 data

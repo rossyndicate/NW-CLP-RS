@@ -23,28 +23,28 @@ calculate_8_7_handoff <- function(filtered, band){
     ungroup()
   
   # filter out for Landsat 7, limiting input sites to those with 10y
-  x <- filtered %>% 
+  y <- filtered %>% 
     filter(date > ymd('2013-02-11'), 
            date < ymd('2022-04-16'), 
            mission == 'LANDSAT_7') %>% 
     inner_join(., filter_summary)
-  x_q <- x %>%
+  y_q <- y %>%
     .[,band] %>%
     as.vector(.)
   # and calculate quantiles, dropping 0 and 1
-  x_q <- x_q[[1]] %>%
+  y_q <- y_q[[1]] %>%
     quantile(., seq(.01,.99, .01))
   
   # do the same for LS 8
-  y <- filtered %>%
+  x <- filtered %>%
     filter(date > ymd('2013-02-11'), 
            date < ymd('2022-04-16'), 
            mission == 'LANDSAT_8') %>% 
     inner_join(., filter_summary)
-  y_q <- y %>%
+  x_q <- x %>%
     .[,band] %>%
     as.vector(.)
-  y_q <- y_q[[1]] %>%
+  x_q <- x_q[[1]] %>%
     quantile(., seq(.01,.99, .01))
   
   poly <- lm(y_q ~ poly(x_q, 2, raw = T))
@@ -55,8 +55,8 @@ calculate_8_7_handoff <- function(filtered, band){
        width = 350, height = 350)
   plot(y_q ~ x_q,
        main = paste0(band, ' LS 8-7 handoff'),
-       xlab = '0.01 Quantile Values for LS7 Rrs',
-       ylab = '0.01 Quantile Values for LS8 Rrs')
+       ylab = '0.01 Quantile Values for LS7 Rrs',
+       xlab = '0.01 Quantile Values for LS8 Rrs')
   lines(sort(x_q),
         fitted(poly)[order(x_q)],
         col = "blue",
@@ -80,8 +80,8 @@ calculate_8_7_handoff <- function(filtered, band){
                max_in_val = max(x_q),
                sat_corr = 'LANDSAT_8',
                sat_to = 'LANDSAT_7',
-               L7_scene_count = length(unique(x$system.index)),
-               L8_scene_count = length(unique(y$system.index))) 
+               L7_scene_count = length(unique(y$system.index)),
+               L8_scene_count = length(unique(x$system.index))) 
   write_csv(summary, file.path('2_calculate_handoff_coefficients/mid/',
                                paste0(band, '_8_7_poly_handoff.csv')))
 }

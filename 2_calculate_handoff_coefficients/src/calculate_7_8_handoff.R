@@ -23,28 +23,28 @@ calculate_7_8_handoff <- function(filtered, band){
     ungroup()
   
   # filter out for Landsat 8, limiting input sites to those with 10x
-  x <- filtered %>%
+  y <- filtered %>%
     filter(date > ymd('2013-02-11'), 
            date < ymd('2022-04-16'), 
            mission == 'LANDSAT_8') %>% 
     inner_join(., filter_summary)
-  x_q <- x %>%
+  y_q <- y %>%
     .[,band] %>%
     as.vector(.)
-  x_q <- x_q[[1]] %>%
+  y_q <- y_q[[1]] %>%
     quantile(., seq(.01,.99, .01))
   
   # do the same for LS 7
-  y <- filtered %>% 
+  x <- filtered %>% 
     filter(date > ymd('2013-02-11'), 
            date < ymd('2022-04-16'), 
            mission == 'LANDSAT_7') %>% 
     inner_join(., filter_summary)
-  y_q <- y %>%
+  x_q <- x %>%
     .[,band] %>%
     as.vector(.)
   # and calculate quantiles, dropping 0 and 1
-  y_q <- y_q[[1]] %>%
+  x_q <- x_q[[1]] %>%
     quantile(., seq(.01,.99, .01))
   
   
@@ -81,8 +81,8 @@ calculate_7_8_handoff <- function(filtered, band){
                max_in_val = max(x_q),
                sat_corr = 'LANDSAT_7',
                sat_to = 'LANDSAT_8',
-               L8_scene_count = length(unique(x$system.index)),
-               L7_scene_count = length(unique(y$system.index))) 
+               L8_scene_count = length(unique(y$system.index)),
+               L7_scene_count = length(unique(x$system.index))) 
   write_csv(summary, file.path('2_calculate_handoff_coefficients/mid/',
                                paste0(band, '_7_8_poly_handoff.csv')))
 }
