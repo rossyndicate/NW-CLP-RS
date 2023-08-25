@@ -10,6 +10,11 @@
 #' of data are automatically detected. Data type is created in the config.yml 
 #' file of the associated Landsat-C2-SRST branch. 
 #' 
+#' @notes for a reason I do not understand, map_dfr creates duplicates of rows
+#' sometimes up to 4 times. Each of the collations in this funciton (to all_meta,
+#' all_points, etc) run a distinct() function that dramatically reduces the number 
+#' of rows.
+#' 
 #' 
 collate_csvs_from_drive <- function(file_prefix, version_identifier) {
   # get the list of files in the `in` directory 
@@ -20,7 +25,8 @@ collate_csvs_from_drive <- function(file_prefix, version_identifier) {
   dir.create("1_historical_RS_data_collation/mid/")
 
   meta_files <- files[grepl("meta", files)]
-  all_meta <- map_dfr(meta_files, read_csv)
+  all_meta <- map_dfr(meta_files, read_csv) %>% 
+    distinct()
   write_feather(all_meta, file.path("1_historical_RS_data_collation/mid/",
                                   paste0(file_prefix, "_collated_metadata_",
                                          version_identifier, ".feather")))
@@ -32,7 +38,8 @@ collate_csvs_from_drive <- function(file_prefix, version_identifier) {
     all_points <- map_dfr(.x = point_files, 
                          .f = function(.x) {
                            read_csv(.x) %>% mutate(source = .x)
-                           })
+                           }) %>% 
+      distinct()
     write_feather(all_points, file.path("1_historical_RS_data_collation/mid/",
                                     paste0(file_prefix, "_collated_points_",
                                            version_identifier, ".feather")))
@@ -45,7 +52,8 @@ collate_csvs_from_drive <- function(file_prefix, version_identifier) {
     all_centers <- map_dfr(.x = center_files, 
                          .f = function(.x) {
                            read_csv(.x) %>% mutate(source = .x)
-                         })
+                         }) %>% 
+      distinct()
     write_feather(all_centers, file.path("1_historical_RS_data_collation/mid/",
                                     paste0(file_prefix, "_collated_centers_",
                                            version_identifier, ".feather")))
@@ -58,7 +66,8 @@ collate_csvs_from_drive <- function(file_prefix, version_identifier) {
     all_polys <- map_dfr(.x = poly_files,
                          .f = function(.x) {
                            read_csv(.x) %>% mutate(source = .x)
-                         })
+                         }) %>% 
+      distinct()
     write_feather(all_polys, file.path("1_historical_RS_data_collation/mid/",
                                   paste0(file_prefix, "_collated_polygons_",
                                          version_identifier, ".feather")))
