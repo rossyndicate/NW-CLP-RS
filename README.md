@@ -30,7 +30,7 @@ file of each type as needed for the RS workflow.
 
 __p1: 1_historical_RS_data_collation__
 This group of functions downloads and processes GEE output from historical pulls.
-Thhis portion of the workflow is dependent on the successful run of two 
+This portion of the workflow is dependent on the successful run of two 
 branches of the Landsat_C2_SRST repository: nw-poudre-historical and 
 nw-er3z21-historical. At this time, this is run outside of the {targets} workflow 
 presented here. 
