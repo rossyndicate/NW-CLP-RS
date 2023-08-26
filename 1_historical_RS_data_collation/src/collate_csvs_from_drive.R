@@ -39,7 +39,7 @@ collate_csvs_from_drive <- function(file_prefix, version_identifier) {
                          .f = function(.x) {
                            read_csv(.x) %>% mutate(source = .x)
                            }) %>% 
-      distinct()
+      distinct_at(vars(-"source"))
     write_feather(all_points, file.path("1_historical_RS_data_collation/mid/",
                                     paste0(file_prefix, "_collated_points_",
                                            version_identifier, ".feather")))
@@ -53,7 +53,7 @@ collate_csvs_from_drive <- function(file_prefix, version_identifier) {
                          .f = function(.x) {
                            read_csv(.x) %>% mutate(source = .x)
                          }) %>% 
-      distinct()
+      distinct_at(vars(-"source"))
     write_feather(all_centers, file.path("1_historical_RS_data_collation/mid/",
                                     paste0(file_prefix, "_collated_centers_",
                                            version_identifier, ".feather")))
@@ -67,7 +67,7 @@ collate_csvs_from_drive <- function(file_prefix, version_identifier) {
                          .f = function(.x) {
                            read_csv(.x) %>% mutate(source = .x)
                          }) %>% 
-      distinct()
+      distinct_at(vars(-"source"))
     write_feather(all_polys, file.path("1_historical_RS_data_collation/mid/",
                                   paste0(file_prefix, "_collated_polygons_",
                                          version_identifier, ".feather")))

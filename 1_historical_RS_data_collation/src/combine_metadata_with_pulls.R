@@ -1,19 +1,3 @@
-#function to grab the row id
-grabRowid <- function(sys_idx){
-  parsed <- str_split(sys_idx, '_')
-  str_len <- length(unlist(parsed))
-  unlist(parsed)[str_len]
-}
-
-#function to grab the system index
-grabSystemIndex <- function(sys_idx){
-  parsed <- str_split(sys_idx, '_')
-  str_len <- length(unlist(parsed))
-  parsed_sub <- unlist(parsed)[1:(str_len-1)]
-  str_flatten(parsed_sub, collapse = '_')
-}
-
-
 #' Function to combine a reduced set of metadata with the upstream pull data
 #'
 #' @param file_prefix specified string that matches the file group to collate
@@ -59,8 +43,20 @@ combine_metadata_with_pulls <- function(file_prefix, version_identifier) {
     points <- read_feather(point_file)
     # format system index for join - right now it has a rowid and the unique LS id
     # could also do this rowwise, but this method is a little faster
-    points$rowid <- as.character(map(points$`system:index`, grabRowid))
-    points$system.index <- as.character(map(points$`system:index`, grabSystemIndex))
+    points$rowid <- map_chr(.x = points$`system:index`, 
+                            function(.x){
+                              parsed <- str_split(.x, '_')
+                              str_len <- length(unlist(parsed))
+                              unlist(parsed)[str_len]
+                            })
+    points$system.index <- map_chr(.x = points$`system:index`, 
+                                   #function to grab the system index
+                                   function(.x){
+                                     parsed <- str_split(.x, '_')
+                                     str_len <- length(unlist(parsed))
+                                     parsed_sub <- unlist(parsed)[1:(str_len-1)]
+                                     str_flatten(parsed_sub, collapse = '_')
+                                     })
     points <- points %>% 
       select(-`system:index`) %>% 
       left_join(., metadata_light) %>% 
@@ -95,8 +91,20 @@ combine_metadata_with_pulls <- function(file_prefix, version_identifier) {
     centers <- read_feather(center_file)
     # format system index for join - right now it has a rowid and the unique LS id
     # could also do this rowwise, but this method is a little faster
-    centers$rowid <- as.character(map(centers$`system:index`, grabRowid))
-    centers$system.index <- as.character(map(centers$`system:index`, grabSystemIndex))
+    centers$rowid <- map_chr(.x = centers$`system:index`, 
+                             function(.x) {
+                               parsed <- str_split(.x, '_')
+                               str_len <- length(unlist(parsed))
+                               unlist(parsed)[str_len]
+                               })
+    centers$system.index <- map_chr(.x = centers$`system:index`, 
+                                    #function to grab the system index
+                                    function(.x) {
+                                      parsed <- str_split(.x, '_')
+                                      str_len <- length(unlist(parsed))
+                                      parsed_sub <- unlist(parsed)[1:(str_len-1)]
+                                      str_flatten(parsed_sub, collapse = '_')
+                                    })
     centers <- centers %>% 
       select(-`system:index`) %>% 
       left_join(., metadata_light) %>% 
@@ -131,8 +139,20 @@ combine_metadata_with_pulls <- function(file_prefix, version_identifier) {
     poly <- read_feather(poly_file)
     # format system index for join - right now it has a rowid and the unique LS id
     # could also do this rowwise, but this method is a little faster
-    poly$rowid <- as.character(map(poly$`system:index`, grabRowid))
-    poly$system.index <- as.character(map(poly$`system:index`, grabSystemIndex))
+    poly$rowid <- map_chr(.x = poly$`system:index`, 
+                          function(.x) {
+                            parsed <- str_split(.x, '_')
+                            str_len <- length(unlist(parsed))
+                            unlist(parsed)[str_len]
+                          })
+    poly$system.index <- map_chr(.x = poly$`system:index`, 
+                                 #function to grab the system index
+                                 function(.x) {
+                                   parsed <- str_split(.x, '_')
+                                   str_len <- length(unlist(parsed))
+                                   parsed_sub <- unlist(parsed)[1:(str_len-1)]
+                                   str_flatten(parsed_sub, collapse = '_')
+                                 })
     poly <- poly %>% 
       select(-`system:index`) %>% 
       left_join(., metadata_light) %>% 
