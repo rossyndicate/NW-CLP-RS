@@ -38,7 +38,8 @@ packages <- c("tidyverse",
               "sf",
               "readxl",
               "googledrive",
-              "feather")
+              "feather",
+              "cowplot")
 lapply(packages, package_installer)
 ```
 
@@ -53,6 +54,11 @@ tar_make()
 ```
 
 ### Create a network diagram of the workflow.
+
+```{r}
+tar_visnetwork()
+```
+
 
 ```{r write_mermaid}
 # save the mmd file
