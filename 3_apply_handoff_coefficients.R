@@ -3,9 +3,10 @@ tar_source("3_apply_handoff_coefficients/src/")
 
 # Apply handoff coefficients to dataset(s) -------------
 
-# This pipeline applies handoff coefficients, flags for band values outside of
-# the handoff inputs, exports the analysis-ready file(s), and uploads them to 
-# the ROSSyndicate Drive.
+# This group of functions applies the handoff coefficients to dataset(s), flags for band 
+# values outside of the handoff inputs that created the correction coefficients,
+# and saves the analysis-ready file(s). Additionally, figures are created to 
+# compare the raw, LS7-corrected, and LS8-corrected figures.
 
 p3_targets_list <- list(
   # make a list of the filtered DSWE1 files from the p1 group

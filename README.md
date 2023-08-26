@@ -22,7 +22,9 @@ Contact B for the link to this if needed.
 This workflow incorporates environment settings within an .Renviron document.
 This document is not tracked in GH. Please request this file from B.
 
-### {targets} architecture overview
+--------------------------------------------------------------------------------
+
+## {targets} architecture overview
 
 This targets workflow is broken down into groups of target lists that perform
 functional chunks of the workflow.
@@ -52,3 +54,15 @@ correction to LS 7 values. Additionally, a handoff for Landsat 7 and 9 is
 calculated to harmonize to LS 8 values for workflows that do not require the
 entire LS record. The LS 9 to LS 8 handoffs include calculations for the Aerosol
 band, which may be useful for workflows that only use LS 8 & 9.
+
+**p3: 3_apply_handoff_coefficients**
+
+This group of functions applies the handoff coefficients to dataset(s), flags
+for band values outside of the handoff inputs that created the correction
+coefficients, and saves the analysis-ready file(s). Additionally, figures are
+created to compare the raw, LS7-corrected, and LS8-corrected figures.
+
+**p4: 4_separate_NW_CLP_data**
+
+This group of functions separates out the NW and CLP data for downstream uses
+and saves all primary files in the ROSSyndicate Google Drive.
