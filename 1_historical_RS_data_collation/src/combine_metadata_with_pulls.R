@@ -44,14 +44,14 @@ combine_metadata_with_pulls <- function(file_prefix, version_identifier) {
     # format system index for join - right now it has a rowid and the unique LS id
     # could also do this rowwise, but this method is a little faster
     points$rowid <- map_chr(.x = points$`system:index`, 
-                            function(.x){
+                            function(.x) {
                               parsed <- str_split(.x, '_')
                               str_len <- length(unlist(parsed))
                               unlist(parsed)[str_len]
                             })
     points$system.index <- map_chr(.x = points$`system:index`, 
                                    #function to grab the system index
-                                   function(.x){
+                                   function(.x) {
                                      parsed <- str_split(.x, '_')
                                      str_len <- length(unlist(parsed))
                                      parsed_sub <- unlist(parsed)[1:(str_len-1)]
