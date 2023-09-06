@@ -1,14 +1,17 @@
 ## filepaths
 0_locs_poly_setup/out/*
+0_locs_poly_setup/nhd/*
 1_historical_RS_data_collation/in/*
 1_historical_RS_data_collation/mid/*
 1_historical_RS_data_collation/out/*
 2_calculate_handoff_coefficients/mid/*
-2_calculate_handoff_coefficients/figs/*
 2_calculate_handoff_coefficients/out/*
+2_calculate_handoff_coefficients/figs/*
 3_apply_handoff_coefficients/mid/*
 3_apply_handoff_coefficients/out/*
 3_apply_handoff_coefficients/figs/*
+4_separate_NW_CLP_data/out/*
+
 tmp/*
 env/*
 data
