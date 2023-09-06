@@ -25,7 +25,7 @@ functional chunks of the workflow.
 
 __p0: 0_locs_poly_setup__
 This group sets up the locations and polygon files for RS retrieval. The group 
-of funcitons collates a few different polygon and point files into a single
+of functions collates a few different polygon and point files into a single
 file of each type as needed for the RS workflow. 
 
 __p1: 1_historical_RS_data_collation__
