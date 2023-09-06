@@ -1,3 +1,6 @@
+#' @title Add NHD information to a tibble containing points 
+#' 
+#' @description
 #' Function to load a {sf} of points from a tibble and add the associated information
 #' from the NHDPlusHR polygon associated with that point.
 #' 

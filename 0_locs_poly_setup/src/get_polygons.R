@@ -1,5 +1,9 @@
+#' @title Get waterbodies within HUC4 from NHD
+#' 
+#' @description
 #' Function to download NHDPlusHR HUC-4 geopackages that contain all NHD layers from 
-#' a HUC
+#' a HUC. Filter for waterbodies larger than a minimum area using the AreaSqKm
+#' column in the NHD file.
 #' 
 #' @param HUC a 4-digit or longer HUC value
 #' @param minimum_sqkm a numeric threshold value to filter waterbodies, in square 
@@ -9,9 +13,6 @@
 #' 
 #' 
 get_polygons <-  function(HUC, minimum_sqkm) {
-  #check for out folder, create if not present
-  dir.create('0_locs_poly_setup/out/')
-  
   # get temp directory for download of HR .gdb files
   temp_dir <- tempdir()
   

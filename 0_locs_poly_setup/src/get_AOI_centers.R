@@ -1,3 +1,6 @@
+#' @title Calculate POI centers
+#' 
+#' @description
 #' Function to calculate the point of inaccessibility (equivalent of Chebyshev 
 #' center) for a {sf} of polygons
 #' 
@@ -6,7 +9,7 @@
 #' polylabelr::poi() function, where the {sf} crs is EPSG:4326 (WGS84)
 #' 
 #' 
-get_AOI_centers <- function(polygons) {
+get_POI_centers <- function(polygons) {
   # create an empty tibble
   cc_df = tibble(
     Permanent_Identifier = character(),

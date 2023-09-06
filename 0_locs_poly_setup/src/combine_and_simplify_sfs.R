@@ -1,3 +1,6 @@
+#' @title Combine {sf} objects
+#' 
+#' @description
 #' Function to combine two {sf} objects and define data groups
 #' 
 #' @param sf_1 a {sf} object 

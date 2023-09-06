@@ -1,7 +1,10 @@
+#' @title Collate and filter {sf} polygon files
+#' 
+#' @description
 #' Function to collate multiple {sf} polygon files together, load points as a {sf} 
 #' object from a tibble, and select the polygons that intersect with the points.
 #' 
-#' @param shapefiles a list of {sf} polygon files
+#' @param shapefiles a list of {sf} polygon filepaths
 #' @param points a tibble of locations with columns Latitude and Longitude in
 #' EPSG:4326 (WGS 84)
 #' @returns filepath for new {sf} file that contains the polygons that contained 

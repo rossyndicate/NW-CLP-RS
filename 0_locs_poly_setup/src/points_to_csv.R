@@ -1,3 +1,6 @@
+#' @title Export a csv from a {sf} object
+#' 
+#' @description
 #' Function to convert a {sf} of points to a .csv, retaining the Latitude and 
 #' Longitude measures
 #' 
