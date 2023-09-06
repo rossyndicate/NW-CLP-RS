@@ -53,9 +53,4 @@ calculated to harmonize to LS 8 values for workflows that do not require the
 entire LS record. The LS 9 to LS 8 handoffs include calculations for the Aerosol
 band, which may be useful for workflows that only use LS 8 & 9.
 
-**p3: 3_apply_handoff_coefficients**
 
-This group of functions applies the handoff coefficients to dataset(s), flags
-for band values outside of the handoff inputs that created the correction
-coefficients, and saves the analysis-ready file(s). Additionally, figures are
-created to compare the raw, LS7-corrected, and LS8-corrected figures.
