@@ -1,5 +1,8 @@
 ## filepaths
 0_locs_poly_setup/out/*
+1_historical_RS_data_collation/in/*
+1_historical_RS_data_collation/mid/*
+1_historical_RS_data_collation/out/*
 tmp/*
 env/*
 data
