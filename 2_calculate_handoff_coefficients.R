@@ -18,7 +18,7 @@ p2_targets_list <- list(
   tar_target(
     name = p2_5_9_band_list,
     command = {
-      p1_QAQC_filter_data
+      p1_QAQC_filtered_data
       c("med_Red", "med_Green", "med_Blue", "med_Nir", "med_Swir1", "med_Swir2")
     }
   ),
@@ -26,7 +26,7 @@ p2_targets_list <- list(
   tar_target(
     name = p2_8_9_band_list,
     command = {
-      p1_QAQC_filter_data
+      p1_QAQC_filtered_data
       c("med_Aerosol", "med_Red", "med_Green", "med_Blue", "med_Nir", "med_Swir1", "med_Swir2")
     }
   ),
@@ -34,7 +34,7 @@ p2_targets_list <- list(
   tar_file_read(
     name = p2_DSWE1_regional_file,
     command = {
-      p1_QAQC_filter_data
+      p1_QAQC_filtered_data
       "1_historical_RS_data_collation/out/NW-Poudre-Regional_filtered_DSWE1_point_v2023-08-17.feather"
       },
     read = read_feather(!!.x),

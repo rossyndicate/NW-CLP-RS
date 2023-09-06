@@ -1,4 +1,8 @@
-#' Function to combine a reduced set of metadata with the upstream pull data
+#' @title Add scene metadata to RS band summary data
+#' 
+#' @description
+#' Function to combine a reduced set of scene metadata with the upstream collated RS
+#' data for downstream use
 #'
 #' @param file_prefix specified string that matches the file group to collate
 #' @param version_identifier user-specified string to identify the RS pull these

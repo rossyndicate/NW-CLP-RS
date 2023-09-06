@@ -1,3 +1,6 @@
+#' @title Collate downloaded csv files into a feather file
+#' 
+#' @description
 #' Function to grab all downloaded .csv files from the 1_.../in/ folder with a specific
 #' file prefix, collate them into a .feather files with version identifiers
 #'
