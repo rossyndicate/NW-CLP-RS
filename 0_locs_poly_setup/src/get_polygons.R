@@ -13,12 +13,9 @@
 #' 
 #' 
 get_polygons <-  function(HUC, minimum_sqkm) {
-  # get temp directory for download of HR .gdb files
-  temp_dir <- tempdir()
-  
   #set timeout for longer per issue #341: https://github.com/DOI-USGS/nhdplusTools/issues
   options(timeout = 60000)
-
+  
   huc_type <- paste0("huc", nchar(HUC))
   # and download the HUC4 HR file
   huc4 <- str_sub(HUC, 1, 4)
@@ -26,7 +23,7 @@ get_polygons <-  function(HUC, minimum_sqkm) {
   # check to see if huc4 exists yet
   file_list <- list.files("0_locs_poly_setup/out/", pattern = c("^huc4.*\\.gpkg$"))
   if (length(file_list) == 0 | any(!grepl(huc4, file_list))) {
-    fp <- download_nhdplushr(nhd_dir = temp_dir, huc4)
+    fp <- download_nhdplushr(nhd_dir = "0_locs_poly_setup/nhd/", huc4)
     # open the waterbody and catchment files
     wbd <- get_nhdplushr(fp, layers = "NHDWaterbody") %>% 
       bind_rows() %>% 
