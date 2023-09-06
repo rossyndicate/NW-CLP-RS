@@ -1,12 +1,14 @@
-#" Function to collate the files created by the handoff targets in this group of
-#" targets
-#" 
-#" @returns file name of collated handoff coefficients .csv stored in the out
-#" folder
-#" 
-#" 
+#' @title Collate handoff coefficients
+#' 
+#' @description
+#' Function to collate the files created by the handoff targets in this group of
+#' targets
+#' 
+#' @returns file name of collated handoff coefficients .csv stored in the out
+#' folder
+#' 
+#' 
 collate_handoff_coefficients <- function() {
-  dir.create("2_calculate_handoff_coefficients/out/")
   #list the files in coefficients
   files <- list.files("2_calculate_handoff_coefficients/mid",
                       full.names = TRUE)

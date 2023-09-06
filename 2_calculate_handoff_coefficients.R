@@ -13,6 +13,11 @@ tar_source("2_calculate_handoff_coefficients/src/")
 # Landsat 8/9 handoff for workflows that would benefit from a harmonized Aerosol
 # band
 
+# create folder structure
+dir.create("2_calculate_handoff_coefficients/mid/")
+dir.create("2_calculate_handoff_coefficients/out/")
+dir.create("2_calculate_handoff_coefficients/figs/")
+
 p2_targets_list <- list(
   # set list of LS5-9 common bands
   tar_target(
