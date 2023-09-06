@@ -51,6 +51,6 @@ combine_and_simplify_sfs <- function(sf_1, data_group_1, sf_2, data_group_2, fil
     left_join(., tibble(collated_sf) %>% select(-data_group)) %>% 
     st_as_sf() %>% 
     distinct()
-  st_write(collated_simplified_sf, paste0('0_locs_poly_setup/out/', filename, '.gpkg'), append = F)
-  paste0('0_locs_poly_setup/out/', filename, '.gpkg')
+  st_write(collated_simplified_sf, paste0("0_locs_poly_setup/out/", filename, ".gpkg"), append = F)
+  paste0("0_locs_poly_setup/out/", filename, ".gpkg")
 }

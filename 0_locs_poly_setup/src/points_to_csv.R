@@ -11,8 +11,8 @@
 #' 
 #' 
 points_to_csv <- function(points, filename){
-  if(st_crs(points) != 'EPSG:4326') {
-    points <- st_transform(points, 'EPSG:4326')
+  if(st_crs(points) != "EPSG:4326") {
+    points <- st_transform(points, "EPSG:4326")
   }
   points_lat_long <- points %>% 
     rowwise() %>% 
@@ -20,6 +20,6 @@ points_to_csv <- function(points, filename){
            Longitude = (geom[[1]][1])) %>% 
     st_drop_geometry() %>% 
     rowid_to_column() 
-  write_csv(points_lat_long, paste0('0_locs_poly_setup/out/', filename, '.csv'))
-  paste0('0_locs_poly_setup/out/', filename, '.csv')
+  write_csv(points_lat_long, paste0("0_locs_poly_setup/out/", filename, ".csv"))
+  paste0("0_locs_poly_setup/out/", filename, ".csv")
 }
