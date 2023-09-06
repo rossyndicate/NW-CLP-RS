@@ -10,7 +10,6 @@
 #' 
 #' 
 download_csvs_from_drive <- function(drive_folder_name) {
-  dir.create("1_historical_RS_data_collation/in/")
   drive_auth(email = Sys.getenv("google_email"))
   dribble_files <- drive_ls(path = drive_folder_name)
   dribble_files <- dribble_files %>% 

@@ -8,7 +8,6 @@
 #' 
 #' 
 combine_metadata_with_pulls <- function(file_prefix, version_identifier) {
-  dir.create("1_historical_RS_data_collation/out/")
   files <- list.files(file.path("1_historical_RS_data_collation/mid/"),
                      pattern = file_prefix,
                      full.names = TRUE) %>% 

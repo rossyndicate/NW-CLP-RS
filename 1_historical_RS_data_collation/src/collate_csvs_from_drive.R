@@ -21,9 +21,7 @@ collate_csvs_from_drive <- function(file_prefix, version_identifier) {
   files <- list.files("1_historical_RS_data_collation/in/",
                      pattern = file_prefix,
                      full.names = TRUE) 
-  # create the mid folder, since it isn't tracked
-  dir.create("1_historical_RS_data_collation/mid/")
-
+  
   meta_files <- files[grepl("meta", files)]
   all_meta <- map_dfr(meta_files, read_csv) %>% 
     distinct()

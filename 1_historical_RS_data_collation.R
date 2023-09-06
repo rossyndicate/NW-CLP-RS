@@ -8,6 +8,11 @@ tar_source("1_historical_RS_data_collation/src/")
 # branches of the Landsat_C2_SRST repository: nw-poudre-historical and nw-er3z21-historical.
 # At this time, this is run outside of the {targets} workflow presented here. 
 
+# prep folder structure
+dir.create("1_historical_RS_data_collation/in/")
+dir.create("1_historical_RS_data_collation/mid/")
+dir.create("1_historical_RS_data_collation/out/")
+
 p1_targets_list <- list(
   # download the NW and CLP data from Google Drive
   tar_target(
