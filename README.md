@@ -29,19 +29,17 @@ This document is not tracked in GH. Please request this file from B.
 This targets workflow is broken down into groups of target lists that perform
 functional chunks of the workflow.
 
-**p0: 0_locs_poly_setup**
+__p0: 0_locs_poly_setup__
+This group sets up the locations and polygon files for RS retrieval. The group 
+of functioons collates a few different polygon and point files into a single
+file of each type as needed for the RS workflow. 
 
-This group sets up the locations and polygon files for RS retrieval. The group
-of funcitons collates a few different polygon and point files into a single file
-of each type as needed for the RS workflow.
-
-**p1: 1_historical_RS_data_collation**
-
-This group of functions downloads and processes GEE output from historical
-pulls. This portion of the workflow is dependent on the successful run of two
-branches of the Landsat_C2_SRST repository: nw-poudre-historical and
-nw-er3z21-historical. At this time, this is run outside of the {targets}
-workflow presented here.
+__p1: 1_historical_RS_data_collation__
+This group of functions downloads and processes GEE output from historical pulls.
+This portion of the workflow is dependent on the successful run of two 
+branches of the Landsat_C2_SRST repository: nw-poudre-historical and 
+nw-er3z21-historical. At this time, this is run outside of the {targets} workflow 
+presented here. 
 
 **p2: 2_calculate_handoff_coefficients**
 
@@ -61,8 +59,3 @@ This group of functions applies the handoff coefficients to dataset(s), flags
 for band values outside of the handoff inputs that created the correction
 coefficients, and saves the analysis-ready file(s). Additionally, figures are
 created to compare the raw, LS7-corrected, and LS8-corrected figures.
-
-**p4: 4_separate_NW_CLP_data**
-
-This group of functions separates out the NW and CLP data for downstream uses
-and saves all primary files in the ROSSyndicate Google Drive.
