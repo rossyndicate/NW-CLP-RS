@@ -18,16 +18,17 @@ b_historical_RS_data_collation_list <- list(
   tar_target(
     name = b_downloaded_historical_NW_CLP,
     command = {
-      p0_collated_pts_file
+      a_collated_pts_file
       download_csvs_from_drive("LS-C2-SR-NW_CLP_-Poly-Points-v2023-08-17")
       },
-    packages = c("tidyverse", "googledrive")
+    packages = c("tidyverse", "googledrive"),
+    cue = tar_cue(depend = T)
   ),
   # and do the same for the regional data
   tar_target(
     name = b_downloaded_historical_regional,
     command = {
-      p0_collated_pts_file
+      a_collated_pts_file
       download_csvs_from_drive("LS-C2-SR-RegionalPoints-v2023-08-17")
       },
     packages = c("tidyverse", "googledrive")
