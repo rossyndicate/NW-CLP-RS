@@ -16,7 +16,8 @@ tar_source(files = c(
 ))
 
 # Full targets list 
-c(a_locs_poly_setup_list,
-  b_historical_RS_data_collation_list,
-  c_calculate_handoff_coefficients_list,
-  d_apply_handoff_coefficients_list)
+c(a_targets_list,
+  b_targets_list,
+  c_targets_list,
+  d_targets_list
+  )

@@ -47,7 +47,7 @@ calculate_9_8_handoff <- function(filtered, band){
   poly <- lm(y_q ~ poly(x_q, 2, raw = T))
   
   # plot and save handoff fig
-  jpeg(file.path("2_calculate_handoff_coefficients/figs/", 
+  jpeg(file.path("c_calculate_handoff_coefficients/figs/", 
        paste0(band, "_9_8_poly_handoff.jpg")), 
        width = 350, height = 350)
   plot(y_q ~ x_q,

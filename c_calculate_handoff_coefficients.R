@@ -18,7 +18,7 @@ dir.create("c_calculate_handoff_coefficients/mid/")
 dir.create("c_calculate_handoff_coefficients/out/")
 dir.create("c_calculate_handoff_coefficients/figs/")
 
-c_calculate_handoff_coefficients_list <- list(
+c_targets_list <- list(
   # set list of LS5-9 common bands
   tar_target(
     name = c_5_9_band_list,

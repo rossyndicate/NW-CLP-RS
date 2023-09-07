@@ -23,13 +23,13 @@ This document is not tracked in GH. Please request this file from B.
 This targets workflow is broken down into groups of target lists that perform 
 functional chunks of the workflow.
 
-**p0: 0_locs_poly_setup** 
+__a_locs_poly_setup__
 
 This group sets up the locations and polygon files 
 for RS retrieval. The group of functioons collates a few different polygon and 
 point files into a single file of each type as needed for the RS workflow.
 
-**p1: 1_historical_RS_data_collation** 
+__b_historical_RS_data_collation__
 
 This group of functions downloads and 
 processes GEE output from historical pulls. This portion of the workflow is 
@@ -37,7 +37,7 @@ dependent on the successful run of two branches of the Landsat_C2_SRST
 repository: nw-poudre-historical and nw-er3z21-historical. At this time, this 
 is run outside of the {targets} workflow presented here.
 
-**p2: 2_calculate_handoff_coefficients**
+__c_calculate_handoff_coefficients__
 
 This group of functions calculates the inter-mission handoff coefficients from 
 the regional pull data. Landsat 4-7 and 8-9 surface reflectance data go through 

@@ -13,7 +13,7 @@ dir.create("b_historical_RS_data_collation/in/")
 dir.create("b_historical_RS_data_collation/mid/")
 dir.create("b_historical_RS_data_collation/out/")
 
-b_historical_RS_data_collation_list <- list(
+b_targets_list <- list(
   # download the NW and CLP data from Google Drive
   tar_target(
     name = b_downloaded_historical_NW_CLP,

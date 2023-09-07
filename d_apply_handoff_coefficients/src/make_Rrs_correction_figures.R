@@ -22,7 +22,7 @@ make_Rrs_correction_figures <- function(corrected_file) {
                     grepl("poly", corrected_file) ~ "poly",
                     grepl("center", corrected_file) ~ "center")
   # load band names 
-  band_names <- tar_read(p2_5_9_band_list)
+  band_names <- tar_read(c_5_9_band_list)
   # create figs for bands shared between LS5-9
   walk(.x = band_names,
        function(.x) {

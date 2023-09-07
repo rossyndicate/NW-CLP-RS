@@ -12,7 +12,7 @@ tar_source("a_locs_poly_setup/src/")
 dir.create("a_locs_poly_setup/nhd/")
 dir.create("a_locs_poly_setup/out/")
 
-a_locs_poly_setup_list <- list(
+a_targets_list <- list(
   # get the polygons for CLP watershed using HUC8
   tar_target(
     name = a_make_CLP_polygon,
