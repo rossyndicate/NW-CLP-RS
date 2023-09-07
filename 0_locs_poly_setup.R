@@ -8,6 +8,10 @@ tar_source("0_locs_poly_setup/src/")
 # file of each type as needed for the RS workflow. CLP = Cache La Poudre, 
 # NW = Northern Water.
 
+# create folder structure
+dir.create("0_locs_poly_setup/nhd/")
+dir.create("0_locs_poly_setup/out/")
+
 p0_targets_list <- list(
   # get the polygons for CLP watershed using HUC8
   tar_target(
@@ -76,7 +80,7 @@ p0_targets_list <- list(
   # from the polygons, we're going to calculate the center point for each of them
   tar_target(
     name = p0_make_NW_CLP_centers,
-    command = get_AOI_centers(p0_NW_CLP_polygons),
+    command = get_POI_centers(p0_NW_CLP_polygons),
     packages = c("tidyverse", "sf", "polylabelr")
   ),
   # and then track and load the centers file

@@ -1,5 +1,9 @@
+#' @title Get waterbodies within HUC4 from NHD
+#' 
+#' @description
 #' Function to download NHDPlusHR HUC-4 geopackages that contain all NHD layers from 
-#' a HUC
+#' a HUC. Filter for waterbodies larger than a minimum area using the AreaSqKm
+#' column in the NHD file.
 #' 
 #' @param HUC a 4-digit or longer HUC value
 #' @param minimum_sqkm a numeric threshold value to filter waterbodies, in square 
@@ -9,29 +13,23 @@
 #' 
 #' 
 get_polygons <-  function(HUC, minimum_sqkm) {
-  #check for out folder, create if not present
-  dir.create('0_locs_poly_setup/out/')
-  
-  # get temp directory for download of HR .gdb files
-  temp_dir <- tempdir()
-  
   #set timeout for longer per issue #341: https://github.com/DOI-USGS/nhdplusTools/issues
   options(timeout = 60000)
-
-  huc_type <- paste0('huc', nchar(HUC))
+  
+  huc_type <- paste0("huc", nchar(HUC))
   # and download the HUC4 HR file
   huc4 <- str_sub(HUC, 1, 4)
   
   # check to see if huc4 exists yet
-  file_list <- list.files('0_locs_poly_setup/out/', pattern = c('^huc4.*\\.gpkg$'))
+  file_list <- list.files("0_locs_poly_setup/out/", pattern = c("^huc4.*\\.gpkg$"))
   if (length(file_list) == 0 | any(!grepl(huc4, file_list))) {
-    fp <- download_nhdplushr(nhd_dir = temp_dir, huc4)
+    fp <- download_nhdplushr(nhd_dir = "0_locs_poly_setup/nhd/", huc4)
     # open the waterbody and catchment files
-    wbd <- get_nhdplushr(fp, layers = 'NHDWaterbody') %>% 
+    wbd <- get_nhdplushr(fp, layers = "NHDWaterbody") %>% 
       bind_rows() %>% 
       st_as_sf() %>% 
       st_make_valid() #make sure they are complete polygons
-    catch <- get_nhdplushr(fp, layers = paste0('WBDHU', nchar(HUC))) %>% 
+    catch <- get_nhdplushr(fp, layers = paste0("WBDHU", nchar(HUC))) %>% 
       bind_rows() %>% 
       filter(.[[12]] == HUC) %>%  #filter the 12th column for the huc provided
       st_as_sf() %>% 
@@ -40,7 +38,7 @@ get_polygons <-  function(HUC, minimum_sqkm) {
     huc_wbd <- wbd[catch,] 
     huc_wbd <- huc_wbd %>% 
       filter(AreaSqKM >= minimum_sqkm)
-    write_sf(huc_wbd, paste0('0_locs_poly_setup/out/', huc_type, '_', HUC, '_NHDPlusHR_polygons.gpkg'), append = F)
+    write_sf(huc_wbd, paste0("0_locs_poly_setup/out/", huc_type, "_", HUC, "_NHDPlusHR_polygons.gpkg"), append = F)
   }
-  return(paste0('0_locs_poly_setup/out/', huc_type, '_', HUC, '_NHDPlusHR_polygons.gpkg'))
+  return(paste0("0_locs_poly_setup/out/", huc_type, "_", HUC, "_NHDPlusHR_polygons.gpkg"))
 }

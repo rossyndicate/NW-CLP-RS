@@ -1,3 +1,6 @@
+#' @title Calculate POI centers
+#' 
+#' @description
 #' Function to calculate the point of inaccessibility (equivalent of Chebyshev 
 #' center) for a {sf} of polygons
 #' 
@@ -6,7 +9,7 @@
 #' polylabelr::poi() function, where the {sf} crs is EPSG:4326 (WGS84)
 #' 
 #' 
-get_AOI_centers <- function(polygons) {
+get_POI_centers <- function(polygons) {
   # create an empty tibble
   cc_df = tibble(
     Permanent_Identifier = character(),
@@ -14,7 +17,7 @@ get_AOI_centers <- function(polygons) {
     Latitude = numeric(),
     dist = numeric()
   )
-  # for each polygon, calculate a center. Because sf doesn't map easily, using a loop.
+  # for each polygon, calculate a center. Because sf doesn"t map easily, using a loop.
   for (i in 1:length(polygons[[1]])) {
     coord = polygons[i,] %>% st_coordinates()
     x = coord[,1]
@@ -31,9 +34,9 @@ get_AOI_centers <- function(polygons) {
   cc_dp <- polygons %>%
     st_drop_geometry() %>% 
     left_join(., cc_df) %>% 
-    mutate(location_type = 'aoi_center')
-  cc_geo <- st_as_sf(cc_dp, coords = c('Longitude', 'Latitude'), crs = st_crs(polygons)) %>% 
-    st_transform(., 'EPSG:4326')
-  write_sf(cc_geo, file.path('0_locs_poly_setup/out/NW_CLP_polygon_centers.gpkg'))
-  '0_locs_poly_setup/out/NW_CLP_polygon_centers.gpkg'
+    mutate(location_type = "poi_center")
+  cc_geo <- st_as_sf(cc_dp, coords = c("Longitude", "Latitude"), crs = st_crs(polygons)) %>% 
+    st_transform(., "EPSG:4326")
+  write_sf(cc_geo, file.path("0_locs_poly_setup/out/NW_CLP_polygon_centers.gpkg"))
+  "0_locs_poly_setup/out/NW_CLP_polygon_centers.gpkg"
 }
