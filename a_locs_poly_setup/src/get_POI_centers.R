@@ -37,6 +37,6 @@ get_POI_centers <- function(polygons) {
     mutate(location_type = "poi_center")
   cc_geo <- st_as_sf(cc_dp, coords = c("Longitude", "Latitude"), crs = st_crs(polygons)) %>% 
     st_transform(., "EPSG:4326")
-  write_sf(cc_geo, file.path("0_locs_poly_setup/out/NW_CLP_polygon_centers.gpkg"))
-  "0_locs_poly_setup/out/NW_CLP_polygon_centers.gpkg"
+  write_sf(cc_geo, file.path("a_locs_poly_setup/out/NW_CLP_polygon_centers.gpkg"))
+  "a_locs_poly_setup/out/NW_CLP_polygon_centers.gpkg"
 }
