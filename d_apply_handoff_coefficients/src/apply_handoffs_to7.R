@@ -1,11 +1,14 @@
+#' @title Apply to LS7 relative correction coefficients 
+#' 
+#' @description
 #' Function to apply the handoff coefficients for LS 5-9 shared bands to 
 #' create Rrs values relative to LS 7 Rrs
 #' 
 #' @param coefficients collated coefficent file created in the 
-#' p2_collated_handoff_coefficients target
+#' c_collated_handoff_coefficients target
 #' @param data_filepath filepath of filtered data that will be passed through
 #' the coefficient calculations, in this workflow the data_filepath is a list
-#' of filepaths created by target p3_filtered_DSWE1_data 
+#' of filepaths created by target d_filtered_DSWE1_data 
 #' @returns silently saves a feather file with added band columns in the mid 
 #' folder, corrected to LS7 Rrs
 #' 
@@ -13,7 +16,7 @@
 #' 
 apply_handoffs_to7 <- function(coefficients, data_filepath) {
   #make sure directory exists
-  dir.create("3_apply_handoff_coefficients/mid/")
+  dir.create("d_apply_handoff_coefficients/mid/")
   #get some info for saving the file
   filename <- str_split(data_filepath, "/")[[1]][4]
   file_prefix <- str_split(filename, "_")[[1]][1]
@@ -94,7 +97,7 @@ apply_handoffs_to7 <- function(coefficients, data_filepath) {
   
   #save the file!
   write_feather(data_out, 
-                file.path("3_apply_handoff_coefficients/mid/",
+                file.path("d_apply_handoff_coefficients/mid/",
                           paste0(file_prefix, 
                                  "_filtered_corr7_",
                                  DSWE, "_",

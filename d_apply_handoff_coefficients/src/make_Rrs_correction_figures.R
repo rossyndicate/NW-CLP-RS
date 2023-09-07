@@ -1,7 +1,10 @@
+#' @title Create and save applied handoff figures
+#' 
+#' @description
 #' Function to create summary figures for each band from a specific corrected
 #' dataset
 #' 
-#' @param corrected_file filepath of a collated, corrected data file
+#' @param corrected_file text string; filepath of a collated, corrected data file
 #' @returns silently saves a number of jpg files showing the raw Rrs, corrected
 #' to LS7, and corrected to LS8
 #' 
@@ -23,11 +26,11 @@ make_Rrs_correction_figures <- function(corrected_file) {
   # create figs for bands shared between LS5-9
   walk(.x = band_names,
        function(.x) {
-         band <- str_split(.x, '_')[[1]][2]
-         corr7 <- paste0(.x, '_corr7')
-         corr8 <- paste0(.x, '_corr8')
-         flag7 <- paste0('flag_', band, '_7')
-         flag8 <- paste0('flag_', band, '_8')
+         band <- str_split(.x, "_")[[1]][2]
+         corr7 <- paste0(.x, "_corr7")
+         corr8 <- paste0(.x, "_corr8")
+         flag7 <- paste0("flag_", band, "_7")
+         flag8 <- paste0("flag_", band, "_8")
          subset <- data %>% 
            select(any_of(names(data)[grepl(band, names(data))]))
          raw <- ggplot(data, aes(x = date, y = !!sym(.x), color = mission)) +
@@ -35,13 +38,13 @@ make_Rrs_correction_figures <- function(corrected_file) {
            scale_color_viridis_d() +
            theme_bw() +
            labs(x = NULL, 
-                y = paste('median', band, 'Rrs\n(raw)'),
-                title = paste(file_prefix, band, 'summary')) +
-           theme(legend.position = 'bottom', 
+                y = paste("median", band, "Rrs\n(raw)"),
+                title = paste(file_prefix, band, "summary")) +
+           theme(legend.position = "bottom", 
                  legend.box="vertical", 
                  legend.margin=margin()) +
            guides(color=guide_legend(nrow=2,byrow=TRUE)) +
-           theme(plot.title = element_text(hjust = 0.5, face = 'bold'),
+           theme(plot.title = element_text(hjust = 0.5, face = "bold"),
                  plot.subtitle = element_text(hjust = 0.5)) 
          corrected_7 <- ggplot(data, aes(x = date, y = !!sym(corr7), 
                                          color = mission, shape = !!sym(flag7))) +
@@ -49,12 +52,12 @@ make_Rrs_correction_figures <- function(corrected_file) {
            scale_color_viridis_d() +
            theme_bw() +
            labs(x = NULL, 
-                y = paste('median', band, 'Rrs\n(relative to LS7 Rrs)')) +
-           theme(legend.position = 'bottom', 
+                y = paste("median", band, "Rrs\n(relative to LS7 Rrs)")) +
+           theme(legend.position = "bottom", 
                  legend.box="vertical", 
                  legend.margin=margin()) +
            guides(color=guide_legend(nrow=2,byrow=TRUE)) +
-           theme(plot.title = element_text(hjust = 0.5, face = 'bold'),
+           theme(plot.title = element_text(hjust = 0.5, face = "bold"),
                  plot.subtitle = element_text(hjust = 0.5)) 
          corrected_8 <- ggplot(data, aes(x = date, y = !!sym(corr8), 
                                          color = mission, shape = !!sym(flag8))) +
@@ -62,51 +65,51 @@ make_Rrs_correction_figures <- function(corrected_file) {
            scale_color_viridis_d() +
            theme_bw() +
            labs(x = NULL, 
-                y = paste('median', band, 'Rrs\n(relative to LS8 Rrs)')) +
-           theme(legend.position = 'bottom', 
+                y = paste("median", band, "Rrs\n(relative to LS8 Rrs)")) +
+           theme(legend.position = "bottom", 
                  legend.box="vertical", 
                  legend.margin=margin()) +
            guides(color=guide_legend(nrow=2,byrow=TRUE)) +
-           theme(plot.title = element_text(hjust = 0.5, face = 'bold'),
+           theme(plot.title = element_text(hjust = 0.5, face = "bold"),
                  plot.subtitle = element_text(hjust = 0.5)) 
          for_out_of_range <- ggplot(data, aes(x = date, y = !!sym(corr8),
                                               shape = !!sym(flag8))) +
            geom_point() +
            theme_bw() +
-           theme(legend.position = 'bottom') +
-           scale_shape(name = 'correction flag')
-         plot_grid(raw + theme(legend.position = 'none'), 
-                   corrected_7 + theme(legend.position = 'none'), 
-                   corrected_8 + theme(legend.position = 'none'),
+           theme(legend.position = "bottom") +
+           scale_shape(name = "correction flag")
+         plot_grid(raw + theme(legend.position = "none"), 
+                   corrected_7 + theme(legend.position = "none"), 
+                   corrected_8 + theme(legend.position = "none"),
                    get_legend(for_out_of_range),
                    get_legend(raw), 
                    nrow = 5,
                    rel_heights = c(1.1, 1, 1, 0.2, 0.2))
-         ggsave(file.path('3_apply_handoff_coefficients/figs/',
+         ggsave(file.path("d_apply_handoff_coefficients/figs/",
                           file_prefix,
                           type,
-                          paste0(band, '_correction_summary.jpg')),
+                          paste0(band, "_correction_summary.jpg")),
                 last_plot(),
                 height = 8,
                 width = 6,
-                units = 'in',
+                units = "in",
                 dpi = 200)
        })
   # and now for the Aerosol band (just raw and relative to LS8)
   subset <- data %>% 
-    select(any_of(names(data)[grepl('Aerosol', names(data))]))
+    select(any_of(names(data)[grepl("Aerosol", names(data))]))
   raw <- ggplot(data, aes(x = date, y = med_Aerosol, color = mission)) +
     geom_point(alpha = 0.5) +
     scale_color_viridis_d() +
     theme_bw() +
     labs(x = NULL, 
-         y = paste('median Aerosol Rrs\n(raw)'),
-         title = paste(file_prefix, 'Aerosol summary')) +
-    theme(legend.position = 'bottom', 
+         y = paste("median Aerosol Rrs\n(raw)"),
+         title = paste(file_prefix, "Aerosol summary")) +
+    theme(legend.position = "bottom", 
           legend.box="vertical", 
           legend.margin=margin()) +
     guides(color=guide_legend(nrow=2,byrow=TRUE)) +
-    theme(plot.title = element_text(hjust = 0.5, face = 'bold'),
+    theme(plot.title = element_text(hjust = 0.5, face = "bold"),
           plot.subtitle = element_text(hjust = 0.5)) 
   corrected_8 <- ggplot(data, aes(x = date, y = med_Aerosol_corr8, 
                                   color = mission, shape = flag_Aerosol_8)) +
@@ -114,32 +117,32 @@ make_Rrs_correction_figures <- function(corrected_file) {
     scale_color_viridis_d() +
     theme_bw() +
     labs(x = NULL, 
-         y = paste('median', 'Aersolol Rrs\n(relative to LS8 Rrs)')) +
-    theme(legend.position = 'bottom', 
+         y = paste("median", "Aersolol Rrs\n(relative to LS8 Rrs)")) +
+    theme(legend.position = "bottom", 
           legend.box="vertical", 
           legend.margin=margin()) +
     guides(color=guide_legend(nrow=2,byrow=TRUE)) +
-    theme(plot.title = element_text(hjust = 0.5, face = 'bold'),
+    theme(plot.title = element_text(hjust = 0.5, face = "bold"),
           plot.subtitle = element_text(hjust = 0.5)) 
   for_out_of_range <- ggplot(data, aes(x = date, y = med_Aerosol_corr8,
                                        shape = flag_Aerosol_8)) +
     geom_point() +
     theme_bw() +
-    theme(legend.position = 'bottom') +
-    scale_shape(name = 'correction flag')
-  plot_grid(raw + theme(legend.position = 'none'), 
-            corrected_8 + theme(legend.position = 'none'),
+    theme(legend.position = "bottom") +
+    scale_shape(name = "correction flag")
+  plot_grid(raw + theme(legend.position = "none"), 
+            corrected_8 + theme(legend.position = "none"),
             get_legend(for_out_of_range),
             get_legend(raw), 
             nrow = 4,
             rel_heights = c(1.6, 1.5, 0.2, 0.2))
-  ggsave(file.path('3_apply_handoff_coefficients/figs/',
+  ggsave(file.path("d_apply_handoff_coefficients/figs/",
                    file_prefix,
                    type,
-                   'Aerosol_correction_summary.jpg'),
+                   "Aerosol_correction_summary.jpg"),
          last_plot(),
          height = 8,
          width = 6,
-         units = 'in',
+         units = "in",
          dpi = 200)
 }
