@@ -2,12 +2,12 @@
 #' 
 #' @description
 #' description Function to download all csv files from a specific drive folder 
-#' to the untracked 1_historical_RS_data_collation/in/ folder
+#' to the untracked b_historical_RS_data_collation/in/ folder
 #'
 #' @param drive_folder_name text string; name of folder in Drive, must be unique
 #' 
 #' @returns downloads all .csvs from the specified folder name to the
-#' 1_historical_RS_data_collation/in/ folder
+#' b_historical_RS_data_collation/in/ folder
 #' 
 #' @note This function requires that you have created an .Renviron option whose
 #' key is 'google_email' and value is the ROSS gmail
@@ -22,7 +22,7 @@ download_csvs_from_drive <- function(drive_folder_name) {
         .y = dribble_files$name, 
         .f = function(.x, .y) {
           try(drive_download(file = .x,
-                         path = file.path("1_historical_RS_data_collation/in/", .y),
+                         path = file.path("b_historical_RS_data_collation/in/", .y),
                          overwrite = FALSE)) # just pass if already downloaded
           })
 }

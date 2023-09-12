@@ -1,7 +1,7 @@
 #' @title Collate downloaded csv files into a feather file
 #' 
 #' @description
-#' Function to grab all downloaded .csv files from the 1_.../in/ folder with a specific
+#' Function to grab all downloaded .csv files from the b_.../in/ folder with a specific
 #' file prefix, collate them into a .feather files with version identifiers
 #'
 #' @param file_prefix specified string that matches the file group to collate
@@ -21,14 +21,14 @@
 #' 
 collate_csvs_from_drive <- function(file_prefix, version_identifier) {
   # get the list of files in the `in` directory 
-  files <- list.files("1_historical_RS_data_collation/in/",
+  files <- list.files("b_historical_RS_data_collation/in/",
                      pattern = file_prefix,
                      full.names = TRUE) 
   
   meta_files <- files[grepl("meta", files)]
   all_meta <- map_dfr(meta_files, read_csv) %>% 
     distinct()
-  write_feather(all_meta, file.path("1_historical_RS_data_collation/mid/",
+  write_feather(all_meta, file.path("b_historical_RS_data_collation/mid/",
                                   paste0(file_prefix, "_collated_metadata_",
                                          version_identifier, ".feather")))
   
@@ -41,7 +41,7 @@ collate_csvs_from_drive <- function(file_prefix, version_identifier) {
                            read_csv(.x) %>% mutate(source = .x)
                            }) %>% 
       distinct(across(-"source"), .keep_all = TRUE)
-    write_feather(all_points, file.path("1_historical_RS_data_collation/mid/",
+    write_feather(all_points, file.path("b_historical_RS_data_collation/mid/",
                                     paste0(file_prefix, "_collated_points_",
                                            version_identifier, ".feather")))
   }
@@ -55,7 +55,7 @@ collate_csvs_from_drive <- function(file_prefix, version_identifier) {
                            read_csv(.x) %>% mutate(source = .x)
                          }) %>% 
       distinct(across(-"source"), .keep_all = TRUE)
-    write_feather(all_centers, file.path("1_historical_RS_data_collation/mid/",
+    write_feather(all_centers, file.path("b_historical_RS_data_collation/mid/",
                                     paste0(file_prefix, "_collated_centers_",
                                            version_identifier, ".feather")))
   }
@@ -69,13 +69,13 @@ collate_csvs_from_drive <- function(file_prefix, version_identifier) {
                            read_csv(.x) %>% mutate(source = .x)
                          }) %>% 
       distinct(across(-"source"), .keep_all = TRUE)
-    write_feather(all_polys, file.path("1_historical_RS_data_collation/mid/",
+    write_feather(all_polys, file.path("b_historical_RS_data_collation/mid/",
                                   paste0(file_prefix, "_collated_polygons_",
                                          version_identifier, ".feather")))
   }
   
   # return the list of files from this process
-  list.files("1_historical_RS_data_collation/mid/",
+  list.files("b_historical_RS_data_collation/mid/",
                          pattern = file_prefix,
                          full.names = TRUE) %>% 
     #but make sure they are the specified version

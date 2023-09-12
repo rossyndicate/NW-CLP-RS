@@ -21,9 +21,9 @@ get_polygons <-  function(HUC, minimum_sqkm) {
   huc4 <- str_sub(HUC, 1, 4)
   
   # check to see if huc4 exists yet
-  file_list <- list.files("0_locs_poly_setup/out/", pattern = c("^huc4.*\\.gpkg$"))
+  file_list <- list.files("a_locs_poly_setup/out/", pattern = c("^huc4.*\\.gpkg$"))
   if (length(file_list) == 0 | any(!grepl(huc4, file_list))) {
-    fp <- download_nhdplushr(nhd_dir = "0_locs_poly_setup/nhd/", huc4)
+    fp <- download_nhdplushr(nhd_dir = "a_locs_poly_setup/nhd/", huc4)
     # open the waterbody and catchment files
     wbd <- get_nhdplushr(fp, layers = "NHDWaterbody") %>% 
       bind_rows() %>% 
@@ -38,7 +38,7 @@ get_polygons <-  function(HUC, minimum_sqkm) {
     huc_wbd <- wbd[catch,] 
     huc_wbd <- huc_wbd %>% 
       filter(AreaSqKM >= minimum_sqkm)
-    write_sf(huc_wbd, paste0("0_locs_poly_setup/out/", huc_type, "_", HUC, "_NHDPlusHR_polygons.gpkg"), append = F)
+    write_sf(huc_wbd, paste0("a_locs_poly_setup/out/", huc_type, "_", HUC, "_NHDPlusHR_polygons.gpkg"), append = F)
   }
-  return(paste0("0_locs_poly_setup/out/", huc_type, "_", HUC, "_NHDPlusHR_polygons.gpkg"))
+  return(paste0("a_locs_poly_setup/out/", huc_type, "_", HUC, "_NHDPlusHR_polygons.gpkg"))
 }

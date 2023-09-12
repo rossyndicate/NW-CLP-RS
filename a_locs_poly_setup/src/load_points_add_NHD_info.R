@@ -24,6 +24,6 @@ load_points_add_NHD_info <- function(points, polygons) {
   pts_sf <- st_transform(pts_sf, poly_crs)
   select_poly <- polygons[pts_sf,]
   pts_with_info <- st_join(pts_sf, select_poly)
-  st_write(pts_with_info, "0_locs_poly_setup/out/NW_points_NHD_info.gpkg", append = F)
-  "0_locs_poly_setup/out/NW_points_NHD_info.gpkg"
+  st_write(pts_with_info, "a_locs_poly_setup/out/NW_points_NHD_info.gpkg", append = F)
+  "a_locs_poly_setup/out/NW_points_NHD_info.gpkg"
 }

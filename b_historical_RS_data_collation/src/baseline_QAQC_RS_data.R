@@ -27,7 +27,7 @@ baseline_QAQC_RS_data <- function(filepath) {
     filter(IMAGE_QUALITY >= 7, pCount_dswe1 >= 10) %>% 
     filter_at(vars(med_Red, med_Green, med_Blue, med_Nir, med_Swir1, med_Swir2),
               all_vars(.<0.2 & .>-0.01)) %>% 
-    write_feather(file.path("1_historical_RS_data_collation/out/",
+    write_feather(file.path("b_historical_RS_data_collation/out/",
                             paste0(file_prefix, 
                                    "_filtered_",
                                    DSWE, "_",
