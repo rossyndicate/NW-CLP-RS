@@ -32,6 +32,7 @@ a_NW_station_locs_file|stem|d6204d617acc01fc|f687c69dfdcc7a65|ef46db3751d8e999|-
 a_NW_station_points|stem|c55aac16dd0b441d|860dbc6e9c5d0dbc|f712f905cb5e0e98|-2064030865||t19607.8446530822s|e4db6b504131b3a3|2643|rds|local|vector|||0.002||
 a_NW_station_points_file|stem|f12e58a86b16d843|89cf27f2b8716e3b|7c5300a9d996856f|688712038|a_locs_poly_setup/out/NW_points_NHD_info.gpkg|t19607.8446523291s|22c04e6244b71b04|98304|file|local|vector|||0||
 a_targets_list|object|4dc1516390c1f16c|||||||||||||||
+add_spatial_information|function|2aad3a1c440e44da|||||||||||||||
 apply_handoffs_to7|function|e25a93df548a2b75|||||||||||||||
 apply_handoffs_to8|function|e3509846f73aad7c|||||||||||||||
 b_collated_files|stem|9b9dad5c9aad8596|b8c955f2104226c0|f4b14b7ef7b12fb6|-2048093660||t19607.8518975916s|37e90c3ecba3a0b1|177|rds|local|vector||b_collated_files_afe6f149*b_collated_files_ddda2ad0*b_collated_files_10689667*b_collated_files_545f9182*b_collated_files_d79e2e0f*b_collated_files_800b9415|0||
@@ -124,6 +125,14 @@ d_Rrs_DSWE1_correction_figures_30afd6c6|branch|fb2f462819b536b0|205a2dd6fe4b7ddf
 d_Rrs_DSWE1_correction_figures_6483b9b6|branch|6d96716d596d06ad|205a2dd6fe4b7ddf|dede16f98d0fedf3|-325425810||t19607.8569807178s|83dfaca672102c9e|139|rds|local|vector|d_Rrs_DSWE1_correction_figures||18.75|1m22mRemoved 58428 rows containing missing values geom_point.. 1m22mRemoved 841 rows containing missing values geom_point.. 1m22mRemoved 58428 rows containing missing values geom_point.. 1m22mRemoved 58428 rows containing missing values geom_point.. 1m22mRemoved 841 rows containing missing values geom_point.. 1m22mRemoved 58428 rows containing missing values geom_point.. 1m22mRemoved 58428 rows containing missing values geom_point.. 1m22mRemoved 841 rows containing missing values geom_point.. 1m22mRemoved 58428 rows containing missing values geom_point.. 1m22mRemoved 58428 rows containing missing values geom_point.. 1m22mRemoved 841 rows containing missing values geom_point.. 1m22mRemoved 58428 rows containing missing values geom_point.. 1m22mRemoved 58428 rows containing missing values geom_point.. 1m22mRemoved 841 rows containing missing values geom_point.. 1m22mRemoved 58428 rows containing missing values geom_point.. 1m22mRemoved 58428 rows containing missing values geom_point.. 1m22mRemoved 841 rows containing missing values geom_point.. 1m22mRemoved 58428 rows containing missing values geom_point.. 1m22mRemoved 97853 rows containing missing values geom_point.. 1m22mRemoved 97853 rows containing missing values geom_point.. 1m22mRemoved 97853 rows containing missing values geom_point.. 1m22mRemoved 97853 rows containing missing values geom_point.|
 d_targets_list|object|5bebcca6a2735293|||||||||||||||
 download_csvs_from_drive|function|6980bb6b493bda49|||||||||||||||
+e_add_spatial_info_NW_CLP_points_DSWE1|stem|4d2b781f891feafa|81c24dc0c8f9ac67|dee85942129d2a09|134039693||t19614.6637461331s|cba50785e7b11882|141|rds|local|vector|||0.593||
+e_add_spatial_info_NW_CLP_polygons_DSWE1|stem|ba4ed1c7284dd565|b8baef9acae2c38f|351adcdf7c83f7c4|2126614629||t19614.6637511469s|3703cb9bd2946119|140|rds|local|vector|||0.423||
+e_CLP_points_to_Drive_DSWE1|stem||9d5222b94ac57a4d|3574494c728bda0e|1809265396||t19614.6616246865s||0|rds|local|vector|||26.535||object e_subset_points_for_CLP not found
+e_NW_CLP_points_dataset_with_info_DSWE1_file|stem|8f94dbf5a6d84848|820f477bb659cc5c|e734d85dc22a7f3e|-1288854150|e_separate_NW_CLP_data/out//NW-Poudre-Historical_point_DSWE1_for_analysis_2023-08-26.feather|t19614.6637461207s|c2dfba574b2a02d9|135947864|file|local|vector|||0||
+e_subset_points_for_CLP_DSWE1|stem|56b5da9fce19a49e|1ec91d8c711462dc|f0644b0138e8ed86|-1890158332||t19614.6637566246s|237f91a00ac3de41|125|rds|local|vector|||0.3||
+e_subset_points_for_NW_DSWE1|stem|48468877e8a4bb3a|b568b922358f0eca|f0644b0138e8ed86|-807816685||t19614.6637531293s|237f91a00ac3de41|125|rds|local|vector|||0.169||
+e_subset_points_for_ROSS_CLP_DSWE1|stem||89b8b9e96f492531|71a862789bb7a5cf|1107988566||t19614.6637587941s||0|rds|local|vector|||0.151||object a_ROSS_CLP_w_NHD not found
+e_targets_list|object|16bc13e6982ba8a7|||||||||||||||
 get_hucs_from_points|function|fbf200b4c0c8c998|||||||||||||||
 get_POI_centers|function|b74f3e454382a9f2|||||||||||||||
 get_polygons|function|c25d3ee7795a3ad8|||||||||||||||
@@ -131,3 +140,5 @@ load_points_add_NHD_info|function|8546fd9c1a971b60|||||||||||||||
 make_Rrs_correction_figures|function|01517475b10f20d8|||||||||||||||
 points_to_csv|function|b6ad0c8f09bae5ec|||||||||||||||
 select_polygons_by_points|function|22d5a213ae5ce68e|||||||||||||||
+subset_file_by_data_group|function|2ff525d4dc3673ba|||||||||||||||
+subset_file_by_PermId|function|67e2cce9fed9ca38|||||||||||||||
