@@ -19,6 +19,7 @@ a_make_collated_points|stem|cb9a8217deeddfa0|e8afcd2999214f76|5608d103ea2a78ae|1
 a_make_NW_CLP_centers|stem|fe5d4559f15f1d30|a1743c63817512f8|2a3a3238f645423e|-789466130||t19607.8446584837s|2005da2f14a67e22|98|rds|local|vector|||0.465||
 a_make_NW_CLP_polygons|stem|fffa746b37480116|c726d10cc7924899|a7b6e855b7daa3c3|-1806697847||t19607.8446519396s|e961a0bcff3caad6|91|rds|local|vector|||0.19||
 a_make_NW_station_points|stem|678555ff6d6da773|ee6bc8a721ee541f|1165225657aeea37|-80709665||t19607.8446523356s|41200f7f0df0ebd3|96|rds|local|vector|||0.032||
+a_make_ROSS_CLP_points|stem||bd86ed9b326e566e|d29272037bb840a0|362988168||t19614.6713946506s||0|rds|local|vector|||0.152||unused arguments ROSS_CLP, gen_point
 a_NW_CLP_centers|stem|8c967b2239fa9e02|18bb9d7c163de5b2|d81bd8390ce1a6c5|-860593064||t19607.84465868s|11e8a4df0cd2faab|33516|rds|local|vector|||0.011||
 a_NW_CLP_centers_file|stem|9892c4a1fda6d37a|8fd85b210949b144|965f95f82becd866|-789366530|a_locs_poly_setup/out/NW_CLP_polygon_centers.gpkg|t19607.8446584767s|7692732bfe7db68c|225280|file|local|vector|||0||
 a_NW_CLP_polygons|stem|577fceaa30fc385f|f75197cc73fb67bc|1daf3281e91a381d|-2045469507||t19607.844653031s|a07c3698ebd0988c|581246|rds|local|vector|||0.008||
@@ -31,7 +32,9 @@ a_NW_station_locs|stem|5847e9de85a6a01f|22b3e6ebec52c681|b56a868eb5cbf01e|-42089
 a_NW_station_locs_file|stem|d6204d617acc01fc|f687c69dfdcc7a65|ef46db3751d8e999|-86099451|data/spatialData/Northern Water Station Coordinates.xlsx|t19436.6943518519s|dedc51677fbc5682|18503|file|local|vector|||0.045||
 a_NW_station_points|stem|c55aac16dd0b441d|860dbc6e9c5d0dbc|f712f905cb5e0e98|-2064030865||t19607.8446530822s|e4db6b504131b3a3|2643|rds|local|vector|||0.002||
 a_NW_station_points_file|stem|f12e58a86b16d843|89cf27f2b8716e3b|7c5300a9d996856f|688712038|a_locs_poly_setup/out/NW_points_NHD_info.gpkg|t19607.8446523291s|22c04e6244b71b04|98304|file|local|vector|||0||
-a_targets_list|object|4dc1516390c1f16c|||||||||||||||
+a_ROSS_CLP_file|stem|ad0d18d103d5732b|677e0e3b70a34de8|799fd48e193cadca|-149304813||t19614.6713905903s|c060e1b24b17f00e|617|rds|local|vector|||0.1||
+a_ROSS_CLP_file_file|stem|274cb8907dfa1e33|b675f5e44579d49a|ef46db3751d8e999|1420797280|data/CLP/upper_poudre_lakes_v2.csv|t19596.8777007121s|a698f91831686738|447|file|local|vector|||0.03||
+a_targets_list|object|6abd5e0034ae2c67|||||||||||||||
 add_spatial_information|function|2aad3a1c440e44da|||||||||||||||
 apply_handoffs_to7|function|e25a93df548a2b75|||||||||||||||
 apply_handoffs_to8|function|e3509846f73aad7c|||||||||||||||

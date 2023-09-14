@@ -128,7 +128,7 @@ a_targets_list <- list(
   # add NHD info to points (and load as a simple feature)
   tar_target(
     name = a_make_ROSS_CLP_points,
-    command = load_points_add_NHD_info(a_ROSS_CLP_file, a_NW_CLP_polygons, 'ROSS_CLP', 'gen_point'),
+    command = load_points_add_NHD_info(a_ROSS_CLP_file, a_NW_CLP_polygons, "ROSS_CLP", "gen_point"),
     packages = c('tidyverse', 'sf')
   ),
   # track and load the simple feature file
