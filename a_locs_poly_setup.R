@@ -106,7 +106,7 @@ a_targets_list <- list(
   # And make it a sf object, adding in the NHD info from the upstream polygons file
   tar_target(
     name = a_make_NW_station_points,
-    command = load_points_add_NHD_info(a_NW_station_locs, a_NW_polygons),
+    command = load_points_add_NHD_info(a_NW_station_locs, a_NW_polygons, "NW", "station"),
     packages = c("tidyverse", "sf")
   ),
   # here we track and load that simple features file

@@ -18,8 +18,9 @@ a_make_CLP_polygon|stem|59cabaef19b1b0e3|2c9ead9dbd5e6380|3ceaf418a27b12ad|-2050
 a_make_collated_points|stem|cb9a8217deeddfa0|e8afcd2999214f76|5608d103ea2a78ae|1821340243||t19607.8446593696s|f0d5811415b6b792|97|rds|local|vector|||0.058||
 a_make_NW_CLP_centers|stem|fe5d4559f15f1d30|a1743c63817512f8|2a3a3238f645423e|-789466130||t19607.8446584837s|2005da2f14a67e22|98|rds|local|vector|||0.465||
 a_make_NW_CLP_polygons|stem|fffa746b37480116|c726d10cc7924899|a7b6e855b7daa3c3|-1806697847||t19607.8446519396s|e961a0bcff3caad6|91|rds|local|vector|||0.19||
-a_make_NW_station_points|stem|678555ff6d6da773|ee6bc8a721ee541f|1165225657aeea37|-80709665||t19607.8446523356s|41200f7f0df0ebd3|96|rds|local|vector|||0.032||
-a_make_ROSS_CLP_points|stem||bd86ed9b326e566e|d29272037bb840a0|362988168||t19614.6713946506s||0|rds|local|vector|||0.152||unused arguments ROSS_CLP, gen_point
+a_make_NW_station_points|stem|224e96847e61953f|0f416ac850599ca5|501533fa3786bf9b|-80709665||t19614.6810436789s|f0d5811415b6b792|97|rds|local|vector|||0.277||
+a_make_ROSS_CLP_points|stem|1627ae37f984b840|bd86ed9b326e566e|ed32c1901eea7d68|362988168||t19614.6810447377s|9935591c0ed1d478|103|rds|local|vector|||0.074||
+a_make_ROSS_CLP_w_NHD|stem|2dec5c7b95ad997c|6b47c59fed59ee0c|2e00b25703e46bdb|-1451140809||t19614.6810455356s|1ed81542be95902a|101|rds|local|vector|||0.061||
 a_NW_CLP_centers|stem|8c967b2239fa9e02|18bb9d7c163de5b2|d81bd8390ce1a6c5|-860593064||t19607.84465868s|11e8a4df0cd2faab|33516|rds|local|vector|||0.011||
 a_NW_CLP_centers_file|stem|9892c4a1fda6d37a|8fd85b210949b144|965f95f82becd866|-789366530|a_locs_poly_setup/out/NW_CLP_polygon_centers.gpkg|t19607.8446584767s|7692732bfe7db68c|225280|file|local|vector|||0||
 a_NW_CLP_polygons|stem|577fceaa30fc385f|f75197cc73fb67bc|1daf3281e91a381d|-2045469507||t19607.844653031s|a07c3698ebd0988c|581246|rds|local|vector|||0.008||
@@ -30,11 +31,15 @@ a_NW_polygons|stem|bec7e5d6becb346c|bd2c5eb122076b7a|8a702001eb190440|1732818101
 a_NW_polygons_file|stem|8c64cf26517833bb|fc1a23a9b1a4f149|95a2bcb7544a1204|-1617252696|a_locs_poly_setup/out/NW_polygons.gpkg|t19607.8446495097s|0f70708e4f3d1fdb|299008|file|local|vector|||0.001||
 a_NW_station_locs|stem|5847e9de85a6a01f|22b3e6ebec52c681|b56a868eb5cbf01e|-420892619||t19607.8432910291s|f7f8910159e13ac3|724|rds|local|vector|||0.009||
 a_NW_station_locs_file|stem|d6204d617acc01fc|f687c69dfdcc7a65|ef46db3751d8e999|-86099451|data/spatialData/Northern Water Station Coordinates.xlsx|t19436.6943518519s|dedc51677fbc5682|18503|file|local|vector|||0.045||
-a_NW_station_points|stem|c55aac16dd0b441d|860dbc6e9c5d0dbc|f712f905cb5e0e98|-2064030865||t19607.8446530822s|e4db6b504131b3a3|2643|rds|local|vector|||0.002||
-a_NW_station_points_file|stem|f12e58a86b16d843|89cf27f2b8716e3b|7c5300a9d996856f|688712038|a_locs_poly_setup/out/NW_points_NHD_info.gpkg|t19607.8446523291s|22c04e6244b71b04|98304|file|local|vector|||0||
+a_NW_station_points|stem|c55aac16dd0b441d|860dbc6e9c5d0dbc|39a70573d124238f|-2064030865||t19614.6810437993s|e4db6b504131b3a3|2643|rds|local|vector|||0.003||
+a_NW_station_points_file|stem|60edcb4bab5bdfdb|89cf27f2b8716e3b|7da793396b6572bf|688712038|a_locs_poly_setup/out//NW_points_NHD_info.gpkg|t19614.6810436677s|22c04e6244b71b04|98304|file|local|vector|||0||
 a_ROSS_CLP_file|stem|ad0d18d103d5732b|677e0e3b70a34de8|799fd48e193cadca|-149304813||t19614.6713905903s|c060e1b24b17f00e|617|rds|local|vector|||0.1||
 a_ROSS_CLP_file_file|stem|274cb8907dfa1e33|b675f5e44579d49a|ef46db3751d8e999|1420797280|data/CLP/upper_poudre_lakes_v2.csv|t19596.8777007121s|a698f91831686738|447|file|local|vector|||0.03||
-a_targets_list|object|6abd5e0034ae2c67|||||||||||||||
+a_ROSS_CLP_points|stem|93cfc271587ef091|fb1977ec15f130b2|f5fec45bf98f857c|-1606246123||t19614.6810448076s|664d8d08489d3b95|2449|rds|local|vector|||0.002||
+a_ROSS_CLP_points_file|stem|cd58b12b1500d13c|e85192a60ac7ba8a|601d5c5a5eb28c2b|-931860933|a_locs_poly_setup/out//ROSS_CLP_points_NHD_info.gpkg|t19614.6810447327s|22c04e6244b71b04|98304|file|local|vector|||0||
+a_ROSS_CLP_w_NHD|stem|9b5b8f1ecd1cb94b|c5048c43454ab769|4c9f70142f0f54f3|1830039801||t19614.681046066s|1ac67ddc9abeec65|1632|rds|local|vector|||0.041||
+a_ROSS_CLP_w_NHD_file|stem|ba4c8fd8bb3ae759|f078ca6051a4f649|9c270983be141636|1957294574|a_locs_poly_setup/out/ROSS_CLP_points_with_NHD.csv|t19614.6810455319s|527d399141c3f7b6|2625|file|local|vector|||0||
+a_targets_list|object|e9f06327fe8abc7d|||||||||||||||
 add_spatial_information|function|2aad3a1c440e44da|||||||||||||||
 apply_handoffs_to7|function|e25a93df548a2b75|||||||||||||||
 apply_handoffs_to8|function|e3509846f73aad7c|||||||||||||||
@@ -130,16 +135,26 @@ d_targets_list|object|5bebcca6a2735293|||||||||||||||
 download_csvs_from_drive|function|6980bb6b493bda49|||||||||||||||
 e_add_spatial_info_NW_CLP_points_DSWE1|stem|4d2b781f891feafa|81c24dc0c8f9ac67|dee85942129d2a09|134039693||t19614.6637461331s|cba50785e7b11882|141|rds|local|vector|||0.593||
 e_add_spatial_info_NW_CLP_polygons_DSWE1|stem|ba4ed1c7284dd565|b8baef9acae2c38f|351adcdf7c83f7c4|2126614629||t19614.6637511469s|3703cb9bd2946119|140|rds|local|vector|||0.423||
-e_CLP_points_to_Drive_DSWE1|stem||9d5222b94ac57a4d|3574494c728bda0e|1809265396||t19614.6616246865s||0|rds|local|vector|||26.535||object e_subset_points_for_CLP not found
+e_CLP_points_dataset_with_info_DSWE1|stem|e49c3db830d81c65|675b5d14c7a300cd|7ce9f8a6d2cc144a|801735816||t19614.6823647797s|ee2120b6033e6c00|31090006|rds|local|vector|||0.222||
+e_CLP_points_dataset_with_info_DSWE1_file|stem|0387d80bb070f716|e021ac11cac3fb08|5ae38cce58841065|-341889522|e_separate_NW_CLP_data/out//CLP_point_DSWE1_for_analysis_2023-08-26.feather|t19614.6637566171s|c1b901188f362ca4|121758832|file|local|vector|||0||
+e_CLP_points_to_Drive_DSWE1|stem|0fbb7e1648804dcd|c8489f3692a7d42a|f78652f9a7d28a1b|1809265396||t19614.6823327738s|7d7aa18edaa796dd|1577|rds|local|vector|||25.601||
+e_NW_CLP_points_dataset_with_info_DSWE1|stem|a3a2c4e8e45a8666|22d3dc910cbe8bc0|c5ac42b14e04ba87|1266939030||t19614.6820359663s|d8cd6347ad764f3c|34451814|rds|local|vector|||0.176||
 e_NW_CLP_points_dataset_with_info_DSWE1_file|stem|8f94dbf5a6d84848|820f477bb659cc5c|e734d85dc22a7f3e|-1288854150|e_separate_NW_CLP_data/out//NW-Poudre-Historical_point_DSWE1_for_analysis_2023-08-26.feather|t19614.6637461207s|c2dfba574b2a02d9|135947864|file|local|vector|||0||
+e_NW_CLP_points_to_Drive_DSWE1|stem|04c001a9ea294759|ebc674af59cc5c92|99300035e74c409d|685526211||t19614.6813706559s|a92f8b3a02c660bc|1588|rds|local|vector|||27.916||
+e_NW_points_dataset_with_info_DSWE1|stem|6384108a08ea415f|efc5a8f7b0deecad|243500276f1331e0|1175684102||t19614.682335185s|f601c71c936922ac|2691139|rds|local|vector|||0.012||
+e_NW_points_dataset_with_info_DSWE1_file|stem|75a1be3428f04b2f|15130e01dd902d54|bb071c17321275e5|-918187712|e_separate_NW_CLP_data/out//NW_point_DSWE1_for_analysis_2023-08-26.feather|t19614.6637531243s|a52626429b1badba|10400744|file|local|vector|||0||
+e_NW_points_to_Drive_DSWE1|stem|f04324305453e021|591d9e0462d0ada1|ee619b93c0d05bff|1164194908||t19614.6817180706s|7d7aa18edaa796dd|1577|rds|local|vector|||29.659||
+e_ROSS_CLP_points_dataset_with_info_DSWE1|stem|435e6d8b0015593e|2e455e63da368eaf|2b055669d08fcc7b|-226130967||t19614.6823371318s|20201e73310da8aa|2294438|rds|local|vector|||0.007||
+e_ROSS_CLP_points_dataset_with_info_DSWE1_file|stem|2acd60d37ab51c50|3754072f543969d9|70f9e571b3dc443e|856887585|e_separate_NW_CLP_data/out//ROSS_CLP_point_DSWE1_for_analysis_2023-08-26.feather|t19614.6813743634s|c8c65abb3c7cd62b|8928888|file|local|vector|||0||
+e_ROSS_CLP_points_to_Drive_DSWE1|stem|f9b03260237fab41|d281ecdacb1d6e05|3268115e0d5442b5|1425614209||t19614.6820059289s|54ec57d7c187309f|1583|rds|local|vector|||24.857||
 e_subset_points_for_CLP_DSWE1|stem|56b5da9fce19a49e|1ec91d8c711462dc|f0644b0138e8ed86|-1890158332||t19614.6637566246s|237f91a00ac3de41|125|rds|local|vector|||0.3||
 e_subset_points_for_NW_DSWE1|stem|48468877e8a4bb3a|b568b922358f0eca|f0644b0138e8ed86|-807816685||t19614.6637531293s|237f91a00ac3de41|125|rds|local|vector|||0.169||
-e_subset_points_for_ROSS_CLP_DSWE1|stem||89b8b9e96f492531|71a862789bb7a5cf|1107988566||t19614.6637587941s||0|rds|local|vector|||0.151||object a_ROSS_CLP_w_NHD not found
+e_subset_points_for_ROSS_CLP_DSWE1|stem|9259f562ef96853d|89b8b9e96f492531|68afe144791ade10|1107988566||t19614.6813743686s|f02b269bc80ae470|129|rds|local|vector|||0.317||
 e_targets_list|object|16bc13e6982ba8a7|||||||||||||||
 get_hucs_from_points|function|fbf200b4c0c8c998|||||||||||||||
 get_POI_centers|function|b74f3e454382a9f2|||||||||||||||
 get_polygons|function|c25d3ee7795a3ad8|||||||||||||||
-load_points_add_NHD_info|function|8546fd9c1a971b60|||||||||||||||
+load_points_add_NHD_info|function|4059a8e240d22e10|||||||||||||||
 make_Rrs_correction_figures|function|01517475b10f20d8|||||||||||||||
 points_to_csv|function|b6ad0c8f09bae5ec|||||||||||||||
 select_polygons_by_points|function|22d5a213ae5ce68e|||||||||||||||
