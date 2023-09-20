@@ -33,6 +33,8 @@ a_targets_list <- list(
     read = read_csv(!!.x),
     packages = "readr"
   ),
+  
+  
   # using the locs file, get the upstream huc-4s to download NHDplusHR
   # this returns a list to branch over
   tar_target(
@@ -63,6 +65,8 @@ a_targets_list <- list(
     read = read_sf(!!.x),
     packages = "sf"
   ),
+  
+  
   # here, we combine the NW and CLP polygons into a single file, condensing the metadata
   # where needed 
   tar_target(
@@ -90,6 +94,8 @@ a_targets_list <- list(
     read = read_sf(!!.x),
     packages = "sf"
   ),
+  
+  
   # and now we'll read in the station location information for NW
   tar_file_read(
     name = a_NW_station_locs,
@@ -100,7 +106,7 @@ a_targets_list <- list(
   # And make it a sf object, adding in the NHD info from the upstream polygons file
   tar_target(
     name = a_make_NW_station_points,
-    command = load_points_add_NHD_info(a_NW_station_locs, a_NW_polygons),
+    command = load_points_add_NHD_info(a_NW_station_locs, a_NW_polygons, "NW", "station"),
     packages = c("tidyverse", "sf")
   ),
   # here we track and load that simple features file
@@ -110,6 +116,43 @@ a_targets_list <- list(
     read = read_sf(!!.x),
     packages = "sf"
   ),
+  
+  
+  # let's also bring in the ROSS CLP subset of lakes
+  tar_file_read(
+    name = a_ROSS_CLP_file,
+    command = 'data/CLP/upper_poudre_lakes_v2.csv',
+    read = read_csv(!!.x),
+    packages = 'readr'
+  ),
+  # add NHD info to points (and load as a simple feature)
+  tar_target(
+    name = a_make_ROSS_CLP_points,
+    command = load_points_add_NHD_info(a_ROSS_CLP_file, a_NW_CLP_polygons, "ROSS_CLP", "gen_point"),
+    packages = c('tidyverse', 'sf')
+  ),
+  # track and load the simple feature file
+  tar_file_read(
+    name = a_ROSS_CLP_points,
+    command = a_make_ROSS_CLP_points,
+    read = read_sf(!!.x),
+    packages = 'sf'
+  ),
+  # and then export those points to .csv
+  tar_target(
+    name = a_make_ROSS_CLP_w_NHD,
+    command = points_to_csv(a_ROSS_CLP_points, 'ROSS_CLP_points_with_NHD'),
+    packages = c("tidyverse", "sf")
+  ),
+  # load and track that file
+  tar_file_read(
+    name = a_ROSS_CLP_w_NHD,
+    command = a_make_ROSS_CLP_w_NHD,
+    read = read_csv(!!.x),
+    packages = 'sf'
+  ),
+  
+  
   # we want the centers and the station locations to be in a single data set for 
   # use in the Landsat pull, and want to retain the metadata (aka, data group 
   # in this case)
