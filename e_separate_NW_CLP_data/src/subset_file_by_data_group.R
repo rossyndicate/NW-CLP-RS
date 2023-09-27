@@ -14,7 +14,7 @@
 subset_file_by_data_group <- function(data_file, data_grp) {
   data <- read_feather(data_file)
   subset <- data %>% 
-    filter(data_group == !!data_grp)
+    filter(grepl(data_grp, data_group))
   # get some info for parsing out the data to be joined
   filename <- str_split(data_file, "/")[[1]][4]
   # break out file prefix
