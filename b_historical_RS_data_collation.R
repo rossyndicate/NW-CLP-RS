@@ -19,7 +19,7 @@ b_targets_list <- list(
     name = b_downloaded_historical_NW_CLP,
     command = {
       a_collated_pts_file
-      download_csvs_from_drive("LS-C2-SR-NW_CLP_-Poly-Points-v2023-08-17")
+      download_csvs_from_drive("LS-C2-SR-NW_CLP_Poly-Points-v2023-09-27")
       },
     packages = c("tidyverse", "googledrive"),
     cue = tar_cue(depend = T)
@@ -39,7 +39,7 @@ b_targets_list <- list(
     name = b_collated_historical_NW_CLP,
     command = {
       b_downloaded_historical_NW_CLP
-      collate_csvs_from_drive("NW-Poudre-Historical", "v2023-08-17")
+      collate_csvs_from_drive("NW-Poudre-Historical", "v2023-09-27")
       },
     packages = c("tidyverse", "feather")
   ),
@@ -48,7 +48,7 @@ b_targets_list <- list(
     name = b_collated_historical_regional,
     command = {
       b_downloaded_historical_regional
-      collate_csvs_from_drive("NW-Poudre-Regional", "v2023-08-17")
+      collate_csvs_from_drive("NW-Poudre-Regional", "v2023-09-27")
       },
     packages = c("tidyverse", "feather")
   ),
@@ -58,7 +58,7 @@ b_targets_list <- list(
     name = b_combined_regional_metadata_data,
     command = {
       b_collated_historical_regional
-      combine_metadata_with_pulls("NW-Poudre-Regional", "v2023-08-17")
+      combine_metadata_with_pulls("NW-Poudre-Regional", "v2023-09-27")
     },
     packages = c("tidyverse", "feather")
   ),
@@ -67,7 +67,7 @@ b_targets_list <- list(
     name = b_combined_NW_CLP_metadata_data,
     command = {
       b_collated_historical_NW_CLP
-      combine_metadata_with_pulls("NW-Poudre-Historical", "v2023-08-17")
+      combine_metadata_with_pulls("NW-Poudre-Historical", "v2023-09-27")
     },
     packages = c("tidyverse", "feather")
   ),
@@ -79,7 +79,7 @@ b_targets_list <- list(
       b_combined_regional_metadata_data
       list.files('b_historical_RS_data_collation/out/', 
                  full.names = T,
-                 pattern = 'v2023-08-17') %>% 
+                 pattern = Sys.getenv("collate_version")) %>% 
         .[grepl('collated', .)]
       }
   ),

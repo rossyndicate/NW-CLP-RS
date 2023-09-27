@@ -102,5 +102,5 @@ apply_handoffs_to7 <- function(coefficients, data_filepath) {
                                  "_filtered_corr7_",
                                  DSWE, "_",
                                  type, "_v",
-                                 file_suffix)))
+                                 Sys.getenv("collate_version"))))
 }

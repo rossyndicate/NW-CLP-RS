@@ -17,7 +17,7 @@ d_targets_list <- list(
                          full.names = TRUE) %>% 
         .[grepl("filtered", .)] %>% 
         .[grepl("DSWE1", .)] %>% 
-        .[grepl("v2023-08-17", .)]
+        .[grepl(Sys.getenv("collate_version"), .)]
     }
   ),
   # using the coefficients from the c group (which were DSWE1 only), we"ll
@@ -43,7 +43,7 @@ d_targets_list <- list(
     command = {
       d_DSWE1_handoffs_to7
       d_DSWE1_handoffs_to8
-      collate_DSWE1_corrected_files("v2023-08-17")
+      collate_DSWE1_corrected_files(Sys.getenv("collate_version"))
       },
     packages = c("tidyverse", "feather")
   ),
@@ -53,6 +53,7 @@ d_targets_list <- list(
     command = {
       d_combined_DSWE1_corrected
       list.files("d_apply_handoff_coefficients/out/",
+                 pattern = Sys.getenv("collate_version"),
                  full.names = TRUE)
     }
   ),
