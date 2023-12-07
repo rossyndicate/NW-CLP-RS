@@ -9,10 +9,12 @@ tar_source("b_historical_RS_data_collation/src/")
 # At this time, this is run outside of the {targets} workflow presented here. 
 
 # prep folder structure
-dir.create("b_historical_RS_data_collation/in/")
-dir.create("b_historical_RS_data_collation/mid/")
-dir.create("b_historical_RS_data_collation/out/")
-
+suppressWarnings({
+  dir.create("b_historical_RS_data_collation/in/")
+  dir.create("b_historical_RS_data_collation/mid/")
+  dir.create("b_historical_RS_data_collation/out/")
+})
+  
 b_targets_list <- list(
   # download the NW and CLP data from Google Drive
   tar_target(

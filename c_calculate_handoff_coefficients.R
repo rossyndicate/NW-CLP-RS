@@ -14,9 +14,11 @@ tar_source("c_calculate_handoff_coefficients/src/")
 # band
 
 # create folder structure
-dir.create("c_calculate_handoff_coefficients/mid/")
-dir.create("c_calculate_handoff_coefficients/out/")
-dir.create("c_calculate_handoff_coefficients/figs/")
+suppressWarnings({
+  dir.create("c_calculate_handoff_coefficients/mid/")
+  dir.create("c_calculate_handoff_coefficients/out/")
+  dir.create("c_calculate_handoff_coefficients/figs/")
+})
 
 c_targets_list <- list(
   # set list of LS5-9 common bands

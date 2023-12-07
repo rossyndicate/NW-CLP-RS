@@ -8,7 +8,9 @@ tar_source("e_separate_NW_CLP_data/src/")
 # the ROSSyndicate Google Drive
 
 # prep folder structure
-dir.create('e_separate_NW_CLP_data/out/')
+suppressWarnings({
+  dir.create('e_separate_NW_CLP_data/out/')
+})
 
 e_targets_list <- list(
   # join collated, corrected GEE output with spatial information.

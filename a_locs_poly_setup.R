@@ -9,8 +9,10 @@ tar_source("a_locs_poly_setup/src/")
 # NW = Northern Water.
 
 # create folder structure
-dir.create("a_locs_poly_setup/nhd/")
-dir.create("a_locs_poly_setup/out/")
+suppressWarnings({
+  dir.create("a_locs_poly_setup/nhd/")
+  dir.create("a_locs_poly_setup/out/")
+})
 
 a_targets_list <- list(
   # get the polygons for CLP watershed using HUC8
@@ -33,7 +35,6 @@ a_targets_list <- list(
     read = read_csv(!!.x),
     packages = "readr"
   ),
-  
   
   # using the locs file, get the upstream huc-4s to download NHDplusHR
   # this returns a list to branch over
@@ -71,7 +72,7 @@ a_targets_list <- list(
   # where needed 
   tar_target(
     name = a_make_NW_CLP_polygons,
-    command = combine_and_simplify_sfs(a_CLP_polygons, "CLP", a_NW_polygons, "NW", "CLP_NW_polygons"),
+    command = combine_and_simplify_sfs(a_CLP_polygons, "CLP", a_NW_polygons, "NW", "CLP_NW_polygons", TRUE),
     packages = c("sf", "tidyverse")
   ),
   # and then track and load the resulting polygon file
@@ -118,49 +119,79 @@ a_targets_list <- list(
   ),
   
   
-  # let's also bring in the ROSS CLP subset of lakes
+  # let's also bring in the ROSS CLP subset of lakes, these are random points
+  # in the lake and not specific to a sampling location
   tar_file_read(
     name = a_ROSS_CLP_file,
     command = 'data/CLP/upper_poudre_lakes_v2.csv',
     read = read_csv(!!.x),
     packages = 'readr'
   ),
-  # add NHD info to points (and load as a simple feature)
+  # create a sf object of the ROSS CLP lakes
   tar_target(
-    name = a_make_ROSS_CLP_points,
-    command = load_points_add_NHD_info(a_ROSS_CLP_file, a_NW_CLP_polygons, "ROSS_CLP", "gen_point"),
-    packages = c('tidyverse', 'sf')
-  ),
-  # track and load the simple feature file
-  tar_file_read(
     name = a_ROSS_CLP_points,
-    command = a_make_ROSS_CLP_points,
-    read = read_sf(!!.x),
+    command = st_as_sf(a_ROSS_CLP_file, crs = "EPSG:4269",
+                       coords = c("Longitude", "Latitude")),
+    packages = "sf"
+  ),
+  # get polygons info from NW/CLP sf
+  tar_target(
+    name = a_ROSS_CLP_polygons,
+    command = a_NW_CLP_polygons[a_ROSS_CLP_points, ],
     packages = 'sf'
   ),
-  # and then export those points to .csv
+  # since all the ROSS_CLP reservoirs are in NW_CLP centers and polygons files, 
+  # we'll just add ROSS_CLP label to data group and make a new polygon target
   tar_target(
-    name = a_make_ROSS_CLP_w_NHD,
-    command = points_to_csv(a_ROSS_CLP_points, 'ROSS_CLP_points_with_NHD'),
+    name = a_NW_CLP_ROSS_centers,
+    command = {
+      NHD_perm_ids = unique(a_ROSS_CLP_polygons$Permanent_Identifier)
+      a_NW_CLP_centers %>% 
+        mutate(data_group = if_else(Permanent_Identifier %in% NHD_perm_ids,
+                                    paste(data_group, "ROSS_CLP", sep = ", "),
+                                    data_group))
+    },
+    packages = c("tidyverse", "sf")
+  ),
+  # do the same for NW_CLP polygons
+  tar_target(
+    name = a_NW_CLP_ROSS_polygons,
+    command = {
+      NHD_perm_ids = unique(a_ROSS_CLP_polygons$Permanent_Identifier)
+      a_NW_CLP_polygons %>% 
+        mutate(data_group = if_else(Permanent_Identifier %in% NHD_perm_ids,
+                                    paste(data_group, "ROSS_CLP", sep = ", "),
+                                    data_group))
+    },
+    packages = c("tidyverse", "sf")
+  ),
+  # and then we'll make the ROSS_CLP centers as a .csv
+  tar_target(
+    name = a_make_ROSS_CLP_centers,
+    command = {
+      NHD_perm_ids = unique(a_ROSS_CLP_polygons$Permanent_Identifier)
+      a_ROSS_CLP_centers <- a_NW_CLP_ROSS_centers %>% 
+        filter(Permanent_Identifier %in% NHD_perm_ids)
+      points_to_csv(a_ROSS_CLP_centers, 'ROSS_CLP_centers')
+      },
     packages = c("tidyverse", "sf")
   ),
   # load and track that file
   tar_file_read(
-    name = a_ROSS_CLP_w_NHD,
-    command = a_make_ROSS_CLP_w_NHD,
+    name = a_ROSS_CLP_centers,
+    command = a_make_ROSS_CLP_centers,
     read = read_csv(!!.x),
-    packages = 'sf'
+    packages = 'readr'
   ),
-  
   
   # we want the centers and the station locations to be in a single data set for 
   # use in the Landsat pull, and want to retain the metadata (aka, data group 
   # in this case)
   tar_target(
     name = a_make_collated_points,
-    command = combine_and_simplify_sfs(a_NW_station_points, NA_character_, 
-                                       a_NW_CLP_centers, NA_character_,
-                                       "a_NW_CLP_all_points"),
+    command = combine_and_simplify_sfs(a_NW_CLP_ROSS_centers, NA_character_,
+                                       a_NW_station_points, NA_character_,
+                                       "CLP_NW_ROSS_points", FALSE),
     packages = c("sf", "tidyverse")
   ),
   # and track and load that simple feature
@@ -174,13 +205,6 @@ a_targets_list <- list(
   tar_target(
     name = a_collated_pts_to_csv,
     command = points_to_csv(a_collated_points, "NW_CLP_all_points"),
-    packages = c("tidyverse", "sf")
-  ),
-  # and track and load that file
-  tar_file_read(
-    name = a_collated_pts_file,
-    command = a_collated_pts_to_csv,
-    read = read_csv(!!.x),
     packages = c("tidyverse", "sf")
   )
 )

@@ -7,6 +7,11 @@ tar_source("d_apply_handoff_coefficients/src/")
 # the handoff inputs, exports the analysis-ready file(s), and uploads them to 
 # the ROSSyndicate Drive.
 
+# create folder structure
+suppressWarnings({
+  dir.create("d_apply_handoff_coefficients/mid/")
+})
+
 d_targets_list <- list(
   # make a list of the filtered DSWE1 files from the b group
   tar_target(
