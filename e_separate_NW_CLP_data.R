@@ -83,9 +83,8 @@ e_targets_list <- list(
   # subset the files for ROSS CLP data
   tar_target(
     name = e_subset_points_for_ROSS_CLP_DSWE1,
-    command = subset_file_by_PermId(e_add_spatial_info_NW_CLP_points_DSWE1, 
-                                    unique(a_ROSS_CLP_centers$Permanent_Identifier),
-                                    'ROSS_CLP'),
+    command = subset_file_by_data_group(e_add_spatial_info_NW_CLP_points_DSWE1, 
+                                        'ROSS_CLP'),
     packages = c('tidyverse', 'feather')
   ),
   # track and load that file

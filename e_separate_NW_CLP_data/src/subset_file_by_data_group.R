@@ -12,9 +12,14 @@
 #' 
 #' 
 subset_file_by_data_group <- function(data_file, data_grp) {
-  data <- read_feather(data_file)
+  data <- read_feather(data_file) %>% 
+    #split the data group column into a list
+    mutate(data_group_list = strsplit(data_group, ", "))
   subset <- data %>% 
-    filter(grepl(data_grp, data_group))
+    rowwise() %>% 
+    filter(data_grp %in% data_group_list) %>% 
+    ungroup() %>% 
+    select(-data_group_list)
   # get some info for parsing out the data to be joined
   filename <- str_split(data_file, "/")[[1]][4]
   # break out file prefix
