@@ -21,10 +21,10 @@ e_targets_list <- list(
       d_Rrs_DSWE1_correction_figures
       add_spatial_information(d_DSWE1_corrected_file_list %>% 
                                 .[grepl('Historical_point', .)], 
-                              a_collated_pts_file, 
+                              a_collated_points, 
                               'point')
     },
-    packages = c('tidyverse', 'feather')
+    packages = c('tidyverse', 'feather', 'sf')
   ),
   # track the output file
   tar_file_read(
@@ -51,7 +51,7 @@ e_targets_list <- list(
       d_Rrs_DSWE1_correction_figures
       add_spatial_information(d_DSWE1_corrected_file_list %>% 
                                 .[grepl('Historical_poly', .)], 
-                              a_NW_CLP_polygons, 
+                              a_NW_CLP_ROSS_polygons, 
                               'poly')
     },
     packages = c('tidyverse', 'feather')
@@ -84,7 +84,7 @@ e_targets_list <- list(
   tar_target(
     name = e_subset_points_for_ROSS_CLP_DSWE1,
     command = subset_file_by_PermId(e_add_spatial_info_NW_CLP_points_DSWE1, 
-                                    unique(a_ROSS_CLP_w_NHD$Permanent_Identifier),
+                                    unique(a_ROSS_CLP_centers$Permanent_Identifier),
                                     'ROSS_CLP'),
     packages = c('tidyverse', 'feather')
   ),

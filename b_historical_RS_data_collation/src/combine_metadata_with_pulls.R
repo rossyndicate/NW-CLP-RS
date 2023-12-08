@@ -7,11 +7,13 @@
 #' @param file_prefix specified string that matches the file group to collate
 #' @param version_identifier user-specified string to identify the RS pull these
 #' data are associated with
+#' @param collation_identifier user-specified string to identify the output of this
+#' target
 #' @returns silently creates collated .feather files from 'mid' folder and 
 #' dumps into 'out'
 #' 
 #' 
-combine_metadata_with_pulls <- function(file_prefix, version_identifier) {
+combine_metadata_with_pulls <- function(file_prefix, version_identifier, collation_identifier) {
   files <- list.files(file.path("b_historical_RS_data_collation/mid/"),
                      pattern = file_prefix,
                      full.names = TRUE) %>% 
@@ -71,8 +73,8 @@ combine_metadata_with_pulls <- function(file_prefix, version_identifier) {
       write_feather(DSWE1_points,
                     file.path("b_historical_RS_data_collation/out/",
                               paste0(file_prefix,
-                                     "_collated_DSWE1_points_meta_",
-                                     version_identifier,
+                                     "_collated_DSWE1_points_meta_v",
+                                     collation_identifier,
                                      ".feather")))
     }
     # and the DSWE 3 data
@@ -82,8 +84,8 @@ combine_metadata_with_pulls <- function(file_prefix, version_identifier) {
       write_feather(DSWE3_points,
                     file.path("b_historical_RS_data_collation/out/",
                               paste0(file_prefix,
-                                     "_collated_DSWE3_points_meta_",
-                                     version_identifier,
+                                     "_collated_DSWE3_points_meta_v",
+                                     collation_identifier,
                                      ".feather")))
     }
   }
@@ -119,8 +121,8 @@ combine_metadata_with_pulls <- function(file_prefix, version_identifier) {
       write_feather(DSWE1_centers,
                     file.path("b_historical_RS_data_collation/out/",
                               paste0(file_prefix,
-                                     "_collated_DSWE1_centers_meta_",
-                                     version_identifier,
+                                     "_collated_DSWE1_centers_meta_v",
+                                     collation_identifier,
                                      ".feather")))
     }
     # and the DSWE 3 data
@@ -130,8 +132,8 @@ combine_metadata_with_pulls <- function(file_prefix, version_identifier) {
       write_feather(DSWE3_centers,
                     file.path("b_historical_RS_data_collation/out/",
                               paste0(file_prefix,
-                                     "_collated_DSWE3_centers_meta_",
-                                     version_identifier,
+                                     "_collated_DSWE3_centers_meta_v",
+                                     collation_identifier,
                                      ".feather")))
     }
   }
@@ -167,8 +169,8 @@ combine_metadata_with_pulls <- function(file_prefix, version_identifier) {
       write_feather(DSWE1_poly,
                     file.path("b_historical_RS_data_collation/out/",
                               paste0(file_prefix,
-                                     "_collated_DSWE1_poly_meta_",
-                                     version_identifier,
+                                     "_collated_DSWE1_poly_meta_v",
+                                     collation_identifier,
                                      ".feather")))
     }
     # and the DSWE 3 data
@@ -178,8 +180,8 @@ combine_metadata_with_pulls <- function(file_prefix, version_identifier) {
       write_feather(DSWE3_poly,
                     file.path("b_historical_RS_data_collation/out/",
                               paste0(file_prefix,
-                                     "_collated_DSWE3_poly_meta_",
-                                     version_identifier,
+                                     "_collated_DSWE3_poly_meta_v",
+                                     collation_identifier,
                                      ".feather")))
     }
   }

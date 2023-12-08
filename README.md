@@ -13,8 +13,14 @@ downstream uses of this work be available to the public when possible.
 This repository uses a symlink data folder to the NASA-NW OneDrive data folder. 
 Contact B for the link to this if needed.
 
-This workflow incorporates environment settings within an .Renviron document. 
-This document is not tracked in GH. Please request this file from B.
+This workflow incorporates environment settings within an .Renviron document. You
+will need to create a .Renviron document in the root directory containing the
+following information, but with proper punctuation:
+
+google_email = "the ROSS yndicate at gmail dot com"
+nw_clp_pull_version_date = "2023-12-07"
+regional_pull_version_date = "2023-08-17"
+collation_date = "2023-12-08"
 
 ------------------------------------------------------------------------
 
@@ -27,7 +33,7 @@ functional chunks of the workflow.
 __a_locs_poly_setup__:
 
 This group sets up the locations and polygon files 
-for RS retrieval. The group of functioons collates a few different polygon and 
+for RS retrieval. The group of functions collates a few different polygon and 
 point files into a single file of each type as needed for the RS workflow.
 
 

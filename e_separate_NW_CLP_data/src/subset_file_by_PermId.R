@@ -34,12 +34,12 @@ subset_file_by_PermId <- function(data_file, Perm_Id_list, data_grp) {
                                  '_', file_type,
                                  '_', DSWE,
                                  '_for_analysis_',
-                                 Sys.getenv('collate_version'),
+                                 Sys.getenv('collation_date'),
                                  '.feather')))
   file.path('e_separate_NW_CLP_data/out/',
             paste0(data_grp,
                    '_', file_type,
                    '_', DSWE,
                    '_for_analysis_',
-                   Sys.getenv('collate_version'),
+                   Sys.getenv('collation_date'),
                    '.feather'))}

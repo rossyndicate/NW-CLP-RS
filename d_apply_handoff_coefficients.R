@@ -22,7 +22,7 @@ d_targets_list <- list(
                          full.names = TRUE) %>% 
         .[grepl("filtered", .)] %>% 
         .[grepl("DSWE1", .)] %>% 
-        .[grepl(Sys.getenv("collate_version"), .)]
+        .[grepl(Sys.getenv("collation_date"), .)]
     }
   ),
   # using the coefficients from the c group (which were DSWE1 only), we"ll
@@ -48,7 +48,7 @@ d_targets_list <- list(
     command = {
       d_DSWE1_handoffs_to7
       d_DSWE1_handoffs_to8
-      collate_DSWE1_corrected_files(Sys.getenv("collate_version"))
+      collate_DSWE1_corrected_files(Sys.getenv("collation_date"))
       },
     packages = c("tidyverse", "feather")
   ),
@@ -58,7 +58,7 @@ d_targets_list <- list(
     command = {
       d_combined_DSWE1_corrected
       list.files("d_apply_handoff_coefficients/out/",
-                 pattern = Sys.getenv("collate_version"),
+                 pattern = Sys.getenv("collation_date"),
                  full.names = TRUE)
     }
   ),
@@ -66,7 +66,8 @@ d_targets_list <- list(
   # quick comparison of the raw, LS7 corrected, and LS8 corrected values
   tar_target(
     name = d_Rrs_DSWE1_correction_figures,
-    command = make_Rrs_correction_figures(d_DSWE1_corrected_file_list),
+    command = make_Rrs_correction_figures(d_DSWE1_corrected_file_list,
+                                          c_5_9_band_list),
     packages = c("tidyverse", "feather", "cowplot"),
     pattern = map(d_DSWE1_corrected_file_list)
   )

@@ -103,5 +103,5 @@ apply_handoffs_to8 <- function(coefficients, data_filepath) {
                                  "_filtered_corr8_",
                                  DSWE, "_",
                                  type, "_v",
-                                 Sys.getenv("collate_version"))))
+                                 Sys.getenv("collation_date"))))
 }

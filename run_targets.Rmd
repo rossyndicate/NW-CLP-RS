@@ -9,7 +9,24 @@ output:
 
 # Purpose
 
-This script loads all necessary packages to run the targets pipeline, then runs it!
+This script loads all necessary packages to run the {targets} pipeline and then
+runs it! This pipeline organizes the location and polygon information for the NW
+and CLP projects (group a), collates the RS pulls (group b, the RS pulls are 
+currently completed in the Landsat-C2-SRST repository, nw-poudre-historical 
+branch and nw-er3z21-historical), calculates handoff coefficients (group c),
+applies handoff coefficients (group d), then separates the NW and CLP data and 
+saves the files to the ROSSyndicate Google Drive (group e).
+
+To run this pipeline, you will need to have an .Renviron script in your root 
+directory (see the readme file for details) and have created a symlink called 'data' 
+that accesses B's OneDrive. 
+
+Current settings:
+```{r, echo=FALSE}
+message("Northern Water and CLP RS pull date: ", Sys.getenv("nw_clp_pull_version_date"))
+message("Regional RS pull date: ", Sys.getenv("regional_pull_version_date"))
+message("Collation date: ", Sys.getenv("collation_date"))
+```
 
 ## Install necessary packages
 
@@ -58,17 +75,3 @@ tar_make()
 ```{r}
 tar_visnetwork()
 ```
-
-
-```{r write_mermaid}
-# save the mmd file
-writeLines(tar_mermaid(), sep = "\n", "mermaid/mermaid.mmd")
-```
-
-```{zsh create_mermaid_png}
-mmdc -i mermaid/mermaid.mmd -o mermaid/mermaid.png -t dark -w 4000 -H 1000
-```
-
-![](mermaid/mermaid.png)
-
-In order to view [legible] text, right click the image and open in a new window.

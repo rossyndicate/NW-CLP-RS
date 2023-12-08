@@ -44,7 +44,13 @@ apply_handoffs_to7 <- function(coefficients, data_filepath) {
     filter(mission == "LANDSAT_8") %>% 
     mutate(mission = "LANDSAT_9")
   coeff <- full_join(coeff, L9_dummy)
-  # join data with coefficients by mission - LS 7 will be blank, as will LS 4
+  # we also assume the handoff is comparable for LS 4 -> 7 as LS 5. Because there are
+  # so few values, we apply the 5 -> 7 handoff for LS 4
+  L4_dummy <- coeff %>% 
+    filter(mission == "LANDSAT_5") %>% 
+    mutate(mission = "LANDSAT_4")
+  coeff <- full_join(coeff, L4_dummy)
+  # join data with coefficients by mission - LS 7 will be blank
   data <- full_join(data, coeff)
   # calculate corr7 value - that is the Rrs in relative corrected to LS7
   data_out <- data %>% 
@@ -102,5 +108,5 @@ apply_handoffs_to7 <- function(coefficients, data_filepath) {
                                  "_filtered_corr7_",
                                  DSWE, "_",
                                  type, "_v",
-                                 Sys.getenv("collate_version"))))
+                                 Sys.getenv("collation_date"))))
 }

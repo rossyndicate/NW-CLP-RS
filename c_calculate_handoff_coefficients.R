@@ -42,7 +42,9 @@ c_targets_list <- list(
     name = c_DSWE1_regional_file,
     command = {
       b_QAQC_filtered_data
-      "b_historical_RS_data_collation/out/NW-Poudre-Regional_filtered_DSWE1_point_v2023-08-17.feather"
+      paste0("b_historical_RS_data_collation/out/NW-Poudre-Regional_filtered_DSWE1_point_v",
+             Sys.getenv("collation_date"),
+             ".feather")
       },
     read = read_feather(!!.x),
     packages = "feather"
