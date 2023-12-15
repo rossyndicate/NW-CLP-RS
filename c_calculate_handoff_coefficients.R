@@ -52,28 +52,32 @@ c_targets_list <- list(
   # calculate handoff for LS 5 to LS 7
   tar_target(
     name = c_regional_5_7_handoff,
-    command = calculate_5_7_handoff(c_DSWE1_regional_file, c_5_9_band_list),
+    command = calculate_5_7_handoff(filtered = c_DSWE1_regional_file,
+                                    band = c_5_9_band_list),
     packages = "tidyverse",
     pattern = map(c_5_9_band_list)
   ),
   # calculate handoff for LS 8 to LS 7
   tar_target(
     name = c_regional_8_7_handoff,
-    command = calculate_8_7_handoff(c_DSWE1_regional_file, c_5_9_band_list),
+    command = calculate_8_7_handoff(filtered = c_DSWE1_regional_file, 
+                                    band = c_5_9_band_list),
     packages = "tidyverse",
     pattern = map(c_5_9_band_list)
   ),
   # calculate handoff for LS 7 to LS 8
   tar_target(
     name = c_regional_7_8_handoff,
-    command = calculate_7_8_handoff(c_DSWE1_regional_file, c_5_9_band_list),
+    command = calculate_7_8_handoff(filtered = c_DSWE1_regional_file, 
+                                    band = c_5_9_band_list),
     packages = "tidyverse",
     pattern = map(c_5_9_band_list)
   ),
   # calculate handoff for LS 9 to LS 8
   tar_target(
     name = c_regional_9_8_handoff,
-    command = calculate_9_8_handoff(c_DSWE1_regional_file, c_8_9_band_list),
+    command = calculate_9_8_handoff(filtered = c_DSWE1_regional_file, 
+                                    band = c_8_9_band_list),
     packages = "tidyverse",
     pattern = map(c_8_9_band_list)
   ),

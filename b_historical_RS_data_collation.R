@@ -21,9 +21,9 @@ b_targets_list <- list(
     name = b_downloaded_historical_NW_CLP,
     command = {
       a_collated_pts_to_csv 
-      download_csvs_from_drive(paste0("LS-C2-SR-NW_CLP_Poly-Points-v", 
+      download_csvs_from_drive(drive_folder_name = paste0("LS-C2-SR-NW_CLP_Poly-Points-v", 
                                       Sys.getenv("nw_clp_pull_version_date")), 
-                               Sys.getenv("nw_clp_pull_version_date"))
+                               version_identifier = Sys.getenv("nw_clp_pull_version_date"))
       },
     packages = c("tidyverse", "googledrive"),
     cue = tar_cue(depend = T)
@@ -33,9 +33,9 @@ b_targets_list <- list(
     name = b_downloaded_historical_regional,
     command = {
       a_collated_pts_to_csv
-      download_csvs_from_drive(paste0("LS-C2-SR-RegionalPoints-v", 
+      download_csvs_from_drive(drive_folder_name = paste0("LS-C2-SR-RegionalPoints-v", 
                                       Sys.getenv("regional_pull_version_date")),
-                               Sys.getenv("regional_pull_version_date"))
+                               version_identifier = Sys.getenv("regional_pull_version_date"))
       },
     packages = c("tidyverse", "googledrive")
   ),
@@ -45,7 +45,8 @@ b_targets_list <- list(
     name = b_collated_historical_NW_CLP,
     command = {
       b_downloaded_historical_NW_CLP
-      collate_csvs_from_drive("NW-Poudre-Historical", Sys.getenv("nw_clp_pull_version_date"))
+      collate_csvs_from_drive(file_prefix = "NW-Poudre-Historical", 
+                              version_identifier = Sys.getenv("nw_clp_pull_version_date"))
       },
     packages = c("tidyverse", "feather")
   ),
@@ -54,7 +55,8 @@ b_targets_list <- list(
     name = b_collated_historical_regional,
     command = {
       b_downloaded_historical_regional
-      collate_csvs_from_drive("NW-Poudre-Regional", Sys.getenv("regional_pull_version_date"))
+      collate_csvs_from_drive(file_prefix = "NW-Poudre-Regional", 
+                              version_identifier = Sys.getenv("regional_pull_version_date"))
       },
     packages = c("tidyverse", "feather")
   ),
@@ -64,9 +66,9 @@ b_targets_list <- list(
     name = b_combined_regional_metadata_data,
     command = {
       b_collated_historical_regional
-      combine_metadata_with_pulls("NW-Poudre-Regional", 
-                                  Sys.getenv("regional_pull_version_date"),
-                                  Sys.getenv("collation_date"))
+      combine_metadata_with_pulls(file_prefix = "NW-Poudre-Regional", 
+                                  version_identifier = Sys.getenv("regional_pull_version_date"),
+                                  collation_identifier = Sys.getenv("collation_date"))
     },
     packages = c("tidyverse", "feather")
   ),
@@ -75,9 +77,9 @@ b_targets_list <- list(
     name = b_combined_NW_CLP_metadata_data,
     command = {
       b_collated_historical_NW_CLP
-      combine_metadata_with_pulls("NW-Poudre-Historical", 
-                                  Sys.getenv("nw_clp_pull_version_date"),
-                                  Sys.getenv("collation_date"))
+      combine_metadata_with_pulls(file_prefix = "NW-Poudre-Historical", 
+                                  version_identifier = Sys.getenv("nw_clp_pull_version_date"),
+                                  collation_identifier = Sys.getenv("collation_date"))
     },
     packages = c("tidyverse", "feather")
   ),
@@ -96,7 +98,7 @@ b_targets_list <- list(
   # pass the QAQC filter over each of the listed files, creating filtered files
   tar_target(
     name = b_QAQC_filtered_data,
-    command = baseline_QAQC_RS_data(b_collated_files),
+    command = baseline_QAQC_RS_data(filepath = b_collated_files),
     packages = c("tidyverse", "feather"),
     pattern = map(b_collated_files)
   )

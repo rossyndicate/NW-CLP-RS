@@ -30,14 +30,16 @@ d_targets_list <- list(
   # first for the relative-to-LS7 values
   tar_target(
     name = d_DSWE1_handoffs_to7,
-    command = apply_handoffs_to7(c_collated_handoff_coefficients, d_filtered_DSWE1_data),
+    command = apply_handoffs_to7(coefficients = c_collated_handoff_coefficients, 
+                                 data_filepath = d_filtered_DSWE1_data),
     packages = c("tidyverse", "feather"),
     pattern = map(d_filtered_DSWE1_data)
   ),
   # and do it for the relative-to-LS8 values
   tar_target(
     name = d_DSWE1_handoffs_to8,
-    command = apply_handoffs_to8(c_collated_handoff_coefficients, d_filtered_DSWE1_data),
+    command = apply_handoffs_to8(coefficients = c_collated_handoff_coefficients, 
+                                 data_filepath = d_filtered_DSWE1_data),
     packages = c("tidyverse", "feather"),
     pattern = map(d_filtered_DSWE1_data)
   ),
@@ -48,7 +50,7 @@ d_targets_list <- list(
     command = {
       d_DSWE1_handoffs_to7
       d_DSWE1_handoffs_to8
-      collate_DSWE1_corrected_files(Sys.getenv("collation_date"))
+      collate_DSWE1_corrected_files(version_identifier = Sys.getenv("collation_date"))
       },
     packages = c("tidyverse", "feather")
   ),
@@ -66,8 +68,8 @@ d_targets_list <- list(
   # quick comparison of the raw, LS7 corrected, and LS8 corrected values
   tar_target(
     name = d_Rrs_DSWE1_correction_figures,
-    command = make_Rrs_correction_figures(d_DSWE1_corrected_file_list,
-                                          c_5_9_band_list),
+    command = make_Rrs_correction_figures(corrected_file = d_DSWE1_corrected_file_list,
+                                          band_names = c_5_9_band_list),
     packages = c("tidyverse", "feather", "cowplot"),
     pattern = map(d_DSWE1_corrected_file_list)
   )
