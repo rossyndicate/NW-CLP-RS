@@ -15,8 +15,6 @@
 #' 
 #' 
 apply_handoffs_to8 <- function(coefficients, data_filepath) {
-  #make sure directory exists
-  dir.create("d_apply_handoff_coefficients/mid/")
   #get some info for saving the file
   filename <- str_split(data_filepath, "/")[[1]][4]
   file_prefix <- str_split(filename, "_")[[1]][1]
@@ -105,5 +103,5 @@ apply_handoffs_to8 <- function(coefficients, data_filepath) {
                                  "_filtered_corr8_",
                                  DSWE, "_",
                                  type, "_v",
-                                 file_suffix)))
+                                 Sys.getenv("collation_date"))))
 }

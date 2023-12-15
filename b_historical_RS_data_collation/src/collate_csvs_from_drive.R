@@ -21,7 +21,8 @@
 #' 
 collate_csvs_from_drive <- function(file_prefix, version_identifier) {
   # get the list of files in the `in` directory 
-  files <- list.files("b_historical_RS_data_collation/in/",
+  files <- list.files(file.path("b_historical_RS_data_collation/in/",
+                                version_identifier),
                      pattern = file_prefix,
                      full.names = TRUE) 
   

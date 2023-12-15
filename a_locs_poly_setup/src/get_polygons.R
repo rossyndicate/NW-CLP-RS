@@ -22,7 +22,7 @@ get_polygons <-  function(HUC, minimum_sqkm) {
   
   # check to see if huc4 exists yet
   file_list <- list.files("a_locs_poly_setup/out/", pattern = c("^huc4.*\\.gpkg$"))
-  if (length(file_list) == 0 | any(!grepl(huc4, file_list))) {
+  if (length(file_list) == 0 | all(!grepl(huc4, file_list))) {
     fp <- download_nhdplushr(nhd_dir = "a_locs_poly_setup/nhd/", huc4)
     # open the waterbody and catchment files
     wbd <- get_nhdplushr(fp, layers = "NHDWaterbody") %>% 

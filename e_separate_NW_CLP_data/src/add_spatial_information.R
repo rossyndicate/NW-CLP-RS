@@ -25,6 +25,10 @@ add_spatial_information <- function(data_file, spatial_info, data_type) {
   DSWE <- str_split(filename, '_')[[1]][3]
   # if data type is point, these will map 1:1 with row id
   if (data_type == 'point') {
+    #add rowid for join
+    spatial_info <- spatial_info %>% 
+      rowid_to_column() %>% 
+      st_drop_geometry()
     # left join with spatial info
     data <- read_feather(data_file) %>% 
       mutate(rowid = as.numeric(rowid)) %>% 
@@ -48,7 +52,7 @@ add_spatial_information <- function(data_file, spatial_info, data_type) {
                                  '_', file_type,
                                  '_', DSWE,
                                  '_for_analysis_',
-                                 Sys.getenv('collate_version'),
+                                 Sys.getenv('collation_date'),
                                  '.feather')
                                 ))
   #return the filepath
@@ -57,6 +61,6 @@ add_spatial_information <- function(data_file, spatial_info, data_type) {
                    '_', file_type,
                    '_', DSWE,
                    '_for_analysis_',
-                   Sys.getenv('collate_version'),
+                   Sys.getenv('collation_date'),
                    '.feather'))
 }

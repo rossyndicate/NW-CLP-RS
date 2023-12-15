@@ -9,7 +9,7 @@
 #' to LS7, and corrected to LS8
 #' 
 #' 
-make_Rrs_correction_figures <- function(corrected_file) {
+make_Rrs_correction_figures <- function(corrected_file, band_names) {
   # ggsave will create folder paths
   # load file and get helpful info from filename
   data <- read_feather(corrected_file)
@@ -21,8 +21,6 @@ make_Rrs_correction_figures <- function(corrected_file) {
   type <- case_when(grepl("point", corrected_file) ~ "point",
                     grepl("poly", corrected_file) ~ "poly",
                     grepl("center", corrected_file) ~ "center")
-  # load band names 
-  band_names <- tar_read(c_5_9_band_list)
   # create figs for bands shared between LS5-9
   walk(.x = band_names,
        function(.x) {
