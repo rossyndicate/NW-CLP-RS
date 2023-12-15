@@ -41,7 +41,7 @@ combine_and_simplify_sfs <- function(sf_1, data_group_1, sf_2, data_group_2, fil
       summarize(n = n()) %>% 
       filter(n > 1) %>% 
       ungroup()
-    dupe_id = unique(dupes$Permanent_Identifier)
+    dupe_id <- unique(dupes$Permanent_Identifier)
     lighter_coll_sf <- collated_sf %>% 
       st_drop_geometry() %>% 
       filter(!Permanent_Identifier %in% dupe_id)
