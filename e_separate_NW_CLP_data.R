@@ -44,18 +44,18 @@ e_targets_list <- list(
       },
     packages = 'googledrive'  
   ),
-  # and also for the polygons
-  tar_target(
-    name = e_add_spatial_info_NW_CLP_polygons_DSWE1,
-    command = {
-      d_Rrs_DSWE1_correction_figures
-      add_spatial_information(d_DSWE1_corrected_file_list %>% 
-                                .[grepl('Historical_poly', .)], 
-                              a_NW_CLP_ROSS_polygons, 
-                              'poly')
-    },
-    packages = c('tidyverse', 'feather')
-  ),
+  # # and also for the polygons
+  # tar_target(
+  #   name = e_add_spatial_info_NW_CLP_polygons_DSWE1,
+  #   command = {
+  #     d_Rrs_DSWE1_correction_figures
+  #     add_spatial_information(d_DSWE1_corrected_file_list %>% 
+  #                               .[grepl('Historical_poly', .)], 
+  #                             a_NW_CLP_ROSS_polygons, 
+  #                             'poly')
+  #   },
+  #   packages = c('tidyverse', 'feather')
+  # ),
   # subset the files for CLP data
   tar_target(
     name = e_subset_points_for_CLP_DSWE1,

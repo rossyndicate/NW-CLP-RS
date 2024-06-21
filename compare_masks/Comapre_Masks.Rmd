@@ -1,0 +1,397 @@
+
+
+```{r}
+library(tidyverse)
+library(targets)
+library(googledrive)
+library(feather)
+
+drive_auth(Sys.getenv('google_email'))
+```
+
+
+# Purpose
+
+This document processes 3 versions of the NW-CLP pull. The first (v2) is the least
+restrictive and most similar to the previous pull - just removes the SR_CLOUD_QA
+mask from previous. v3 uses a fill mask (0 are masked) and realistic values 
+filtered (Rrs \>-0.01). v4 masks SR_ATMOS_OPACITY \>0.3 and SR_QA_AEROSOL high.
+The primary purpose is to see if there is data loss by having increasingly stringent
+pulls and if there is data loss, how much.
+
+## Collate other versions of the pull 
+
+Only v4 (the most restrictive) has been collated in the repo. Download .csvs from 
+Google Drive.
+
+```{r}
+download_csvs_from_drive <- function(drive_folder_name, version_identifier) {
+  drive_auth(email = Sys.getenv("google_email"))
+  dribble_files <- drive_ls(path = drive_folder_name)
+  dribble_files <- dribble_files %>% 
+    filter(grepl(".csv", name))
+  # make sure directory exists, create it if not
+  if(!dir.exists(file.path("b_historical_RS_data_collation/in/", 
+                           version_identifier))) {
+    dir.create(file.path("b_historical_RS_data_collation/in/", 
+                         version_identifier))
+  }
+  walk2(.x = dribble_files$id,
+        .y = dribble_files$name, 
+        .f = function(.x, .y) {
+          try(drive_download(file = .x,
+                         path = file.path("b_historical_RS_data_collation/in/", 
+                                          version_identifier,
+                                          .y),
+                         overwrite = FALSE)) # just pass if already downloaded
+          })
+}
+download_csvs_from_drive(drive_folder_name = "LS-C2-SR-NW_CLP_Poly-Points-v2024-06-11-v2",
+                         version_identifier = '2024-06-11-v2')
+download_csvs_from_drive(drive_folder_name = "LS-C2-SR-NW_CLP_Poly-Points-v2024-06-11-v3",
+                         version_identifier = '2024-06-11-v3')
+```
+
+Collate the files we just downloaded
+
+```{r}
+collate_csvs_from_drive <- function(file_prefix, version_identifier) {
+  # get the list of files in the `in` directory 
+  files <- list.files(file.path("b_historical_RS_data_collation/in/",
+                                version_identifier),
+                     pattern = file_prefix,
+                     full.names = TRUE) 
+  
+  meta_files <- files[grepl("meta", files)]
+  all_meta <- map_dfr(meta_files, read_csv) %>% 
+    distinct()
+  write_feather(all_meta, file.path("b_historical_RS_data_collation/mid/",
+                                  paste0(file_prefix, "_collated_metadata_",
+                                         version_identifier, ".feather")))
+  
+  # if point data are present, subset those, collate, and save
+  if (any(grepl("point", files))) {
+    point_files <- files[grepl("point", files)]
+    # collate files, but add the filename, since this *could be* is DSWE 1 + 3
+    all_points <- map_dfr(.x = point_files, 
+                         .f = function(.x) {
+                           read_csv(.x) %>% mutate(source = .x)
+                           }) %>% 
+      distinct(across(-"source"), .keep_all = TRUE)
+    write_feather(all_points, file.path("b_historical_RS_data_collation/mid/",
+                                    paste0(file_prefix, "_collated_points_",
+                                           version_identifier, ".feather")))
+  }
+  
+  # if centers data are present, subset those, collate, and save
+  if (any(grepl("center", files))) {
+    center_files <- files[grepl("center", files)]
+    # collate files, but add the filename, since this *could be* is DSWE 1 + 3
+    all_centers <- map_dfr(.x = center_files, 
+                         .f = function(.x) {
+                           read_csv(.x) %>% mutate(source = .x)
+                         }) %>% 
+      distinct(across(-"source"), .keep_all = TRUE)
+    write_feather(all_centers, file.path("b_historical_RS_data_collation/mid/",
+                                    paste0(file_prefix, "_collated_centers_",
+                                           version_identifier, ".feather")))
+  }
+  
+  #if polygon data are present, subset those, collate, and save
+  if (any(grepl("poly", files))) {
+    poly_files <- files[grepl("poly", files)]
+    # collate files, but add the filename, since this *could be* is DSWE 1 + 3
+    all_polys <- map_dfr(.x = poly_files,
+                         .f = function(.x) {
+                           read_csv(.x) %>% mutate(source = .x)
+                         }) %>% 
+      distinct(across(-"source"), .keep_all = TRUE)
+    write_feather(all_polys, file.path("b_historical_RS_data_collation/mid/",
+                                  paste0(file_prefix, "_collated_polygons_",
+                                         version_identifier, ".feather")))
+  }
+  
+  # return the list of files from this process
+  list.files("b_historical_RS_data_collation/mid/",
+                         pattern = file_prefix,
+                         full.names = TRUE) %>% 
+    #but make sure they are the specified version
+    .[grepl(version_identifier, .)]
+}
+      
+files_v2 <- collate_csvs_from_drive(file_prefix = "NW-Poudre-Historical", 
+                        version_identifier = '2024-06-11-v2')
+files_v3 <- collate_csvs_from_drive(file_prefix = "NW-Poudre-Historical", 
+                        version_identifier = '2024-06-11-v3')
+
+
+```
+
+And now we'll add in the scene-level metadata.
+
+```{r}
+combine_metadata_with_pulls <- function(file_prefix, version_identifier, collation_identifier) {
+  files <- list.files(file.path("b_historical_RS_data_collation/mid/"),
+                     pattern = file_prefix,
+                     full.names = TRUE) %>% 
+    # and grab the right version
+    .[grepl(version_identifier, .)]
+  
+  # load the metadata
+  meta_file <- files[grepl("metadata", files)]
+  metadata <- read_feather(meta_file)
+  # do some metadata formatting
+  metadata_light <- metadata %>% 
+    # Landsat 4-7 and 8/9 store image quality differently, so here, we"re harmonizing this.
+    mutate(IMAGE_QUALITY = if_else(is.na(IMAGE_QUALITY), 
+                                   IMAGE_QUALITY_OLI, 
+                                   IMAGE_QUALITY)) %>% 
+    rename(system.index = `system:index`) %>% 
+    select(system.index, 
+           WRS_PATH, 
+           WRS_ROW, 
+           "mission" = SPACECRAFT_ID, 
+           "date" = DATE_ACQUIRED, 
+           "UTC_time" = SCENE_CENTER_TIME, 
+           CLOUD_COVER,
+           IMAGE_QUALITY, 
+           IMAGE_QUALITY_TIRS, 
+           SUN_AZIMUTH, 
+           SUN_ELEVATION) 
+  
+  # check for point files
+  if (any(grepl("point", files))) {
+    point_file <- files[grepl("point", files)]
+    points <- read_feather(point_file)
+    # format system index for join - right now it has a rowid and the unique LS id
+    # could also do this rowwise, but this method is a little faster
+    points$rowid <- map_chr(.x = points$`system:index`, 
+                            function(.x) {
+                              parsed <- str_split(.x, '_')
+                              str_len <- length(unlist(parsed))
+                              unlist(parsed)[str_len]
+                            })
+    points$system.index <- map_chr(.x = points$`system:index`, 
+                                   #function to grab the system index
+                                   function(.x) {
+                                     parsed <- str_split(.x, '_')
+                                     str_len <- length(unlist(parsed))
+                                     parsed_sub <- unlist(parsed)[1:(str_len-1)]
+                                     str_flatten(parsed_sub, collapse = '_')
+                                     })
+    points <- points %>% 
+      select(-`system:index`) %>% 
+      left_join(., metadata_light) %>% 
+      mutate(DSWE = str_sub(source, -28, -24))
+    # break out the DSWE 1 data
+    if (nrow(points %>% filter(DSWE == 'DSWE1') > 0)) {
+      DSWE1_points <- points %>%
+        filter(DSWE == 'DSWE1')
+      write_feather(DSWE1_points,
+                    file.path("b_historical_RS_data_collation/out/",
+                              paste0(file_prefix,
+                                     "_collated_DSWE1_points_meta_v",
+                                     collation_identifier,
+                                     ".feather")))
+    }
+    # and the DSWE 3 data
+    if (nrow(points %>% filter(DSWE == 'DSWE3') > 0)) {
+      DSWE3_points <- points %>%
+        filter(DSWE == 'DSWE3')
+      write_feather(DSWE3_points,
+                    file.path("b_historical_RS_data_collation/out/",
+                              paste0(file_prefix,
+                                     "_collated_DSWE3_points_meta_v",
+                                     collation_identifier,
+                                     ".feather")))
+    }
+  }
+  
+  # check to see if there are any center point data
+  if (any(grepl("centers", files))) {
+    center_file <- files[grepl("centers", files)]
+    centers <- read_feather(center_file)
+    # format system index for join - right now it has a rowid and the unique LS id
+    # could also do this rowwise, but this method is a little faster
+    centers$rowid <- map_chr(.x = centers$`system:index`, 
+                             function(.x) {
+                               parsed <- str_split(.x, '_')
+                               str_len <- length(unlist(parsed))
+                               unlist(parsed)[str_len]
+                               })
+    centers$system.index <- map_chr(.x = centers$`system:index`, 
+                                    #function to grab the system index
+                                    function(.x) {
+                                      parsed <- str_split(.x, '_')
+                                      str_len <- length(unlist(parsed))
+                                      parsed_sub <- unlist(parsed)[1:(str_len-1)]
+                                      str_flatten(parsed_sub, collapse = '_')
+                                    })
+    centers <- centers %>% 
+      select(-`system:index`) %>% 
+      left_join(., metadata_light) %>% 
+      mutate(DSWE = str_sub(source, -28, -24))
+    # break out the DSWE 1 data
+    if (nrow(centers %>% filter(DSWE == 'DSWE1') > 0)) {
+      DSWE1_centers <- centers %>%
+        filter(DSWE == 'DSWE1')
+      write_feather(DSWE1_centers,
+                    file.path("b_historical_RS_data_collation/out/",
+                              paste0(file_prefix,
+                                     "_collated_DSWE1_centers_meta_v",
+                                     collation_identifier,
+                                     ".feather")))
+    }
+    # and the DSWE 3 data
+    if (nrow(centers %>% filter(DSWE == 'DSWE3') > 0)) {
+      DSWE3_centers <- centers %>%
+        filter(DSWE == 'DSWE3')
+      write_feather(DSWE3_centers,
+                    file.path("b_historical_RS_data_collation/out/",
+                              paste0(file_prefix,
+                                     "_collated_DSWE3_centers_meta_v",
+                                     collation_identifier,
+                                     ".feather")))
+    }
+  }
+  
+  # check for polygons files
+  if (any(grepl("poly", files))) {
+    poly_file <- files[grepl("poly", files)]
+    poly <- read_feather(poly_file)
+    # format system index for join - right now it has a rowid and the unique LS id
+    # could also do this rowwise, but this method is a little faster
+    poly$rowid <- map_chr(.x = poly$`system:index`, 
+                          function(.x) {
+                            parsed <- str_split(.x, '_')
+                            str_len <- length(unlist(parsed))
+                            unlist(parsed)[str_len]
+                          })
+    poly$system.index <- map_chr(.x = poly$`system:index`, 
+                                 #function to grab the system index
+                                 function(.x) {
+                                   parsed <- str_split(.x, '_')
+                                   str_len <- length(unlist(parsed))
+                                   parsed_sub <- unlist(parsed)[1:(str_len-1)]
+                                   str_flatten(parsed_sub, collapse = '_')
+                                 })
+    poly <- poly %>% 
+      select(-`system:index`) %>% 
+      left_join(., metadata_light) %>% 
+      mutate(DSWE = str_sub(source, -28, -24))
+    # break out the DSWE 1 data
+    if (nrow(poly %>% filter(DSWE == 'DSWE1') > 0)) {
+      DSWE1_poly <- poly %>%
+        filter(DSWE == 'DSWE1')
+      write_feather(DSWE1_poly,
+                    file.path("b_historical_RS_data_collation/out/",
+                              paste0(file_prefix,
+                                     "_collated_DSWE1_poly_meta_v",
+                                     collation_identifier,
+                                     ".feather")))
+    }
+    # and the DSWE 3 data
+    if (nrow(poly %>% filter(DSWE == 'DSWE3') > 0)) {
+      DSWE3_poly <- poly %>%
+        filter(DSWE == 'DSWE3')
+      write_feather(DSWE3_poly,
+                    file.path("b_historical_RS_data_collation/out/",
+                              paste0(file_prefix,
+                                     "_collated_DSWE3_poly_meta_v",
+                                     collation_identifier,
+                                     ".feather")))
+    }
+  }
+}
+
+
+combine_metadata_with_pulls(file_prefix = "NW-Poudre-Historical", 
+                            version_identifier = '2024-06-11-v2',
+                            collation_identifier = '2024-06-21-v2')
+
+
+combine_metadata_with_pulls(file_prefix = "NW-Poudre-Historical", 
+                            version_identifier = '2024-06-11-v3',
+                            collation_identifier = '2024-06-21-v3')
+```
+
+And now we can pull in the 3 versions of the pull
+
+```{r}
+NW_CLP_points <- read_csv("a_locs_poly_setup/out/NW_CLP_all_points.csv")
+
+v2 <- read_feather(file.path('b_historical_RS_data_collation/out/NW-Poudre-Historical_collated_DSWE1_points_meta_v2024-06-21-v2.feather')) %>% 
+  mutate(rowid = as.numeric(rowid)) %>% 
+  left_join(., NW_CLP_points) %>% 
+  filter(FTYPE != 466)
+v3 <- read_feather(file.path('b_historical_RS_data_collation/out/NW-Poudre-Historical_collated_DSWE1_points_meta_v2024-06-21-v3.feather')) %>% 
+  mutate(rowid = as.numeric(rowid))%>% 
+  left_join(., NW_CLP_points)%>% 
+  filter(FTYPE != 466)
+v4 <- read_feather(file.path('b_historical_RS_data_collation/out/NW-Poudre-Historical_collated_DSWE1_points_meta_v2024-06-21.feather')) %>% 
+  mutate(rowid = as.numeric(rowid))%>% 
+  left_join(., NW_CLP_points)%>% 
+  filter(FTYPE != 466)
+```
+
+
+And calculate, at a high level how much data we loose (percent):
+
+```{r}
+(nrow(v4)-nrow(v2))/nrow(v2)*100
+```
+
+And let's see if this is higher in any waterbody:
+
+```{r}
+v2_summary <- v2 %>% 
+  # filter(pCount_dswe_gt0 >= 8) %>% 
+  group_by(rowid) %>% 
+  summarize(n_v2 = n()) 
+v3_summary <- v3 %>% 
+  # filter(pCount_dswe_gt0 >= 8)%>% 
+  group_by(rowid) %>% 
+  summarize(n_v3 = n())
+v4_summary <- v4 %>% 
+  # filter(pCount_dswe_gt0 >= 8) %>% 
+  group_by(rowid) %>% 
+  summarize(n_v4 = n()) 
+
+summaries <- reduce(list(v2_summary, v3_summary, v4_summary),
+                    full_join) %>% 
+  mutate(across(c(n_v2, n_v3, n_v4),
+                ~ if_else(is.na(.), 0, .)), 
+         perc_change = ((n_v4-n_v2)/n_v2)*100) 
+
+# targets object a_collated_pts_to_csv = "a_locs_poly_setup/out/NW_CLP_all_points.csv"
+
+
+summaries <- full_join(summaries, NW_CLP_points) 
+
+```
+
+Or any water type:
+
+```{r}
+v2_water_type <- v2 %>% 
+  full_join(NW_CLP_points) %>% 
+  group_by(FCODE) %>% 
+  summarize(n_v2_type = n())
+
+v3_water_type <- v3 %>% 
+  full_join(NW_CLP_points) %>% 
+  group_by(FCODE) %>% 
+  summarize(n_v3_type = n())
+
+v4_water_type <- v4 %>% 
+  full_join(NW_CLP_points) %>% 
+  group_by(FCODE) %>% 
+  summarize(n_v4_type = n())
+
+summary_water_type <- reduce(list(v2_water_type, v3_water_type, v4_water_type),
+       full_join) %>% 
+  mutate(across(c(n_v2_type, n_v3_type, n_v4_type),
+                ~ if_else(is.na(.), 0, .)), 
+         perc_change = ((n_v4_type-n_v2_type)/n_v2_type)*100) 
+```
+
