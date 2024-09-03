@@ -98,7 +98,7 @@ apply_handoffs_to8 <- function(coefficients, data_filepath) {
   
   #save the file!
   write_feather(data_out, 
-                file.path("d_apply_handoff_coefficients/mid/",
+                file.path("e_apply_handoff_coefficients/mid/",
                           paste0(file_prefix, 
                                  "_filtered_corr8_",
                                  DSWE, "_",

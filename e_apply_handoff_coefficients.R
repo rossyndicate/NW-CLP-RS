@@ -9,16 +9,16 @@ tar_source("d_apply_handoff_coefficients/src/")
 
 # create folder structure
 suppressWarnings({
-  dir.create("d_apply_handoff_coefficients/mid/")
+  dir.create("e_apply_handoff_coefficients/mid/")
 })
 
-d_targets_list <- list(
+e_targets_list <- list(
   # make a list of the filtered DSWE1 files from the b group
   tar_target(
-    name = d_filtered_DSWE1_data,
+    name = e_filtered_DSWE1_data,
     command = {
-      b_QAQC_filtered_data
-      list.files("b_historical_RS_data_collation/out/",
+      c_QAQC_filtered_data
+      list.files("c_historical_RS_data_collation/out/",
                          full.names = TRUE) %>% 
         .[grepl("filtered", .)] %>% 
         .[grepl("DSWE1", .)] %>% 
@@ -29,37 +29,37 @@ d_targets_list <- list(
   # apply those to our DSWE1 datasets
   # first for the relative-to-LS7 values
   tar_target(
-    name = d_DSWE1_handoffs_to7,
-    command = apply_handoffs_to7(coefficients = c_collated_handoff_coefficients, 
-                                 data_filepath = d_filtered_DSWE1_data),
+    name = e_DSWE1_handoffs_to7,
+    command = apply_handoffs_to7(coefficients = d_collated_handoff_coefficients, 
+                                 data_filepath = e_filtered_DSWE1_data),
     packages = c("tidyverse", "feather"),
-    pattern = map(d_filtered_DSWE1_data)
+    pattern = map(e_filtered_DSWE1_data)
   ),
   # and do it for the relative-to-LS8 values
   tar_target(
-    name = d_DSWE1_handoffs_to8,
-    command = apply_handoffs_to8(coefficients = c_collated_handoff_coefficients, 
-                                 data_filepath = d_filtered_DSWE1_data),
+    name = e_DSWE1_handoffs_to8,
+    command = apply_handoffs_to8(coefficients = d_collated_handoff_coefficients, 
+                                 data_filepath = e_filtered_DSWE1_data),
     packages = c("tidyverse", "feather"),
-    pattern = map(d_filtered_DSWE1_data)
+    pattern = map(e_filtered_DSWE1_data)
   ),
   # and now compile them so that all data: raw, corrected to LS7, and corrected
   # to LS8 are all stored together
   tar_target(
-    name = d_combined_DSWE1_corrected,
+    name = e_combined_DSWE1_corrected,
     command = {
-      d_DSWE1_handoffs_to7
-      d_DSWE1_handoffs_to8
+      e_DSWE1_handoffs_to7
+      e_DSWE1_handoffs_to8
       collate_DSWE1_corrected_files(version_identifier = Sys.getenv("collation_date"))
       },
     packages = c("tidyverse", "feather")
   ),
   # list the file names to map over
   tar_target(
-    name = d_DSWE1_corrected_file_list,
+    name = e_DSWE1_corrected_file_list,
     command = {
-      d_combined_DSWE1_corrected
-      list.files("d_apply_handoff_coefficients/out/",
+      e_combined_DSWE1_corrected
+      list.files("e_apply_handoff_coefficients/out/",
                  pattern = Sys.getenv("collation_date"),
                  full.names = TRUE)
     }
@@ -67,10 +67,10 @@ d_targets_list <- list(
   # using the collated file names from the previous target, create figures for
   # quick comparison of the raw, LS7 corrected, and LS8 corrected values
   tar_target(
-    name = d_Rrs_DSWE1_correction_figures,
-    command = make_Rrs_correction_figures(corrected_file = d_DSWE1_corrected_file_list,
-                                          band_names = c_5_9_band_list),
+    name = e_Rrs_DSWE1_correction_figures,
+    command = make_Rrs_correction_figures(corrected_file = e_DSWE1_corrected_file_list,
+                                          band_names = d_5_9_band_list),
     packages = c("tidyverse", "feather", "cowplot"),
-    pattern = map(d_DSWE1_corrected_file_list)
+    pattern = map(e_DSWE1_corrected_file_list)
   )
 )

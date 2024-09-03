@@ -83,7 +83,7 @@ make_Rrs_correction_figures <- function(corrected_file, band_names) {
                    get_legend(raw), 
                    nrow = 5,
                    rel_heights = c(1.1, 1, 1, 0.2, 0.2))
-         ggsave(file.path("d_apply_handoff_coefficients/figs/",
+         ggsave(file.path("e_apply_handoff_coefficients/figs/",
                           file_prefix,
                           type,
                           paste0(band, "_correction_summary.jpg")),
@@ -134,7 +134,7 @@ make_Rrs_correction_figures <- function(corrected_file, band_names) {
             get_legend(raw), 
             nrow = 4,
             rel_heights = c(1.6, 1.5, 0.2, 0.2))
-  ggsave(file.path("d_apply_handoff_coefficients/figs/",
+  ggsave(file.path("e_apply_handoff_coefficients/figs/",
                    file_prefix,
                    type,
                    "Aerosol_correction_summary.jpg"),

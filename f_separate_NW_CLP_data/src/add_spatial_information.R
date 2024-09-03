@@ -2,7 +2,7 @@
 #' 
 #' @description
 #' This function adds location info from group -a- alongside the RS data collated
-#' and collected in group -b- through -c-. This also accounts for rowid numbering
+#' and collected in group -c- through -d-. This also accounts for rowid numbering
 #' differences between R and Python
 #' 
 #' @param data_file .feather filepath; remote sensing summary data, specifically those that
@@ -47,7 +47,7 @@ add_spatial_information <- function(data_file, spatial_info, data_type) {
   }
   #save the file
   write_feather(data, 
-                file.path('e_separate_NW_CLP_data/out/',
+                file.path('f_separate_NW_CLP_data/out/',
                           paste0(file_prefix,
                                  '_', file_type,
                                  '_', DSWE,
@@ -56,7 +56,7 @@ add_spatial_information <- function(data_file, spatial_info, data_type) {
                                  '.feather')
                                 ))
   #return the filepath
-  file.path('e_separate_NW_CLP_data/out/',
+  file.path('f_separate_NW_CLP_data/out/',
             paste0(file_prefix,
                    '_', file_type,
                    '_', DSWE,

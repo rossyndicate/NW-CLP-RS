@@ -29,14 +29,14 @@ subset_file_by_data_group <- function(data_file, data_grp) {
   # and DSWE type
   DSWE <- str_split(filename, '_')[[1]][3]
   write_feather(subset,
-                file.path('e_separate_NW_CLP_data/out/',
+                file.path('f_separate_NW_CLP_data/out/',
                           paste0(data_grp,
                                  '_', file_type,
                                  '_', DSWE,
                                  '_for_analysis_',
                                  Sys.getenv('collation_date'),
                                  '.feather')))
-  file.path('e_separate_NW_CLP_data/out/',
+  file.path('f_separate_NW_CLP_data/out/',
             paste0(data_grp,
                    '_', file_type,
                    '_', DSWE,
