@@ -49,7 +49,7 @@ calculate_8_7_handoff <- function(filtered, band){
   poly <- lm(y_q ~ poly(x_q, 2, raw = T))
   
   # plot and save handoff fig
-  jpeg(file.path("c_calculate_handoff_coefficients/figs/", 
+  jpeg(file.path("d_calculate_handoff_coefficients/figs/", 
        paste0(band, "_8_7_poly_handoff.jpg")), 
        width = 350, height = 350)
   plot(y_q ~ x_q,
@@ -63,7 +63,7 @@ calculate_8_7_handoff <- function(filtered, band){
   dev.off()
   
   # plot and save residuals from fit
-  jpeg(file.path("c_calculate_handoff_coefficients/figs/", 
+  jpeg(file.path("d_calculate_handoff_coefficients/figs/", 
                  paste0(band, "_8_7_poly_residuals.jpg")), 
        width = 350, height = 200)
   plot(poly$residuals,

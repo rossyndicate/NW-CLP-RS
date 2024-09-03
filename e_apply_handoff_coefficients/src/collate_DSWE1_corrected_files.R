@@ -13,9 +13,9 @@
 #' 
 collate_DSWE1_corrected_files <- function(version_identifier) {
   #check for out directory
-  dir.create("d_apply_handoff_coefficients/out/")
+  dir.create("e_apply_handoff_coefficients/out/")
   # get a list of the DSWE 1 corrected files
-  corrected_files <- list.files("d_apply_handoff_coefficients/mid/",
+  corrected_files <- list.files("e_apply_handoff_coefficients/mid/",
                                 full.names = TRUE) %>% 
     .[grepl(version_identifier, .)] %>% 
     .[grepl("DSWE1", .)]
@@ -34,7 +34,7 @@ collate_DSWE1_corrected_files <- function(version_identifier) {
        function(.x, .y) {
          file_subset <- filename[grepl(.x, filename)] %>% 
            .[grepl(.y, .)]
-         collated <- map(file.path("d_apply_handoff_coefficients/mid/",
+         collated <- map(file.path("e_apply_handoff_coefficients/mid/",
                                        file_subset), 
                              read_feather) %>% 
            reduce(full_join)
@@ -44,7 +44,7 @@ collate_DSWE1_corrected_files <- function(version_identifier) {
            mutate(across(all_of(flag_cols),
                          ~ replace_na(., "")))
          write_feather(collated,
-                       file.path("d_apply_handoff_coefficients/out/",
+                       file.path("e_apply_handoff_coefficients/out/",
                                  paste0(.x,
                                         "_",
                                         .y,

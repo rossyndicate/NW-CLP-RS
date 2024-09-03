@@ -16,7 +16,7 @@
 #' 
 apply_handoffs_to7 <- function(coefficients, data_filepath) {
   #make sure directory exists
-  dir.create("d_apply_handoff_coefficients/mid/")
+  dir.create("e_apply_handoff_coefficients/mid/")
   #get some info for saving the file
   filename <- str_split(data_filepath, "/")[[1]][4]
   file_prefix <- str_split(filename, "_")[[1]][1]
@@ -103,7 +103,7 @@ apply_handoffs_to7 <- function(coefficients, data_filepath) {
   
   #save the file!
   write_feather(data_out, 
-                file.path("d_apply_handoff_coefficients/mid/",
+                file.path("e_apply_handoff_coefficients/mid/",
                           paste0(file_prefix, 
                                  "_filtered_corr7_",
                                  DSWE, "_",

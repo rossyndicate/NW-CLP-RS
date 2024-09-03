@@ -14,7 +14,7 @@
 #' 
 #' 
 combine_metadata_with_pulls <- function(file_prefix, version_identifier, collation_identifier) {
-  files <- list.files(file.path("b_historical_RS_data_collation/mid/"),
+  files <- list.files(file.path("c_historical_RS_data_collation/mid/"),
                      pattern = file_prefix,
                      full.names = TRUE) %>% 
     # and grab the right version
@@ -67,22 +67,22 @@ combine_metadata_with_pulls <- function(file_prefix, version_identifier, collati
       left_join(., metadata_light) %>% 
       mutate(DSWE = str_sub(source, -28, -24))
     # break out the DSWE 1 data
-    if (nrow(points %>% filter(DSWE == 'DSWE1') > 0)) {
+    if (nrow(points %>% filter(DSWE == 'DSWE1')) > 0) {
       DSWE1_points <- points %>%
         filter(DSWE == 'DSWE1')
       write_feather(DSWE1_points,
-                    file.path("b_historical_RS_data_collation/out/",
+                    file.path("c_historical_RS_data_collation/out/",
                               paste0(file_prefix,
                                      "_collated_DSWE1_points_meta_v",
                                      collation_identifier,
                                      ".feather")))
     }
     # and the DSWE 3 data
-    if (nrow(points %>% filter(DSWE == 'DSWE3') > 0)) {
+    if (nrow(points %>% filter(DSWE == 'DSWE3')) > 0) {
       DSWE3_points <- points %>%
         filter(DSWE == 'DSWE3')
       write_feather(DSWE3_points,
-                    file.path("b_historical_RS_data_collation/out/",
+                    file.path("c_historical_RS_data_collation/out/",
                               paste0(file_prefix,
                                      "_collated_DSWE3_points_meta_v",
                                      collation_identifier,
@@ -115,22 +115,22 @@ combine_metadata_with_pulls <- function(file_prefix, version_identifier, collati
       left_join(., metadata_light) %>% 
       mutate(DSWE = str_sub(source, -28, -24))
     # break out the DSWE 1 data
-    if (nrow(centers %>% filter(DSWE == 'DSWE1') > 0)) {
+    if (nrow(centers %>% filter(DSWE == 'DSWE1')) > 0) {
       DSWE1_centers <- centers %>%
         filter(DSWE == 'DSWE1')
       write_feather(DSWE1_centers,
-                    file.path("b_historical_RS_data_collation/out/",
+                    file.path("c_historical_RS_data_collation/out/",
                               paste0(file_prefix,
                                      "_collated_DSWE1_centers_meta_v",
                                      collation_identifier,
                                      ".feather")))
     }
     # and the DSWE 3 data
-    if (nrow(centers %>% filter(DSWE == 'DSWE3') > 0)) {
+    if (nrow(centers %>% filter(DSWE == 'DSWE3')) > 0) {
       DSWE3_centers <- centers %>%
         filter(DSWE == 'DSWE3')
       write_feather(DSWE3_centers,
-                    file.path("b_historical_RS_data_collation/out/",
+                    file.path("c_historical_RS_data_collation/out/",
                               paste0(file_prefix,
                                      "_collated_DSWE3_centers_meta_v",
                                      collation_identifier,
@@ -163,22 +163,22 @@ combine_metadata_with_pulls <- function(file_prefix, version_identifier, collati
       left_join(., metadata_light) %>% 
       mutate(DSWE = str_sub(source, -28, -24))
     # break out the DSWE 1 data
-    if (nrow(poly %>% filter(DSWE == 'DSWE1') > 0)) {
+    if (nrow(poly %>% filter(DSWE == 'DSWE1')) > 0) {
       DSWE1_poly <- poly %>%
         filter(DSWE == 'DSWE1')
       write_feather(DSWE1_poly,
-                    file.path("b_historical_RS_data_collation/out/",
+                    file.path("c_historical_RS_data_collation/out/",
                               paste0(file_prefix,
                                      "_collated_DSWE1_poly_meta_v",
                                      collation_identifier,
                                      ".feather")))
     }
     # and the DSWE 3 data
-    if (nrow(poly %>% filter(DSWE == 'DSWE3') > 0)) {
+    if (nrow(poly %>% filter(DSWE == 'DSWE3')) > 0) {
       DSWE3_poly <- poly %>%
         filter(DSWE == 'DSWE3')
       write_feather(DSWE3_poly,
-                    file.path("b_historical_RS_data_collation/out/",
+                    file.path("c_historical_RS_data_collation/out/",
                               paste0(file_prefix,
                                      "_collated_DSWE3_poly_meta_v",
                                      collation_identifier,

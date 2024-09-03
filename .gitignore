@@ -1,16 +1,17 @@
 ## filepaths
 a_locs_poly_setup/out/*
 a_locs_poly_setup/nhd/*
-b_historical_RS_data_collation/in/*
-b_historical_RS_data_collation/mid/*
-b_historical_RS_data_collation/out/*
-c_calculate_handoff_coefficients/mid/*
-c_calculate_handoff_coefficients/out/*
-c_calculate_handoff_coefficients/figs/*
-d_apply_handoff_coefficients/mid/*
-d_apply_handoff_coefficients/out/*
-d_apply_handoff_coefficients/figs/*
-e_separate_NW_CLP_data/out/*
+c_historical_RS_data_collation/in/*
+c_historical_RS_data_collation/mid/*
+c_historical_RS_data_collation/out/*
+d_calculate_handoff_coefficients/mid/*
+d_calculate_handoff_coefficients/out/*
+d_calculate_handoff_coefficients/figs/*
+e_apply_handoff_coefficients/mid/*
+e_apply_handoff_coefficients/out/*
+e_apply_handoff_coefficients/figs/*
+f_separate_NW_CLP_data/out/*
+compare_masks/*
 
 ## OneDrive Symlink
 data
