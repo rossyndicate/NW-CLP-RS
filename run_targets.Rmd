@@ -11,11 +11,11 @@ output:
 
 This script loads all necessary packages to run the {targets} pipeline and then
 runs it! This pipeline organizes the location and polygon information for the NW
-and CLP projects (group a), collates the RS pulls (group b, the RS pulls are 
+and CLP projects (group a), collates the RS pulls (group c, the RS pulls are 
 currently completed in the Landsat-C2-SRST repository, nw-poudre-historical 
-branch and nw-er3z21-historical), calculates handoff coefficients (group c),
-applies handoff coefficients (group d), then separates the NW and CLP data and 
-saves the files to the ROSSyndicate Google Drive (group e).
+branch and nw-er3z21-historical), calculates handoff coefficients (group d),
+applies handoff coefficients (group e), then separates the NW and CLP data and 
+saves the files to the ROSSyndicate Google Drive (group f).
 
 To run this pipeline, you will need to have an .Renviron script in your root 
 directory (see the readme file for details) and have created a symlink called 'data' 

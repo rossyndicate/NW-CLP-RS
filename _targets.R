@@ -10,10 +10,10 @@ tar_option_set(
 # source functions
 tar_source(files = c(
   "a_locs_poly_setup.R",
-  "b_historical_RS_data_collation.R",
-  "c_calculate_handoff_coefficients.R",
-  "d_apply_handoff_coefficients.R",
-  "e_separate_NW_CLP_data.R"
+  "c_historical_RS_data_collation.R",
+  "d_calculate_handoff_coefficients.R",
+  "e_apply_handoff_coefficients.R",
+  "f_separate_NW_CLP_data.R"
 ))
 
 # Full targets list 
