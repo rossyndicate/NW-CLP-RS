@@ -11,6 +11,7 @@ d_apply_handoff_coefficients/mid/*
 d_apply_handoff_coefficients/out/*
 d_apply_handoff_coefficients/figs/*
 e_separate_NW_CLP_data/out/*
+compare_masks/*
 
 ## OneDrive Symlink
 data
