@@ -67,7 +67,7 @@ combine_metadata_with_pulls <- function(file_prefix, version_identifier, collati
       left_join(., metadata_light) %>% 
       mutate(DSWE = str_sub(source, -28, -24))
     # break out the DSWE 1 data
-    if (nrow(points %>% filter(DSWE == 'DSWE1') > 0)) {
+    if (nrow(points %>% filter(DSWE == 'DSWE1')) > 0) {
       DSWE1_points <- points %>%
         filter(DSWE == 'DSWE1')
       write_feather(DSWE1_points,
@@ -78,7 +78,7 @@ combine_metadata_with_pulls <- function(file_prefix, version_identifier, collati
                                      ".feather")))
     }
     # and the DSWE 3 data
-    if (nrow(points %>% filter(DSWE == 'DSWE3') > 0)) {
+    if (nrow(points %>% filter(DSWE == 'DSWE3')) > 0) {
       DSWE3_points <- points %>%
         filter(DSWE == 'DSWE3')
       write_feather(DSWE3_points,
@@ -115,7 +115,7 @@ combine_metadata_with_pulls <- function(file_prefix, version_identifier, collati
       left_join(., metadata_light) %>% 
       mutate(DSWE = str_sub(source, -28, -24))
     # break out the DSWE 1 data
-    if (nrow(centers %>% filter(DSWE == 'DSWE1') > 0)) {
+    if (nrow(centers %>% filter(DSWE == 'DSWE1')) > 0) {
       DSWE1_centers <- centers %>%
         filter(DSWE == 'DSWE1')
       write_feather(DSWE1_centers,
@@ -126,7 +126,7 @@ combine_metadata_with_pulls <- function(file_prefix, version_identifier, collati
                                      ".feather")))
     }
     # and the DSWE 3 data
-    if (nrow(centers %>% filter(DSWE == 'DSWE3') > 0)) {
+    if (nrow(centers %>% filter(DSWE == 'DSWE3')) > 0) {
       DSWE3_centers <- centers %>%
         filter(DSWE == 'DSWE3')
       write_feather(DSWE3_centers,
@@ -163,7 +163,7 @@ combine_metadata_with_pulls <- function(file_prefix, version_identifier, collati
       left_join(., metadata_light) %>% 
       mutate(DSWE = str_sub(source, -28, -24))
     # break out the DSWE 1 data
-    if (nrow(poly %>% filter(DSWE == 'DSWE1') > 0)) {
+    if (nrow(poly %>% filter(DSWE == 'DSWE1')) > 0) {
       DSWE1_poly <- poly %>%
         filter(DSWE == 'DSWE1')
       write_feather(DSWE1_poly,
@@ -174,7 +174,7 @@ combine_metadata_with_pulls <- function(file_prefix, version_identifier, collati
                                      ".feather")))
     }
     # and the DSWE 3 data
-    if (nrow(poly %>% filter(DSWE == 'DSWE3') > 0)) {
+    if (nrow(poly %>% filter(DSWE == 'DSWE3')) > 0) {
       DSWE3_poly <- poly %>%
         filter(DSWE == 'DSWE3')
       write_feather(DSWE3_poly,
