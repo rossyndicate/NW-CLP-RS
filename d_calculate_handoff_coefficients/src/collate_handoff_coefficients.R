@@ -10,7 +10,7 @@
 #' 
 collate_handoff_coefficients <- function() {
   #list the files in coefficients
-  files <- list.files("cdcalculate_handoff_coefficients/mid",
+  files <- list.files("d_calculate_handoff_coefficients/mid",
                       full.names = TRUE)
   # collate those suckers
   collated <- map_dfr(files, read_csv)
