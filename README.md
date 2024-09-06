@@ -44,7 +44,7 @@ _b_RS_data_acquisition_:
 
 This group of targets acquires the Landsat record for our focus lakes as part of 
 the Northern Water project, our internal Cache La Poudre lakes, as well as all
-lakes greater than 1ha in the CLP HUC12.
+lakes greater than 1 hectare in the CLP HUC12.
 
 
 _c_historical_RS_data_collation_:
