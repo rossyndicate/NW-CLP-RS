@@ -18,8 +18,11 @@ will need to create a .Renviron document in the root directory containing the
 following information, but with proper punctuation:
 
 google_email = "the ROSS yndicate at gmail dot com"
+
 nw_clp_pull_version_date = "2023-12-07"
+
 regional_pull_version_date = "2023-08-17"
+
 collation_date = "2023-12-08"
 
 ------------------------------------------------------------------------
@@ -30,23 +33,27 @@ This targets workflow is broken down into groups of target lists that perform
 functional chunks of the workflow.
 
 
-__a_locs_poly_setup__:
+_a_locs_poly_setup_:
 
 This group sets up the locations and polygon files 
 for RS retrieval. The group of functions collates a few different polygon and 
 point files into a single file of each type as needed for the RS workflow.
 
 
-__b_historical_RS_data_collation__:
+_b_RS_data_acquisition_:
 
-This group of functions downloads and 
-processes GEE output from historical pulls. This portion of the workflow is 
-dependent on the successful run of two branches of the Landsat_C2_SRST 
-repository: nw-poudre-historical and nw-er3z21-historical. At this time, this 
-is run outside of the {targets} workflow presented here.
+This group of targets acquires the Landsat record for our focus lakes as part of 
+the Northern Water project, our internal Cache La Poudre lakes, as well as all
+lakes greater than 1 hectare in the CLP HUC12.
 
 
-__c_calculate_handoff_coefficients__:
+_c_historical_RS_data_collation_:
+
+This group of functions downloads and processes GEE output from historical pulls
+completed in the _b_ group.
+
+
+_d_calculate_handoff_coefficients_:
 
 This group of functions calculates the inter-mission handoff coefficients from 
 the regional pull data. Landsat 4-7 and 8-9 surface reflectance data go through 
@@ -59,10 +66,16 @@ entire LS record. The LS 9 to LS 8 handoffs include calculations for the Aerosol
 band, which may be useful for workflows that only use LS 8 & 9.
 
 
-__d_apply_handoff_coefficients__:
+_e_apply_handoff_coefficients_:
 
 This group of functions applies the handoff coefficients to dataset(s), flags
 for band values outside of the handoff inputs that created the correction
 coefficients, and saves the analysis-ready file(s). Additionally, figures are
 created to compare the raw, LS7-corrected, and LS8-corrected figures.
+
+
+_f_separate_NW_CLP_data_:
+
+This group of functions splits the data for individual research programs and 
+stores them in the ROSS Google Drive.
 

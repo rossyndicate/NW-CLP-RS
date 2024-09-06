@@ -18,8 +18,8 @@ tar_source(files = c(
 
 # Full targets list 
 c(a_targets_list,
-  b_targets_list,
   c_targets_list,
   d_targets_list,
-  e_targets_list
+  e_targets_list,
+  f_targets_list
   )

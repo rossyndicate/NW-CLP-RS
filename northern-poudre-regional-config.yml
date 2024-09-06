@@ -1,0 +1,40 @@
+# yaml file to configure the Landsat C2 SR & ST parameters for this repository's 
+# {targets} workflow
+
+# The following parameters are required to be set by the user unless otherwise 
+# indicated. All inputs are case-sensitive.
+
+local_settings:
+- data_dir: "~/OneDrive\ -\ Colostate/NASA-Northern/data/spatialData/" # point to the *full* directory path where your location information is stored - this path must end with a '/'
+- location_file: "NW_regional_collated_locations_v2023-05-16.csv" # name of the *.csv* file that contains the location information
+- unique_id: "rowid" # this is the column that stores the unique identifier for each site, should not contain any special characters
+- latitude: "Latitude" # this is the column that stores the latitude of the site, must be in decimal degrees
+- longitude: "Longitude" # this is the column that stores the longitude of the site, must be in decimal degrees
+- location_crs: "EPSG:4326" # this is the coordinate reference system of the location data, must be in EPSG format (e.g. EPSG:4326)
+- polygon: "False" # optional. True or False - if True, you have lake polygon shapefiles for each site.
+- poly_crs: "" # this is the coordinate reference system of the polygon data, must be in EPSG format (e.g. EPSG:4326)
+- poly_dir: "" # optional. point to the directory where your lake polygon shapefiles are stored - this path must end with a '/'
+- poly_file: "" # optional. name of the shapefile that contains the lake polygons. 
+
+google_settings:
+- proj: "NW-Poudre-Regional" # this is a short name for file naming conventions. All output files will include this prefix.
+- proj_folder: "LS-C2-SR-RegionalPoints-v2023-08-17" # this is the folder name where the GEE data will be save to Google Drive. If it doesn't exist, it will be created.
+- ee_proj: "ee-nasa-nw" # this is the ee project name you are running your pulls from
+
+# The following parameters are optional and have default values listed below. 
+# If these key-values remain unaltered, date will be acquired for the entire satellite data record at the specified location only.
+
+temporal_settings: 
+- start_date: "1983-01-01" # earliest data of satellite data to be acquired; earliest data available is 1983-01-01
+- end_date: "today" # latest data of satellite data to be acquired; if 'today' is used, the date will be set to the current date
+
+spatial_settings: 
+- extent: "site" # options: "site", "polygon", "polycenter", "site+poly", "site+polygon+polycenter", "polygon+polycenter" - at this time lake and lake center can only be calculated for lakes in the US
+- site_buffer: 120 # buffer distance in meters around the site or poly center
+
+gee_settings:
+- cloud_filter: "True" # True or False - if True, scenes will be filtered by scene-level cloudy value provided in the metadata
+- cloud_thresh: 95 # scenes with a cloud value greater than this threshold will be filtered out
+- water_detection: "DSWE" # "DSWE" is currently the only option for water detection. Future iterations may include Peckel water instance or another method.
+- DSWE_setting: "1+3" # 1, 3, or 1+3. DSWE 1 only summarizes high confidence water pixels; DSWE 3 summarizes vegetated pixels. 
+
