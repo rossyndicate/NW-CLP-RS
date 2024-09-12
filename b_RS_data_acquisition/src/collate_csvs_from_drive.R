@@ -16,19 +16,19 @@
 #' 
 collate_csvs_from_drive <- function(file_prefix, version_identifier) {
   # get the list of files in the `in` directory 
-  files <- list.files(file.path("data_acquisition/down/",
+  files <- list.files(file.path("b_RS_data_acquisition/down/",
                                 version_identifier),
                       pattern = file_prefix,
                       full.names = TRUE) 
   
   # make sure directory exists, create it if not
-  if(!dir.exists(file.path("data_acquisition/mid/"))) {
-    dir.create(file.path("data_acquisition/mid/"))
+  if(!dir.exists(file.path("b_RS_data_acquisition/mid/"))) {
+    dir.create(file.path("b_RS_data_acquisition/mid/"), recursive = T)
   }
   
   meta_files <- files[grepl("meta", files)]
   all_meta <- map_dfr(meta_files, read_csv) 
-  write_feather(all_meta, file.path("data_acquisition/mid/",
+  write_feather(all_meta, file.path("b_RS_data_acquisition/mid/",
                                     paste0(file_prefix, "_collated_metadata_",
                                            version_identifier, ".feather")))
   
@@ -48,7 +48,7 @@ collate_csvs_from_drive <- function(file_prefix, version_identifier) {
                                             ~ as.numeric(.)))%>% 
                               mutate(source = file_name)
                           }) 
-    write_feather(all_points, file.path("data_acquisition/mid/",
+    write_feather(all_points, file.path("b_RS_data_acquisition/mid/",
                                         paste0(file_prefix, "_collated_points_",
                                                version_identifier, ".feather")))
   }
@@ -69,7 +69,7 @@ collate_csvs_from_drive <- function(file_prefix, version_identifier) {
                                              ~ as.numeric(.)))%>% 
                                mutate(source = file_name)
                            }) 
-    write_feather(all_centers, file.path("data_acquisition/mid/",
+    write_feather(all_centers, file.path("b_RS_data_acquisition/mid/",
                                          paste0(file_prefix, "_collated_centers_",
                                                 version_identifier, ".feather")))
   }
@@ -91,13 +91,13 @@ collate_csvs_from_drive <- function(file_prefix, version_identifier) {
                              mutate(source = file_name)
                          })
     
-    write_feather(all_polys, file.path("data_acquisition/mid/",
+    write_feather(all_polys, file.path("b_RS_data_acquisition/mid/",
                                        paste0(file_prefix, "_collated_polygons_",
                                               version_identifier, ".feather")))
   }
   
   # return the list of files from this process
-  list.files("data_acquisition/mid/",
+  list.files("b_RS_data_acquisition/mid/",
              pattern = file_prefix,
              full.names = TRUE) %>% 
     #but make sure they are the specified version

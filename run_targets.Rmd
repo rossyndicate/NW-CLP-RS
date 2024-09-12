@@ -60,6 +60,21 @@ packages <- c("tidyverse",
 lapply(packages, package_installer)
 ```
 
+## Set up python environment and authenticate EE
+
+```{r}
+source("b_RS_data_acquisition/py/pySetup.R")
+```
+
+And then authenticate EE. This has to match both your gcloud init settings and your
+config settings (especially the project you're running on.)
+
+```{python}
+import ee
+ee.Authenticate()
+```
+
+
 ## Run the targets pipeline and output a network graph.
 
 ```{r run_targets}

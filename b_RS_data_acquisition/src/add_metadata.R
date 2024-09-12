@@ -16,7 +16,7 @@ add_metadata <- function(yaml,
                          file_prefix, 
                          version_identifier) {
   
-  files <- list.files(file.path("data_acquisition/mid/"),
+  files <- list.files(file.path("b_RS_data_acquisition/mid/"),
                       pattern = file_prefix,
                       full.names = TRUE) %>% 
     # and grab the right version
@@ -48,8 +48,8 @@ add_metadata <- function(yaml,
   extent <- unlist(str_split(yaml$extent, "\\+"))
   
   # make sure directory exists, create it if not
-  if(!dir.exists(file.path("data_out/"))) {
-    dir.create(file.path("data_out/"))
+  if(!dir.exists(file.path("b_RS_data_acquisition/out/"))) {
+    dir.create(file.path("b_RS_data_acquisition/out/"), recursive = T)
   }
   
   map(extent, function(e){
@@ -80,10 +80,10 @@ add_metadata <- function(yaml,
         mutate(r_id = as.character(r_id))
     } else if (e == "polycenter") {
       if (yaml$polygon) { 
-        spatial_info <- read_csv("data_acquisition/out/user_polygon_withrowid.csv") %>% 
+        spatial_info <- read_csv("b_RS_data_acquisition/run/user_polygon_withrowid.csv") %>% 
           mutate(r_id = as.character(r_id))
       } else {
-        spatial_info <- read_csv("data_acquisition/out/NHDPlus_polygon_centers.csv") %>% 
+        spatial_info <- read_csv("b_RS_data_acquisition/run/NHDPlus_polygon_centers.csv") %>% 
           mutate(r_id = as.character(r_id))
       }
     } else if (e == "polygon") {
@@ -93,7 +93,7 @@ add_metadata <- function(yaml,
           st_drop_geometry() %>% 
           mutate(r_id = as.character(r_id))
       } else {
-        spatial_info <- read_csv('data_acquisition/out/NHDPlus_stats_lakes.csv') %>% 
+        spatial_info <- read_csv('b_RS_data_acquisition/run/NHDPlus_stats_lakes.csv') %>% 
           mutate(r_id = as.character(r_id))
       }
     }
@@ -139,7 +139,7 @@ add_metadata <- function(yaml,
       DSWE1 <- df %>%
         filter(DSWE == 'DSWE1')
       write_feather(DSWE1,
-                    file.path("data_out/",
+                    file.path("b_RS_data_acquisition/out/",
                               paste0(file_prefix,
                                      "_collated_DSWE1_",
                                      ext,
@@ -167,7 +167,7 @@ add_metadata <- function(yaml,
       DSWE3 <- df %>%
         filter(DSWE == 'DSWE3')
       write_feather(DSWE3,
-                    file.path("data_out",
+                    file.path("b_RS_data_acquisition/out",
                               paste0(file_prefix,
                                      "_collated_DSWE3_",
                                      ext,
@@ -178,7 +178,7 @@ add_metadata <- function(yaml,
   })
   
   # return the list of files from this process
-  list.files("data_out",
+  list.files("b_RS_data_acquisition/out",
              pattern = file_prefix,
              full.names = TRUE) %>% 
     #but make sure they are the specified version

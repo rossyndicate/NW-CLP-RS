@@ -2,6 +2,8 @@
 a_locs_poly_setup/out/*
 a_locs_poly_setup/nhd/*
 b_RS_data_acquisition/out/*
+b_RS_data_acquisition/run/*
+b_RS_data_acquisition/down/*
 c_historical_RS_data_collation/in/*
 c_historical_RS_data_collation/mid/*
 c_historical_RS_data_collation/out/*
@@ -13,6 +15,8 @@ e_apply_handoff_coefficients/out/*
 e_apply_handoff_coefficients/figs/*
 f_separate_NW_CLP_data/out/*
 compare_masks/*
+
+env/*
 
 ## OneDrive Symlink
 data

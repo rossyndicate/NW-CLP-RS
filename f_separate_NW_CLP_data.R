@@ -12,7 +12,7 @@ suppressWarnings({
   dir.create('f_separate_NW_CLP_data/out/')
 })
 
-e_targets_list <- list(
+f_targets_list <- list(
   # join collated, corrected GEE output with spatial information.
   # first for points
   tar_target(

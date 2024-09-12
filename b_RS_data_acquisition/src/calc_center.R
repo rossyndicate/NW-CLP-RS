@@ -16,8 +16,8 @@
 #' 
 #' 
 calc_center <- function(poly, yaml) {
-  if (!dir.exists("data_acquisition/out/")) {
-    dir.create("data_acquisition/out/")
+  if (!dir.exists("b_RS_data_acquisition/run/")) {
+    dir.create("b_RS_data_acquisition/run/", recursive = T)
   }
   if (grepl("center", yaml$extent[1])) {
     # create an empty tibble
@@ -82,19 +82,19 @@ calc_center <- function(poly, yaml) {
                         crs = "EPSG:4326")
     
     if (yaml$polygon[1] == FALSE) {
-      write_sf(poi_geo, file.path("data_acquisition/out/NHDPlus_polygon_centers.shp"))
+      write_sf(poi_geo, file.path("b_RS_data_acquisition/run/NHDPlus_polygon_centers.shp"))
       poly_poi %>% 
         # mutate for python base 0
         mutate(py_id = r_id - 1) %>% 
-        write_csv("data_acquisition/out/NHDPlus_polygon_centers.csv")
-      return("data_acquisition/out/NHDPlus_polygon_centers.shp")
+        write_csv("b_RS_data_acquisition/run/NHDPlus_polygon_centers.csv")
+      return("b_RS_data_acquisition/run/NHDPlus_polygon_centers.shp")
     } else {
-      write_sf(poi_geo, file.path("data_acquisition/out/user_polygon_centers.shp"))
+      write_sf(poi_geo, file.path("b_RS_data_acquisition/run/user_polygon_centers.shp"))
       poly_poi %>% 
         # mutate for python base 0
         mutate(py_id = r_id - 1) %>% 
-        write_csv("data_acquisition/out/user_polygon_centers.csv")
-      return("data_acquisition/out/user_polygon_centers.shp")
+        write_csv("b_RS_data_acquisition/run/user_polygon_centers.csv")
+      return("b_RS_data_acquisition/run/user_polygon_centers.shp")
     }
   } else {
     return(message("Not configured to pull polygon center."))

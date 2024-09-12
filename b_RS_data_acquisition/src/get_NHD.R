@@ -13,8 +13,8 @@
 #' 
 #' 
 get_NHD <- function(locations, yaml) {
-  if (!dir.exists("data_acquisition/out/")) {
-    dir.create("data_acquisition/out/")
+  if (!dir.exists("b_RS_data_acquisition/run/")) {
+    dir.create("b_RS_data_acquisition/run/")
   }
   if (grepl("poly", yaml$extent)) { # if polygon is specified in desired extent - either polycenter or polgon
     if (!yaml$polygon) { # and no polygon is provided, then use nhdplustools
@@ -42,10 +42,10 @@ get_NHD <- function(locations, yaml) {
       all_lakes <- all_lakes %>% 
         select(r_id, comid, gnis_id:elevation, meandepth:maxdepth)
       write_csv(st_drop_geometry(all_lakes), 
-                "data_acquisition/out/NHDPlus_stats_lakes.csv")
+                "b_RS_data_acquisition/run/NHDPlus_stats_lakes.csv")
       all_lakes <- all_lakes %>% select(r_id, comid, gnis_name)
-      st_write(all_lakes, "data_acquisition/out/NHDPlus_polygon.shp", append = F)
-      return("data_acquisition/out/NHDPlus_polygon.shp")
+      st_write(all_lakes, "b_RS_data_acquisition/run/NHDPlus_polygon.shp", append = F)
+      return("b_RS_data_acquisition/run/NHDPlus_polygon.shp")
     } else { # otherwise read in specified file
       polygons <- read_sf(file.path(yaml$poly_dir[1], yaml$poly_file[1])) 
       polygons <- st_zm(polygons)#drop z or m if present
@@ -53,9 +53,9 @@ get_NHD <- function(locations, yaml) {
         rename(r_id = yaml$unique_id)
       st_drop_geometry(polygons) %>% 
         mutate(py_id = r_id - 1) %>% #subtract 1 so that it matches with Py output
-        write_csv(., "data_acquisition/out/user_polygon_withrowid.csv")
-      st_write(polygons, "data_acquisition/out/user_polygon.shp", append = F)
-      return("data_acquisition/out/user_polygon.shp")
+        write_csv(., "b_RS_data_acquisition/run/user_polygon_withrowid.csv")
+      st_write(polygons, "b_RS_data_acquisition/run/user_polygon.shp", append = F)
+      return("b_RS_data_acquisition/run/user_polygon.shp")
     }
   } else {
     return(message("Not configured to use polygon area."))

@@ -143,14 +143,14 @@ a_targets_list <- list(
   tar_target(
     name = a_ROSS_CLP_points,
     command = st_as_sf(a_ROSS_CLP_file, 
-                       crs = "EPSG:4269",
+                       crs = "EPSG:4326",
                        coords = c("Longitude", "Latitude")),
     packages = "sf"
   ),
   # get polygons info from NW/CLP sf
   tar_target(
     name = a_ROSS_CLP_polygons,
-    command = a_NW_CLP_polygons[a_ROSS_CLP_points, ],
+    command = a_NW_CLP_polygons[a_ROSS_CLP_points %>% st_transform(st_crs(a_NW_CLP_polygons)), ],
     packages = 'sf'
   ),
   # since all the ROSS_CLP reservoirs are in NW_CLP centers and polygons files, 
