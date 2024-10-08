@@ -24,10 +24,10 @@ compare_masks/*
 env/*
 
 ## OneDrive Symlink
-data
+data/
 
 ## targets folder
-_targets
+_targets/
 
 ## R Environment Variables
 .Renviron
