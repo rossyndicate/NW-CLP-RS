@@ -1,4 +1,5 @@
 # Source functions for this {targets} list
+
 tar_source("a_locs_poly_setup/src/")
 
 
@@ -8,27 +9,50 @@ tar_source("a_locs_poly_setup/src/")
 # file of each type as needed for the RS workflow. CLP = Cache La Poudre, 
 # NW = Northern Water.
 
-# create folder structure
-suppressWarnings({
-  dir.create("a_locs_poly_setup/nhd/")
-  dir.create("a_locs_poly_setup/out/")
-})
 
-a_targets_list <- list(
+a_locs_poly_setup <- list(
+  
+  # check for proper directory structure ------------------------------------
+  
+  tar_target(
+    name = a_check_dir_structure,
+    command = {
+      directories = c("a_locs_poly_setup/nhd/",
+                      "a_locs_poly_setup/out/")
+      walk(directories, function(dir) {
+        if(!dir.exists(dir)){
+          dir.create(dir)
+        }
+      })
+    }
+  ),
+  
+  
+  # get CLP polygons --------------------------------------------------------
+  
   # get the polygons for CLP watershed using HUC8
   tar_target(
     name = a_make_CLP_polygon,
-    command = get_polygons(HUC = "10190007", 
-                           minimum_sqkm = 0.01),
-    packages = c("sf", "nhdplusTools", "tidyverse")
+    command = {
+      a_check_dir_structure
+      get_polygons(HUC = "10190007", 
+                   minimum_sqkm = 0.01,
+                   ftypes = c(390, 436))
+    },
+    packages = c("sf", "nhdplusTools", "tidyverse", "janitor")
   ),
-  # track and load the CLP polygons
+  
+  # load the CLP polygons
   tar_file_read(
     name = a_CLP_polygons,
     command = a_make_CLP_polygon,
     read = read_sf(!!.x),
     packages = "sf"
   ),
+  
+  
+  # get the NW-specific reservoirs --------------------------------------------
+  
   # track and load the csv with NW locs
   tar_file_read(
     name = a_NW_locs_file,
@@ -38,35 +62,41 @@ a_targets_list <- list(
   ),
   
   # using the locs file, get the upstream huc-4s to download NHDplusHR
-  # this returns a list to branch over
+  # this returns a list to branch over. 
   tar_target(
     name = a_get_NW_hucs,
-    command = get_hucs_from_points(point_csv = a_NW_locs_file, 
-                                   CRS = "EPSG:4326"),
+    command = {
+      a_check_dir_structure
+      get_hucs_from_points(point_csv = a_NW_locs_file, 
+                           CRS = "EPSG:4326")
+    },
     packages = c("sf", "nhdplusTools", "tidyverse")
   ),
+  
   # now download the polygons associated with the huc4s from previous target
   # we branch here, but return a repeated collated file name over the length of
   # the list
   tar_target(
     name = a_get_NW_NHD,
     command = get_polygons(HUC = a_get_NW_hucs, 
-                           minimum_sqkm = 0.1),
-    packages = c("sf", "nhdplusTools", "tidyverse"),
+                           minimum_sqkm = 0, # we aren't going to filter for size here
+                           ftypes =  c(390, 436)),
+    packages = c("sf", "nhdplusTools", "tidyverse", "janitor"),
     pattern = map(a_get_NW_hucs)
   ),
+  
   # select the NW polygons by location from the collated polygon from previous target
   tar_target(
     name = a_get_NW_polygons,
     command = select_polygons_by_points(shapefiles = a_get_NW_NHD, 
                                         points = a_NW_locs_file),
-    packages = c("sf", "tidyverse"),
-    pattern = a_get_NW_hucs
+    packages = c("sf", "tidyverse")
   ),
+  
   # track and load the polygons file for NW sites
   tar_file_read(
     name = a_NW_polygons,
-    command = a_get_NW_polygons[1], # output from a_NW_polygons is a list! the values are the same for all list members 
+    command = a_get_NW_polygons,
     read = read_sf(!!.x),
     packages = "sf"
   ),
@@ -186,7 +216,7 @@ a_targets_list <- list(
       a_ROSS_CLP_centers <- a_NW_CLP_ROSS_centers %>% 
         filter(Permanent_Identifier %in% NHD_perm_ids)
       points_to_csv(a_ROSS_CLP_centers, 'ROSS_CLP_centers')
-      },
+    },
     packages = c("tidyverse", "sf")
   ),
   # load and track that file

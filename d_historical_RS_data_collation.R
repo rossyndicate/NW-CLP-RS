@@ -1,5 +1,5 @@
 # Source functions for this {targets} list
-tar_source("c_historical_RS_data_collation/src/")
+tar_source("d_historical_RS_data_collation/src/")
 
 # Download and process GEE output from historical pulls -------------
 
@@ -10,9 +10,9 @@ tar_source("c_historical_RS_data_collation/src/")
 
 # prep folder structure
 suppressWarnings({
-  dir.create("c_historical_RS_data_collation/in/")
-  dir.create("c_historical_RS_data_collation/mid/")
-  dir.create("c_historical_RS_data_collation/out/")
+  dir.create("d_historical_RS_data_collation/in/")
+  dir.create("d_historical_RS_data_collation/mid/")
+  dir.create("d_historical_RS_data_collation/out/")
 })
 
 c_targets_list <- list(

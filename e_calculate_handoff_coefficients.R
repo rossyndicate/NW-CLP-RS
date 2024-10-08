@@ -1,5 +1,5 @@
 # Source functions for this {targets} list
-tar_source("d_calculate_handoff_coefficients/src/")
+tar_source("e_calculate_handoff_coefficients/src/")
 
 # Using the regional data, calculate handoff coefficients -------------
 
@@ -15,9 +15,9 @@ tar_source("d_calculate_handoff_coefficients/src/")
 
 # create folder structure
 suppressWarnings({
-  dir.create("d_calculate_handoff_coefficients/mid/")
-  dir.create("d_calculate_handoff_coefficients/out/")
-  dir.create("d_calculate_handoff_coefficients/figs/")
+  dir.create("e_calculate_handoff_coefficients/mid/")
+  dir.create("e_calculate_handoff_coefficients/out/")
+  dir.create("e_calculate_handoff_coefficients/figs/")
 })
 
 d_targets_list <- list(
