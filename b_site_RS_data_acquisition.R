@@ -2,7 +2,7 @@ library(targets)
 library(tarchetypes)
 library(reticulate)
 
-yaml_file <- "example/example_config.yml"
+yaml_file <- "nw-poudre-historical-config.yml"
 
 # MUST READ ---------------------------------------------------------------
 
@@ -19,21 +19,21 @@ yaml_file <- "example/example_config.yml"
 
 # Set up python virtual environment ---------------------------------------
 
-tar_source("data_acquisition/py/pySetup.R")
+tar_source("b_RS_data_acquisition/py/pySetup.R")
 
 
 # Source functions --------------------------------------------------------
 
-tar_source("data_acquisition/src/")
+tar_source("b_RS_data_acquisition/src/")
 
 
 # Define {targets} workflow -----------------------------------------------
 
 # Set target-specific options such as packages.
-tar_option_set(packages = "tidyverse")
+tar_option_set(packages = c("tidyverse", "sf"))
 
 # target objects in workflow
-list(
+b_targets_list <- list(
   # read and track the config file
   tar_file_read(
     name = config_file,
@@ -65,8 +65,7 @@ list(
   # load, format, save user locations as an updated csv called locs.csv
   tar_target(
     name = locs_save,
-    command = grab_locs(yaml = yml),
-    packages = "readr"
+    command = grab_locs(yaml = yml)
   ),
   
   # read and track formatted locations shapefile
@@ -78,54 +77,55 @@ list(
     error = "null"
   ),
   
-  # use location shapefile and configurations to get polygons from NHDPlusv2
-  tar_target(
-    name = poly_save,
-    command = get_NHD(locations = locs, 
-                      yaml = yml),
-    packages = c("nhdplusTools", "sf", "tidyverse")
-  ),
-  
-  # load and track polygons file
-  tar_file_read(
-    name = polygons, # this will throw an error if the configure extent does not include polygon
-    command = tar_read(poly_save),
-    read = read_sf(!!.x),
-    packages = "sf",
-    error = "null"
-  ),
-  
-  # use `polygons` sfc to calculate Chebyshev centers
-  tar_target(
-    name = centers_save,
-    command = calc_center(poly = polygons, 
-                          yaml = yml),
-    packages = c("sf", "polylabelr", "tidyverse")
-  ),
-  
-  # track centers file
-  tar_file_read(
-    name = centers, # this will throw an error if the configure extent does not include center.
-    command = tar_read(centers_save),
-    read = read_sf(!!.x),
-    packages = "sf",
-    error = "null"
-  ),
-  
-  # get WRS tile acquisition method from yaml
-  tar_target(
-    name = WRS_detection_method,
-    command = get_WRS_detection(yaml = yml),
-  ),
+  # # use location shapefile and configurations to get polygons from NHDPlusv2
+  # tar_target(
+  #   name = poly_save,
+  #   command = get_NHD(locations = locs, 
+  #                     yaml = yml),
+  #   packages = c("nhdplusTools", "sf", "tidyverse")
+  # ),
+  # 
+  # # load and track polygons file
+  # tar_file_read(
+  #   name = polygons, # this will throw an error if the configure extent does not include polygon
+  #   command = tar_read(poly_save),
+  #   read = read_sf(!!.x),
+  #   packages = "sf",
+  #   error = "null"
+  # ),
+  # 
+  # # use `polygons` sfc to calculate Chebyshev centers
+  # tar_target(
+  #   name = centers_save,
+  #   command = calc_center(poly = polygons, 
+  #                         yaml = yml),
+  #   packages = c("sf", "polylabelr", "tidyverse")
+  # ),
+  # 
+  # # track centers file
+  # tar_file_read(
+  #   name = centers, # this will throw an error if the configure extent does not include center.
+  #   command = tar_read(centers_save),
+  #   read = read_sf(!!.x),
+  #   packages = "sf",
+  #   error = "null"
+  # ),
+  # 
+  # # get WRS tile acquisition method from yaml
+  # tar_target(
+  #   name = WRS_detection_method,
+  #   command = get_WRS_detection(yaml = yml),
+  # ),
   
   # get WRS tiles
   tar_target(
     name = WRS_tiles,
-    command = get_WRS_tiles(detection_method = WRS_detection_method, 
+    command = get_WRS_tiles(detection_method = "site", 
                             yaml = yml, 
-                            locs = locs,
-                            centers = centers,
-                            poly = polygons),
+                            locs = locs),
+                            # ,
+                            # centers = centers,
+                            # poly = polygons),
     packages = c("readr", "sf")
   ),
   
@@ -135,8 +135,8 @@ list(
     command = {
       yml
       locs
-      polygons
-      centers
+      # polygons
+      # centers
       run_GEE_per_tile(WRS_tiles)
     },
     pattern = map(WRS_tiles),
@@ -148,7 +148,7 @@ list(
     name = ee_tasks_complete,
     command = {
       eeRun
-      source_python("data_acquisition/py/poi_wait_for_completion.py")
+      source_python("b_RS_data_acquisition/py/poi_wait_for_completion.py")
     },
     packages = "reticulate"
   ),
@@ -187,6 +187,5 @@ list(
     },
     packages = c("tidyverse", "feather")
   )
-  
   
 )

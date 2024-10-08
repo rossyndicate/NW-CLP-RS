@@ -1,28 +1,38 @@
 ## filepaths
 a_locs_poly_setup/out/*
 a_locs_poly_setup/nhd/*
-b_RS_data_acquisition/out/*
-c_historical_RS_data_collation/in/*
-c_historical_RS_data_collation/mid/*
-c_historical_RS_data_collation/out/*
-d_calculate_handoff_coefficients/mid/*
-d_calculate_handoff_coefficients/out/*
-d_calculate_handoff_coefficients/figs/*
-e_apply_handoff_coefficients/mid/*
-e_apply_handoff_coefficients/out/*
-e_apply_handoff_coefficients/figs/*
-f_separate_NW_CLP_data/out/*
+b_site_RS_data_acquisition/mid/*
+b_site_RS_data_acquisition/out/*
+b_site_RS_data_acquisition/run/*
+b_site_RS_data_acquisition/down/*
+c_regional_RS_data_acquisition/mid/*
+c_regional_RS_data_acquisition/out/*
+c_regional_RS_data_acquisition/run/*
+c_regional_RS_data_acquisition/down/*
+d_historical_RS_data_collation/in/*
+d_historical_RS_data_collation/mid/*
+d_historical_RS_data_collation/out/*
+e_calculate_handoff_coefficients/mid/*
+e_calculate_handoff_coefficients/out/*
+e_calculate_handoff_coefficients/figs/*
+f_apply_handoff_coefficients/mid/*
+f_apply_handoff_coefficients/out/*
+f_apply_handoff_coefficients/figs/*
+g_separate_NW_CLP_data/out/*
 compare_masks/*
 
+env/*
+
 ## OneDrive Symlink
-data
+data/
 
 ## targets folder
-_targets
+_targets/
 
 ## R Environment Variables
 .Renviron
 .Rproj.user/
+.Rhistory
 
 ## DS_Store files
 *.DS_Store
