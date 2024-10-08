@@ -13,7 +13,7 @@
 #' 
 #' 
 get_WRS_tiles <- function(detection_method, yaml, locs, poly, centers) {
-  WRS <- read_sf("b_RS_data_acquisition/in/WRS2_descending.shp")
+  WRS <- read_sf("data_acquisition/in/WRS2_descending.shp")
   if (detection_method == "site") {
     locs <- st_as_sf(locs, 
                      coords = c("Longitude", "Latitude"), 
@@ -24,7 +24,7 @@ get_WRS_tiles <- function(detection_method, yaml, locs, poly, centers) {
       locs <- st_transform(locs, st_crs(WRS))
       WRS_subset <- WRS[locs,]
     }
-    write_csv(st_drop_geometry(WRS_subset), "b_RS_data_acquisition/run/WRS_subset_list.csv")
+    write_csv(st_drop_geometry(WRS_subset), "data_acquisition/out/WRS_subset_list.csv")
     return(WRS_subset$PR)
   } else {
     if (detection_method == "centers") {
@@ -34,7 +34,7 @@ get_WRS_tiles <- function(detection_method, yaml, locs, poly, centers) {
         centers <- st_transform(centers, st_crs(WRS))
         WRS_subset <- WRS[centers,]
       }
-      write_csv(st_drop_geometry(WRS_subset), "b_RS_data_acquisition/run/WRS_subset_list.csv")
+      write_csv(st_drop_geometry(WRS_subset), "data_acquisition/out/WRS_subset_list.csv")
       return(WRS_subset$PR)
     } else {
       if (detection_method == "polygon") {
@@ -44,7 +44,7 @@ get_WRS_tiles <- function(detection_method, yaml, locs, poly, centers) {
           poly <- st_transform(poly, st_crs(WRS))
           WRS_subset <- WRS[poly,]
         }
-        write_csv(st_drop_geometry(WRS_subset), "b_RS_data_acquisition/run/WRS_subset_list.csv")
+        write_csv(st_drop_geometry(WRS_subset), "data_acquisition/out/WRS_subset_list.csv")
         return(WRS_subset$PR)
       }
     }

@@ -9,6 +9,6 @@
 #' 
 #' 
 run_GEE_per_tile <- function(WRS_tile) {
-  write_lines(WRS_tile, "b_RS_data_acquisition/run/current_tile.txt", sep = "")
-  source_python("b_RS_data_acquisition/py/runGEEperTile.py")
+  write_lines(WRS_tile, "data_acquisition/out/current_tile.txt", sep = "")
+  source_python("data_acquisition/py/runGEEperTile.py")
 }

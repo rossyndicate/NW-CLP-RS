@@ -1222,14 +1222,14 @@ def maximum_no_of_tasks(MaxNActive, waitingPeriod):
 
 
 # get locations and yml from data folder
-yml = read_csv('b_RS_data_acquisition/run/yml.csv')
+yml = read_csv('data_acquisition/in/yml.csv')
 
 eeproj = yml['ee_proj'][0]
 #initialize GEE
 ee.Initialize(project = eeproj)
 
 # get current tile
-with open('b_RS_data_acquisition/run/current_tile.txt', 'r') as file:
+with open('data_acquisition/out/current_tile.txt', 'r') as file:
   tiles = file.read()
 
 # get EE/Google settings from yml file
@@ -1261,7 +1261,7 @@ extent = (yml['extent'][0]
   .split('+'))
 
 if 'site' in extent:
-  locations = read_csv('b_RS_data_acquisition/run/locs.csv')
+  locations = read_csv('data_acquisition/in/locs.csv')
   # convert locations to an eeFeatureCollection
   locs_feature = csv_to_eeFeat(locations, yml['location_crs'][0])
 
@@ -1272,13 +1272,13 @@ if 'polygon' in extent:
   # if shapefile provided by user 
   if shapefile == True:
     # load the shapefile into a Fiona object
-    with fiona.open('b_RS_data_acquisition/rub/user_polygon.shp') as src:
+    with fiona.open('data_acquisition/out/user_polygon.shp') as src:
       shapes = ([ee.Geometry.Polygon(
         [[x[0], x[1]] for x in feature['geometry']['coordinates'][0]]
         ) for feature in src])
   else: #otherwise use the NHDPlus file
     # load the shapefile into a Fiona object
-    with fiona.open('b_RS_data_acquisition/run/NHDPlus_polygon.shp') as src:
+    with fiona.open('data_acquisition/out/NHDPlus_polygon.shp') as src:
       shapes = ([ee.Geometry.Polygon(
         [[x[0], x[1]] for x in feature['geometry']['coordinates'][0]]
         ) for feature in src])
@@ -1290,14 +1290,14 @@ if 'polygon' in extent:
 
 if 'polycenter' in extent:
   if yml['polygon'][0] == True:
-    centers_csv = read_csv('b_RS_data_acquisition/run/user_polygon_centers.csv')
+    centers_csv = read_csv('data_acquisition/out/user_polygon_centers.csv')
     centers_csv = (centers_csv.rename(columns={'poi_latitude': 'Latitude', 
       'poi_longitude': 'Longitude',
       'r_id': 'id'}))
     # load the shapefile into a Fiona object
     centers = csv_to_eeFeat(centers_csv, 'EPSG:4326')
   else: #otherwise use the NHDPlus file
-    centers_csv = read_csv('b_RS_data_acquisition/run/NHDPlus_polygon_centers.csv')
+    centers_csv = read_csv('data_acquisition/out/NHDPlus_polygon_centers.csv')
     centers_csv = (centers_csv.rename(columns={'poi_latitude': 'Latitude', 
       'poi_longitude': 'Longitude',
       'r_id': 'id'}))
@@ -1321,20 +1321,20 @@ wrs_row = int(tiles[-3:])
 #grab images and apply scaling factors
 l7 = (ee.ImageCollection('LANDSAT/LE07/C02/T1_L2')
     .filter(ee.Filter.lt('CLOUD_COVER', ee.Number.parse(str(cloud_thresh))))
-    .filter(ee.Filter.eq('WRS_PATH', wrs_path))
-    .filter(ee.Filter.eq('WRS_ROW', wrs_row))
     .filterDate(yml_start, yml_end)
-    .filterDate('1999-05-28', '2019-12-31')) # for valid dates
+    .filterDate('1999-05-28', '2019-12-31') # for valid dates
+    .filter(ee.Filter.eq('WRS_PATH', wrs_path))
+    .filter(ee.Filter.eq('WRS_ROW', wrs_row)))
 l5 = (ee.ImageCollection('LANDSAT/LT05/C02/T1_L2')
     .filter(ee.Filter.lt('CLOUD_COVER', ee.Number.parse(str(cloud_thresh))))
+    .filterDate(yml_start, yml_end)
     .filter(ee.Filter.eq('WRS_PATH', wrs_path))
-    .filter(ee.Filter.eq('WRS_ROW', wrs_row))
-    .filterDate(yml_start, yml_end))
+    .filter(ee.Filter.eq('WRS_ROW', wrs_row)))
 l4 = (ee.ImageCollection('LANDSAT/LT04/C02/T1_L2')
     .filter(ee.Filter.lt('CLOUD_COVER', ee.Number.parse(str(cloud_thresh))))
+    .filterDate(yml_start, yml_end)
     .filter(ee.Filter.eq('WRS_PATH', wrs_path))
-    .filter(ee.Filter.eq('WRS_ROW', wrs_row))
-    .filterDate(yml_start, yml_end))
+    .filter(ee.Filter.eq('WRS_ROW', wrs_row)))
     
 # merge collections by image processing groups
 ls457 = ee.ImageCollection(l4.merge(l5).merge(l7))
@@ -1355,14 +1355,14 @@ bns457 = (['Blue', 'Green', 'Red', 'Nir', 'Swir1', 'Swir2',
 #grab image stacks
 l8 = (ee.ImageCollection('LANDSAT/LC08/C02/T1_L2')
     .filter(ee.Filter.lt('CLOUD_COVER', ee.Number.parse(str(cloud_thresh))))
+    .filterDate(yml_start, yml_end)
     .filter(ee.Filter.eq('WRS_PATH', wrs_path))
-    .filter(ee.Filter.eq('WRS_ROW', wrs_row))
-    .filterDate(yml_start, yml_end))
+    .filter(ee.Filter.eq('WRS_ROW', wrs_row)))
 l9 = (ee.ImageCollection('LANDSAT/LC09/C02/T1_L2')
     .filter(ee.Filter.lt('CLOUD_COVER', ee.Number.parse(str(cloud_thresh))))
+    .filterDate(yml_start, yml_end)
     .filter(ee.Filter.eq('WRS_PATH', wrs_path))
-    .filter(ee.Filter.eq('WRS_ROW', wrs_row))
-    .filterDate(yml_start, yml_end))
+    .filter(ee.Filter.eq('WRS_ROW', wrs_row)))
 
 
 # merge collections by image processing groups
@@ -1424,6 +1424,7 @@ for e in extent:
   if '1' in dswe:
     # pull DSWE1 and DSWE1 with algal mask if configured
     if '1a' in dswe:
+      print('Starting Landsat 4, 5, 7 DSWE 1 acquisition for ' + e + ' configuration at tile ' + str(tiles))
       locs_out_457_D1 = locs_stack_ls457.map(ref_pull_457_DSWE1).flatten()
       locs_out_457_D1 = locs_out_457_D1.filter(ee.Filter.notNull(['med_Blue']))
       locs_srname_457_D1 = proj+'_'+e+'_LS457_C2_SRST_DSWE1_'+str(tiles)+'_v'+run_date
@@ -1447,6 +1448,7 @@ for e in extent:
       #Send next task.                                        
       locs_dataOut_457_D1.start()
       print('Completed Landsat 4, 5, 7 DSWE 1 stack acquisitions for ' + e + ' configuration at tile ' + str(tiles))
+      print('Starting Landsat 4, 5, 7 DSWE 1a acquisition for ' + e + ' configuration at tile ' + str(tiles))
       locs_out_457_D1a = locs_stack_ls457.map(ref_pull_457_DSWE1a).flatten()
       locs_out_457_D1a = locs_out_457_D1a.filter(ee.Filter.notNull(['med_Blue']))
       locs_srname_457_D1a = proj+'_'+e+'_LS457_C2_SRST_DSWE1a_'+str(tiles)+'_v'+run_date
@@ -1474,6 +1476,7 @@ for e in extent:
     else: 
       print('Not configured to acquire DSWE 1a stack for Landsat 4, 5, 7 for ' + e + ' configuration')
       # and pull DSWE1
+      print('Starting Landsat 4, 5, 7 DSWE1 acquisition for ' + e + ' configuration at tile ' + str(tiles))
       locs_out_457_D1 = locs_stack_ls457.map(ref_pull_457_DSWE1).flatten()
       locs_out_457_D1 = locs_out_457_D1.filter(ee.Filter.notNull(['med_Blue']))
       locs_srname_457_D1 = proj+'_'+e+'_LS457_C2_SRST_DSWE1_'+str(tiles)+'_v'+run_date
@@ -1503,6 +1506,7 @@ for e in extent:
   # pull DSWE3 variants if configured
   if '3' in dswe:
     # pull DSWE3
+    print('Starting Landsat 4, 5, 7 DSWE3 acquisition for ' + e + ' configuration at tile ' + str(tiles))
     locs_out_457_D3 = locs_stack_ls457.map(ref_pull_457_DSWE3).flatten()
     locs_out_457_D3 = locs_out_457_D3.filter(ee.Filter.notNull(['med_Blue']))
     locs_srname_457_D3 = proj+'_'+e+'_LS457_C2_SRST_DSWE3_'+str(tiles)+'_v'+run_date
@@ -1571,6 +1575,7 @@ for e in extent:
   
   if '1' in dswe:
     if '1a' in dswe:
+      print('Starting Landsat 8, 9 DSWE1 acquisition for ' + e + ' configuration at tile ' + str(tiles))
       locs_out_89_D1 = locs_stack_ls89.map(ref_pull_89_DSWE1).flatten()
       locs_out_89_D1 = locs_out_89_D1.filter(ee.Filter.notNull(['med_Blue']))
       locs_srname_89_D1 = proj+'_'+ e + '_LS89_C2_SRST_DSWE1_'+str(tiles)+'_v'+run_date
@@ -1594,6 +1599,7 @@ for e in extent:
       #Send next task.                                        
       locs_dataOut_89_D1.start()
       print('Completed Landsat 8, 9 DSWE 1 stack acquisitions for ' + e + ' configuration at tile ' + str(tiles))
+      print('Starting Landsat 8, 9 DSWE 1a acquisition for ' + e + ' configuration at tile ' + str(tiles))
       locs_out_89_D1a = locs_stack_ls89.map(ref_pull_89_DSWE1a).flatten()
       locs_out_89_D1a = locs_out_89_D1a.filter(ee.Filter.notNull(['med_Blue']))
       locs_srname_89_D1a = proj+'_'+e+'_LS89_C2_SRST_DSWE1a_'+str(tiles)+'_v'+run_date
@@ -1619,6 +1625,7 @@ for e in extent:
       print('Completed Landsat 8, 9 DSWE 1a stack acquisitions for ' + e + ' configuration at tile ' + str(tiles))
     else:
       print('Not configured to acquire DSWE 1a stack for Landsat 8, 9 for ' + e + ' configuration')
+      print('Starting Landsat 8, 9 DSWE1 acquisition for ' + e + ' configuration at tile ' + str(tiles))
       locs_out_89_D1 = locs_stack_ls89.map(ref_pull_89_DSWE1).flatten()
       locs_out_89_D1 = locs_out_89_D1.filter(ee.Filter.notNull(['med_Blue']))
       locs_srname_89_D1 = proj+'_'+e+'_LS89_C2_SRST_DSWE1_'+str(tiles)+'_v'+run_date
@@ -1646,6 +1653,7 @@ for e in extent:
   else: print('Not configured to acquire DSWE 1 stack for Landsat 8, 9 for ' + e + ' configuration')
   
   if '3' in dswe:
+    print('Starting Landsat 8, 9 DSWE3 acquisition for ' + e + ' configuration at tile ' + str(tiles))
     locs_out_89_D3 = locs_stack_ls89.map(ref_pull_89_DSWE3).flatten()
     locs_out_89_D3 = locs_out_89_D3.filter(ee.Filter.notNull(['med_Blue']))
     locs_srname_89_D3 = proj+'_'+e+'_LS89_C2_SRST_DSWE3_'+str(tiles)+'_v'+run_date
@@ -1677,6 +1685,7 @@ for e in extent:
 ##---- LANDSAT 457 METADATA ACQUISITION ----##
 ##############################################
 
+print('Starting Landsat 4, 5, 7 metadata acquisition for tile ' +str(tiles))
 
 ## get metadata ##
 meta_srname_457 = proj+'_metadata_LS457_C2_'+str(tiles)+'_v'+run_date
@@ -1697,6 +1706,7 @@ print('Completed Landsat 4, 5, 7 metadata acquisition for tile ' + str(tiles))
 ##---- LANDSAT 89 METADATA ACQUISITION ----##
 #############################################
 
+print('Starting Landsat 8, 9 metadata acquisition for tile ' +str(tiles))
 
 ## get metadata ##
 meta_srname_89 = proj+'_metadata_LS89_C2_'+str(tiles)+'_v'+run_date

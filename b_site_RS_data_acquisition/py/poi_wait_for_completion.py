@@ -3,7 +3,7 @@ from pandas import read_csv
 import time
 
 # get configs from yml file
-yml = read_csv("b_RS_data_acquisition/run/yml.csv")
+yml = read_csv("data_acquisition/in/yml.csv")
 # assign proj
 eeproj = yml["ee_proj"][0]
 #initialize GEE with proj

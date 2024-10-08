@@ -11,9 +11,6 @@
 #' 
 #' 
 grab_locs <- function(yaml) {
-  if (!dir.exists("b_RS_data_acquisition/run/")) {
-    dir.create("b_RS_data_acquisition/run/")
-  }
   if (grepl("site", yaml$extent[1])) {
     locs <- read_csv(file.path(yaml$data_dir, yaml$location_file))
     # store yaml info as objects
@@ -23,8 +20,8 @@ grab_locs <- function(yaml) {
     # apply objects to tibble
     locs <- locs %>% 
       rename_with(~c("Latitude", "Longitude", "id"), any_of(c(lat, lon, id)))
-    write_csv(locs, "b_RS_data_acquisition/run/locs.csv")
-    return("b_RS_data_acquisition/run/locs.csv")
+    write_csv(locs, "data_acquisition/in/locs.csv")
+    return("data_acquisition/in/locs.csv")
   } else {
     message("Not configured to use site locations.")
   }

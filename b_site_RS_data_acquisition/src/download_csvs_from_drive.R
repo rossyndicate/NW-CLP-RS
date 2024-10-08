@@ -13,25 +13,22 @@
 #' data_acquisition/in/ folder
 #' 
 #' 
-download_csvs_from_drive <- function(drive_folder_name, 
-                                     version_identifier, 
-                                     google_email) {
-  # authenticate
+download_csvs_from_drive <- function(drive_folder_name, google_email, version_identifier) {
   drive_auth(email = google_email)
   dribble_files <- drive_ls(path = drive_folder_name)
   dribble_files <- dribble_files %>% 
     filter(grepl(".csv", name))
   # make sure directory exists, create it if not
-  if(!dir.exists(file.path("b_RS_data_acquisition/down/", 
+  if(!dir.exists(file.path("data_acquisition/down/", 
                            version_identifier))) {
-    dir.create(file.path("b_RS_data_acquisition/down/", 
+    dir.create(file.path("data_acquisition/down/", 
                          version_identifier), recursive = TRUE)
   }
   walk2(.x = dribble_files$id,
         .y = dribble_files$name, 
         .f = function(.x, .y) {
           try(drive_download(file = .x,
-                         path = file.path("b_RS_data_acquisition/down/", 
+                         path = file.path("data_acquisition/down/", 
                                           version_identifier,
                                           .y),
                          overwrite = FALSE)) # just pass if already downloaded

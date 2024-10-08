@@ -1,2 +1,0 @@
-data_dir,location_file,unique_id,latitude,longitude,location_crs,polygon,poly_crs,poly_dir,poly_file,proj,proj_folder,ee_proj,start_date,end_date,run_date,extent,site_buffer,cloud_filter,cloud_thresh,water_detection,DSWE_setting
-~/Documents/GitHub/NW-CLP-RS/a_locs_poly_setup/out/,NW_CLP_all_points.csv,rowid,Latitude,Longitude,EPSG:4326,True,EPSG:4269,~/Documents/GitHub/NW-CLP-RS/a_locs_poly_setup/out/,CLP_NW_polygons.gpkg,NW_Poudre_Historical,NW_CLP_Landsat_v2024-09-12,ee-nasa-nw,1983-01-01,today,2024-09-12,site,120,True,90,DSWE,1
