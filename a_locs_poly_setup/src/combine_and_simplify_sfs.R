@@ -37,19 +37,19 @@ combine_and_simplify_sfs <- function(sf_1, data_group_1, sf_2, data_group_2, fil
   if(simplify == TRUE) {
     dupes <- collated_sf %>% 
       st_drop_geometry() %>% 
-      group_by(Permanent_Identifier) %>% 
+      group_by(permanent_identifier) %>% 
       summarize(n = n()) %>% 
       filter(n > 1) %>% 
       ungroup()
-    dupe_id <- unique(dupes$Permanent_Identifier)
+    dupe_id <- unique(dupes$permanent_identifier)
     lighter_coll_sf <- collated_sf %>% 
       st_drop_geometry() %>% 
-      filter(!Permanent_Identifier %in% dupe_id)
+      filter(!permanent_identifier %in% dupe_id)
     condensed_sf <- collated_sf %>%
       st_drop_geometry() %>% 
-      filter(Permanent_Identifier %in% dupe_id) %>% 
-      select(Permanent_Identifier, data_group) %>%  
-      group_by(Permanent_Identifier) %>% 
+      filter(permanent_identifier %in% dupe_id) %>% 
+      select(permanent_identifier, data_group) %>%  
+      group_by(permanent_identifier) %>% 
       summarize(data_group = toString(unique(data_group))) %>% 
       left_join(., collated_sf %>% st_drop_geometry() %>% select(-data_group)) %>% 
       distinct()
