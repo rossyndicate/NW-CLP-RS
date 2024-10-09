@@ -1,5 +1,5 @@
 # Source functions for this {targets} list
-tar_source("f_separate_NW_CLP_data/src/")
+tar_source("g_separate_NW_CLP_data/src/")
 
 # Separate NW and CLP data and save to Drive -------------
 
@@ -9,7 +9,7 @@ tar_source("f_separate_NW_CLP_data/src/")
 
 # prep folder structure
 suppressWarnings({
-  dir.create('f_separate_NW_CLP_data/out/')
+  dir.create('g_separate_NW_CLP_data/out/')
 })
 
 f_targets_list <- list(

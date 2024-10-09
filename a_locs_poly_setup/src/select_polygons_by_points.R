@@ -13,7 +13,8 @@
 #' 
 select_polygons_by_points <- function(shapefiles, points){
   # load and collate all NHD polygons
-  shps <- map_dfr(shapefiles, read_sf)
+  shps <- map(shapefiles, read_sf) %>% 
+    bind_rows()
   # load points - crs is WGS84
   pts <- st_as_sf(points, crs = "EPSG:4326", coords = c("Longitude", "Latitude"))
   # get the crs of polygons

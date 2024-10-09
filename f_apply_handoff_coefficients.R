@@ -1,5 +1,5 @@
 # Source functions for this {targets} list
-tar_source("e_apply_handoff_coefficients/src/")
+tar_source("f_apply_handoff_coefficients/src/")
 
 # Apply handoff coefficients to dataset(s) -------------
 
@@ -9,7 +9,7 @@ tar_source("e_apply_handoff_coefficients/src/")
 
 # create folder structure
 suppressWarnings({
-  dir.create("e_apply_handoff_coefficients/mid/")
+  dir.create("f_apply_handoff_coefficients/mid/")
 })
 
 e_targets_list <- list(
