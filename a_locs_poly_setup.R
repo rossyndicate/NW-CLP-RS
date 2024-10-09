@@ -12,7 +12,7 @@ tar_source("a_locs_poly_setup/src/")
 
 a_locs_poly_setup <- list(
   
-  # config settings (you must use the `config::` style here)
+  # project config settings (you must use the `config::` style here)
   tar_target(
     name = a_config,
     command = config::get(),
@@ -254,6 +254,7 @@ a_locs_poly_setup <- list(
     },
     packages = c("tidyverse", "sf")
   ),
+  
   # load and track that file
   tar_file_read(
     name = a_ROSS_CLP_centers,

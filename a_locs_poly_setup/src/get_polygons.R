@@ -38,7 +38,7 @@ get_polygons <-  function(HUC, minimum_sqkm, ftypes) {
       # clean up the names for later... stinking HR
       clean_names(case = "snake") %>% 
       st_as_sf() %>% 
-      st_make_valid() #make sure they are complete polygons
+      st_make_valid() # make sure they are complete polygons
     catch <- get_nhdplushr(fp, layers = paste0("WBDHU", nchar(HUC))) %>% 
       bind_rows() %>% 
       # clean up the names for later... stinking HR
@@ -56,7 +56,10 @@ get_polygons <-  function(HUC, minimum_sqkm, ftypes) {
     #filter for wbd in catchment, minimum size, and waterbody FTYPE
     huc_wbd <- wbd[catch,] 
     huc_wbd <- huc_wbd %>% 
-      filter(area_sq_km >= minimum_sqkm & ftype %in% ftypes)
+      filter(area_sq_km >= minimum_sqkm & ftype %in% ftypes) %>% 
+      select(any_of(c("permanent_identifier", "comid", "resolution", "gnis_id", 
+                      "gnis_name", "area_sq_km", "reachcode", "ftype", "fcode", 
+                      "vpuid")))
     write_sf(huc_wbd, paste0("a_locs_poly_setup/out/", huc_type, "_", HUC, "_NHDPlusHR_polygons.gpkg"), append = F)
   }
   return(paste0("a_locs_poly_setup/out/", huc_type, "_", HUC, "_NHDPlusHR_polygons.gpkg"))
