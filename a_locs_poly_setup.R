@@ -12,6 +12,12 @@ tar_source("a_locs_poly_setup/src/")
 
 a_locs_poly_setup <- list(
   
+  # config settings (you must use the `config::` style here)
+  tar_target(
+    name = a_config,
+    command = config::get(),
+    cue = tar_cue("always")
+  ),
   
   # check for proper directory structure ------------------------------------
   
