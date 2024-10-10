@@ -1,7 +1,7 @@
 #import modules
 import ee
 import time
-import fiona
+# import fiona
 from datetime import date, datetime
 import os 
 from pandas import read_csv
@@ -1222,14 +1222,14 @@ def maximum_no_of_tasks(MaxNActive, waitingPeriod):
 
 
 # get locations and yml from data folder
-yml = read_csv('data_acquisition/in/yml.csv')
+yml = read_csv('b_site_RS_data_acquisition/run/yml.csv')
 
 eeproj = yml['ee_proj'][0]
 #initialize GEE
 ee.Initialize(project = eeproj)
 
 # get current tile
-with open('data_acquisition/out/current_tile.txt', 'r') as file:
+with open('b_site_RS_data_acquisition/run/current_tile.txt', 'r') as file:
   tiles = file.read()
 
 # get EE/Google settings from yml file
@@ -1261,7 +1261,7 @@ extent = (yml['extent'][0]
   .split('+'))
 
 if 'site' in extent:
-  locations = read_csv('data_acquisition/in/locs.csv')
+  locations = read_csv('b_site_RS_data_acquisition/run/locs.csv')
   # convert locations to an eeFeatureCollection
   locs_feature = csv_to_eeFeat(locations, yml['location_crs'][0])
 
@@ -1272,13 +1272,13 @@ if 'polygon' in extent:
   # if shapefile provided by user 
   if shapefile == True:
     # load the shapefile into a Fiona object
-    with fiona.open('data_acquisition/out/user_polygon.shp') as src:
+    with fiona.open('b_site_RS_data_acquisition/run/user_polygon.shp') as src:
       shapes = ([ee.Geometry.Polygon(
         [[x[0], x[1]] for x in feature['geometry']['coordinates'][0]]
         ) for feature in src])
   else: #otherwise use the NHDPlus file
     # load the shapefile into a Fiona object
-    with fiona.open('data_acquisition/out/NHDPlus_polygon.shp') as src:
+    with fiona.open('b_site_RS_data_acquisition/run/NHDPlus_polygon.shp') as src:
       shapes = ([ee.Geometry.Polygon(
         [[x[0], x[1]] for x in feature['geometry']['coordinates'][0]]
         ) for feature in src])
@@ -1290,14 +1290,14 @@ if 'polygon' in extent:
 
 if 'polycenter' in extent:
   if yml['polygon'][0] == True:
-    centers_csv = read_csv('data_acquisition/out/user_polygon_centers.csv')
+    centers_csv = read_csv('b_site_RS_data_acquisition/run/user_polygon_centers.csv')
     centers_csv = (centers_csv.rename(columns={'poi_latitude': 'Latitude', 
       'poi_longitude': 'Longitude',
       'r_id': 'id'}))
     # load the shapefile into a Fiona object
     centers = csv_to_eeFeat(centers_csv, 'EPSG:4326')
   else: #otherwise use the NHDPlus file
-    centers_csv = read_csv('data_acquisition/out/NHDPlus_polygon_centers.csv')
+    centers_csv = read_csv('b_site_RS_data_acquisition/run/NHDPlus_polygon_centers.csv')
     centers_csv = (centers_csv.rename(columns={'poi_latitude': 'Latitude', 
       'poi_longitude': 'Longitude',
       'r_id': 'id'}))
