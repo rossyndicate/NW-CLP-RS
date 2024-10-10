@@ -4,7 +4,7 @@ library(tarchetypes) # Load other packages as needed.
 
 # Set target options:
 tar_option_set(
-  packages = c("tidyverse")
+  packages = c("tidyverse", "sf")
 )
 
 # source functions
