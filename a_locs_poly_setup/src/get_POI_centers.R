@@ -11,6 +11,7 @@
 #' 
 #' 
 get_POI_centers <- function(polygons, out_file) {
+  
   # create an empty tibble
   poi_df = tibble(
     permanent_identifier = character(),
@@ -18,7 +19,6 @@ get_POI_centers <- function(polygons, out_file) {
     Latitude = numeric(),
     dist_m = numeric()
   )
-  
   
   # for each polygon, calculate a center. Because sf doesn't map easily, using a loop.
   for (i in 1:length(polygons[[1]])) {
@@ -62,12 +62,14 @@ get_POI_centers <- function(polygons, out_file) {
     poi_df$Longitude[i] = new_coords[ ,1]
     poi_df$Latitude[i] = new_coords[ ,2]
   }
+  poi_df <- poi_df %>% 
+    distinct()
   poly_poi <- polygons %>%
     st_drop_geometry() %>% 
     left_join(., poi_df) %>% 
     mutate(location_type = "poi_center")
   poi_geo <- st_as_sf(poly_poi, coords = c("Longitude", "Latitude"), crs = st_crs(polygons)) %>% 
-    st_transform(., "EPSG:4326")
+    st_transform(., "EPSG:4326") 
   write_sf(poi_geo, file.path("a_locs_poly_setup/out", paste0(out_file,".gpkg")))
   file.path("a_locs_poly_setup/out", paste0(out_file,".gpkg"))
 }

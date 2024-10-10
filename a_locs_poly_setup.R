@@ -324,12 +324,24 @@ a_locs_poly_setup <- list(
   ),
   
   tar_target(
-    name = a_aoi_polygons,
+    name = a_make_aoi_polygons,
     command = get_polygons(HUC = a_aoi_hucs, 
                            minimum_sqkm = 0.01, 
                            ftypes = c(390, 436)),
     packages = c("sf", "nhdplusTools", "tidyverse", "janitor"),
     pattern = map(a_aoi_hucs)
+  ),
+  
+  tar_target(
+    name = a_aoi_polygons,
+    command = {
+      map(a_make_aoi_polygons,
+          read_sf) %>% 
+        bind_rows() %>% 
+        # there may be some tiny polygons that squeak through because there is 
+        # no minimum set for 1019 from processing the NW and CLP reservoirs
+        filter(area_sq_km >= 0.01) 
+    }
   ),
   
   tar_target(
