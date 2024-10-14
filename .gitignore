@@ -1,5 +1,6 @@
 ## filepaths
 a_locs_poly_setup/out/*
+!a_locs_poly_setup/out/NW_CLP_all_points.csv
 a_locs_poly_setup/nhd/*
 b_site_RS_data_acquisition/mid/*
 b_site_RS_data_acquisition/out/*

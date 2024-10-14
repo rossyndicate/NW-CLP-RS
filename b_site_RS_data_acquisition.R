@@ -19,12 +19,12 @@ yaml_file <- "nw-poudre-historical-config.yml"
 
 # Set up python virtual environment ---------------------------------------
 
-tar_source("b_RS_data_acquisition/py/pySetup.R")
+tar_source("b_site_RS_data_acquisition/py/pySetup.R")
 
 
 # Source functions --------------------------------------------------------
 
-tar_source("b_RS_data_acquisition/src/")
+tar_source("b_site_RS_data_acquisition/src/")
 
 
 # Define {targets} workflow -----------------------------------------------
@@ -33,7 +33,7 @@ tar_source("b_RS_data_acquisition/src/")
 tar_option_set(packages = c("tidyverse", "sf"))
 
 # target objects in workflow
-b_targets_list <- list(
+b_site_RS_data <- list(
   # read and track the config file
   tar_file_read(
     name = config_file,
