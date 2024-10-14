@@ -33,12 +33,12 @@ tar_source("src/")
 tar_option_set(packages = c("tidyverse", "sf"))
 
 # target objects in workflow
-b_site_RS_data <- list(
+c_regional_RS_data <- list(
 
   # check for proper directory structure ------------------------------------
 
   tar_target(
-    name = b_check_dir_structure,
+    name = c_check_dir_structure,
     command = {
       directories = c("c_regional_RS_data_acquisition/run/",
                       "c_regional_RS_data_acquisition/mid/",
@@ -55,7 +55,7 @@ b_site_RS_data <- list(
 
   # read and track the config file
   tar_file_read(
-    name = b_config_file,
+    name = c_config_file,
     command = yaml_file,
     read = read_yaml(!!.x),
     packages = "yaml",
@@ -64,47 +64,47 @@ b_site_RS_data <- list(
   
   # load, format, save yml as a csv
   tar_target(
-    name = b_yml,
-    command = format_yaml(yaml = b_config_file,
+    name = c_yml,
+    command = format_yaml(yaml = c_config_file,
                           parent_path = "c_regional_RS_data_acquisition"),
     packages = c("yaml", "tidyverse") #for some reason, you have to load TV.
   ),
   
   # load, format, save user locations as an updated csv called locs.csv
   tar_target(
-    name = b_locs,
-    command = grab_locs(yaml = b_yml,
+    name = c_locs,
+    command = grab_locs(yaml = c_yml,
                         parent_path = "c_regional_RS_data_acquisition")
   ),
   
   # get WRS tiles
   tar_target(
-    name = b_WRS_tiles,
+    name = c_WRS_tiles,
     command = get_WRS_tiles(detection_method = "site", 
-                            yaml = b_yml, 
-                            locs = b_locs,
+                            yaml = c_yml, 
+                            locs = c_locs,
                             parent_path = "c_regional_RS_data_acquisition"),
     packages = c("readr", "sf")
   ),
   
   # run the Landsat pull as function per tile
   tar_target(
-    name = b_eeRun,
+    name = c_eeRun,
     command = {
-      b_yml
-      b_locs
-      run_GEE_per_tile(WRS_tile = b_WRS_tiles,
+      c_yml
+      c_locs
+      run_GEE_per_tile(WRS_tile = c_WRS_tiles,
                        parent_path = "c_regional_RS_data_acquisition")
     },
-    pattern = map(b_WRS_tiles),
+    pattern = map(c_WRS_tiles),
     packages = "reticulate"
   ),
   
   # wait for all earth engine tasks to be completed
   tar_target(
-    name = b_ee_tasks_complete,
+    name = c_ee_tasks_complete,
     command = {
-      b_eeRun
+      c_eeRun
       source_python("c_regional_RS_data_acquisition/py/poi_wait_for_completion.py")
     },
     packages = "reticulate"
@@ -112,12 +112,12 @@ b_site_RS_data <- list(
   
   # download all files
   tar_target(
-    name = b_download_files,
+    name = c_download_files,
     command = {
-      b_ee_tasks_complete
-      download_csvs_from_drive(drive_folder_name = b_yml$proj_folder,
-                               google_email = b_yml$google_email,
-                               version_identifier = b_yml$run_date,
+      c_ee_tasks_complete
+      download_csvs_from_drive(drive_folder_name = c_yml$proj_folder,
+                               google_email = c_yml$google_email,
+                               version_identifier = c_yml$run_date,
                                parent_path = "c_regional_RS_data_acquisition")
     },
     packages = c("tidyverse", "googledrive")
@@ -125,11 +125,11 @@ b_site_RS_data <- list(
   
   # collate all files
   tar_target(
-    name = b_make_collated_data_files,
+    name = c_make_collated_data_files,
     command = {
-      b_download_files
-      collate_csvs_from_drive(file_prefix = b_yml$proj, 
-                              version_identifier = b_yml$run_date,
+      c_download_files
+      collate_csvs_from_drive(file_prefix = c_yml$proj, 
+                              version_identifier = c_yml$run_date,
                               parent_path = "c_regional_RS_data_acquisition")
     },
     packages = c("tidyverse", "feather")
@@ -137,10 +137,10 @@ b_site_RS_data <- list(
   
   # and collate the data with metadata
   tar_target(
-    name = b_make_files_with_metadata,
+    name = c_make_files_with_metadata,
     command = {
-      b_make_collated_data_files
-      add_metadata(yaml = b_yml,
+      c_make_collated_data_files
+      add_metadata(yaml = c_yml,
                    parent_path = "c_regional_RS_data_acquisition")
     },
     packages = c("tidyverse", "feather")

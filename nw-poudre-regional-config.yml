@@ -5,8 +5,8 @@
 # indicated. All inputs are case-sensitive.
 
 local_settings:
-- data_dir: "data/spatialData/" # point to the *full* directory path where your location information is stored - this path must end with a '/'
-- location_file: "NW_regional_collated_locations_v2023-05-16.csv" # name of the *.csv* file that contains the location information
+- data_dir: "~/Documents/GitHub/NW-CLP-RS/a_locs_poly_setup/out/" # point to the *full* directory path where your location information is stored - this path must end with a '/'
+- location_file: "er3z21_centers.csv" # name of the *.csv* file that contains the location information
 - unique_id: "rowid" # this is the column that stores the unique identifier for each site, should not contain any special characters
 - latitude: "Latitude" # this is the column that stores the latitude of the site, must be in decimal degrees
 - longitude: "Longitude" # this is the column that stores the longitude of the site, must be in decimal degrees

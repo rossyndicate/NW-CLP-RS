@@ -1222,14 +1222,14 @@ def maximum_no_of_tasks(MaxNActive, waitingPeriod):
 
 
 # get locations and yml from data folder
-yml = read_csv('b_site_RS_data_acquisition/run/yml.csv')
+yml = read_csv('c_regional_RS_data_acquisition/run/yml.csv')
 
 eeproj = yml['ee_proj'][0]
 #initialize GEE
 ee.Initialize(project = eeproj)
 
 # get current tile
-with open('b_site_RS_data_acquisition/run/current_tile.txt', 'r') as file:
+with open('c_regional_RS_data_acquisition/run/current_tile.txt', 'r') as file:
   tiles = file.read()
 
 # get EE/Google settings from yml file
