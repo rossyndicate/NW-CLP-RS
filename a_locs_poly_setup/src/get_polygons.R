@@ -5,7 +5,7 @@
 #' a HUC. Filter for waterbodies larger than a minimum area using the AreaSqKm
 #' column in the NHD file.
 #' 
-#' @param HUC a 4-digit or longer HUC value
+#' @param HUC a 4-digit or 8-digit HUC value
 #' @param minimum_sqkm a numeric threshold value to filter waterbodies, in square 
 #' kilometers; if specified as NA_real_, no filter will be applied
 #' @param ftypes a list of FTYPE (3-digit) values to filter the waterbodies. 390 
