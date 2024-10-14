@@ -19,14 +19,22 @@
 collate_csvs_from_drive <- function(file_prefix, 
                                     version_identifier,
                                     parent_path) {
+  
   # get the list of files in the `down` directory 
   files <- list.files(file.path(parent_path,
                                 "down",
                                 version_identifier),
                       pattern = file_prefix,
                       full.names = TRUE) 
+  # also grab the short name for these, to make sure filtering doesn't include
+  # full path that may present issues...
+  files_short <- list.files(file.path(parent_path,
+                                      "down",
+                                      version_identifier),
+                            pattern = file_prefix,
+                            full.names = FALSE) 
   
-  meta_files <- files[grepl("meta", files)]
+  meta_files <- files[grepl("meta", files_short)]
   all_meta <- map_dfr(meta_files, read_csv) 
   write_feather(all_meta, file.path(parent_path, 
                                     "mid",
@@ -35,7 +43,8 @@ collate_csvs_from_drive <- function(file_prefix,
   
   # if point data are present, subset those, collate, and save
   if (any(grepl("site", files))) {
-    point_files <- files[grepl("site", files)]
+    # check for 'site' in file name, but make sure it's only ths last
+    point_files <- files[grepl("site", files_short)] 
     # collate files, but add the filename, since this *could be* is DSWE 1 + 3
     all_points <- map_dfr(.x = point_files, 
                           .f = function(.x) {
@@ -57,7 +66,7 @@ collate_csvs_from_drive <- function(file_prefix,
   
   # if centers data are present, subset those, collate, and save
   if (any(grepl("center", files))) {
-    center_files <- files[grepl("center", files)]
+    center_files <- files[grepl("center", files_short)]
     # collate files, but add the filename, since this *could be* is DSWE 1 + 3
     all_centers <- map_dfr(.x = center_files, 
                            .f = function(.x) {
@@ -79,7 +88,7 @@ collate_csvs_from_drive <- function(file_prefix,
   
   #if polygon data are present, subset those, collate, and save
   if (any(grepl("polygon", files))) {
-    poly_files <- files[grepl("polygon", files)]
+    poly_files <- files[grepl("polygon", files_short)]
     # collate files, but add the filename, since this *could be* is DSWE 1 + 3
     all_polys <- map_dfr(.x = poly_files,
                          .f = function(.x) {
