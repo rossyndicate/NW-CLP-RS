@@ -13,18 +13,6 @@ downstream uses of this work be available to the public when possible.
 This repository uses a symlink data folder to the NASA-NW OneDrive data folder. 
 Contact B for the link to this if needed.
 
-This workflow incorporates environment settings within an .Renviron document. You
-will need to create a .Renviron document in the root directory containing the
-following information, but with proper punctuation:
-
-google_email = "the ROSS yndicate at gmail dot com"
-
-nw_clp_pull_version_date = "2023-12-07"
-
-regional_pull_version_date = "2023-08-17"
-
-collation_date = "2023-12-08"
-
 ------------------------------------------------------------------------
 
 ## {targets} architecture overview
@@ -40,11 +28,14 @@ for RS retrieval. The group of functions collates a few different polygon and
 point files into a single file of each type as needed for the RS workflow.
 
 
-_b_RS_data_acquisition_:
+_b_site_RS_data_acquisition_:
 
 This group of targets acquires the Landsat record for our focus lakes as part of 
 the Northern Water project, our internal Cache La Poudre lakes, as well as all
-lakes greater than 1 hectare in the CLP HUC12.
+lakes greater than 1 hectare in the CLP HUC12. This group of targets also collates
+the files of this pull and adds the metadata to create a singular file per extent
+and DSWE. In this case, we are only pulling sites and lake centers for DSWE1 
+(confident water).
 
 
 _c_historical_RS_data_collation_:
