@@ -2,7 +2,7 @@ library(targets)
 library(tarchetypes)
 library(reticulate)
 
-yaml_file <- "nw-poudre-historical-config.yml"
+site_yaml_file <- "nw-poudre-historical-config.yml"
 
 # MUST READ ---------------------------------------------------------------
 
@@ -55,7 +55,7 @@ b_site_RS_data <- list(
   # read and track the config file
   tar_file_read(
     name = b_config_file,
-    command = yaml_file,
+    command = site_yaml_file,
     read = read_yaml(!!.x),
     packages = "yaml",
     cue = tar_cue("always")
