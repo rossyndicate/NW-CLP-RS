@@ -38,10 +38,18 @@ and DSWE. In this case, we are only pulling sites and lake centers for DSWE1
 (confident water).
 
 
-_c_historical_RS_data_collation_:
+_c_regional_RS_data_acquisition_:
 
-This group of functions downloads and processes GEE output from historical pulls
-completed in the _b_ group.
+Similar to group -b-, this targets group acquires the Landsat record, but for all
+lakes greater than 1 hectare for lakes that fall within the EcoRegion Level 3 Zone
+21 area. These data are used to calculate handoff calculations on a regional level, 
+which we suspect may be better than a national handoff coefficient (e.g. all lakes
+across the US), since we assume that atmospheric correction processes likely have
+ingrained processes (or biases) based on general location (e.g. elevation, distance
+to ocean). At some point in the future, we will likely compare the coefficients 
+here to those calculated by the Gardener lab (focused on the east coast) and those
+from lakeSR (calculated across all US and territories).
+
 
 
 _d_calculate_handoff_coefficients_:
