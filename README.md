@@ -8,10 +8,35 @@ Primary repository contact: B Steele <b dot steele at colostate dot edu>
 This repository is covered by the MIT use license. We request that all 
 downstream uses of this work be available to the public when possible.
 
-### Important notes:
+## Important notes:
 
-This repository uses a symlink data folder to the NASA-NW OneDrive data folder. 
+- This repository uses a symlink data folder to the NASA-NW OneDrive data folder. 
 Contact B for the link to this if needed.
+
+- We recommend running the {targets} workflow from the run_targets.Rmd file.
+
+- In order to use this workflow, you must have a [Google Earth Engine account](https://earthengine.google.com/signup/) 
+and have configured a [Google Cloud Project](https://developers.google.com/earth-engine/cloud/projects) 
+and you will need to [download, install, and initialize gcloud](https://cloud.google.com/sdk/docs/install). 
+
+- The Earth Engine workflow has been modified from the [Landsat_C2_SRST_template](https://github.com/rossyndicate/Landsat_C2_SRST_template)
+to be able to run the ee workflow in multiple subfolders without issues with 
+{targets} or Earth Engine.
+
+## Confirm `gcloud` function:
+
+It is recommended to run the following command in your **zsh** terminal and 
+follow the prompts in  your browser to ensure that your gcloud is set up correctly.
+
+`earthengine authenticate`
+
+Follow the prompts in your browser. When completed in the browser, your terminal 
+will also read:
+
+`Successfully saved authorization token.`
+
+This token is valid for 7 days from the time of authentication. If this fails,
+see the [common issues](https://github.com/rossyndicate/ROSS_RS_mini_tools/blob/main/helps/CommonIssues.md) or contact B for help troubleshooting.
 
 ------------------------------------------------------------------------
 

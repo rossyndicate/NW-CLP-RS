@@ -1,32 +1,21 @@
 ---
 title: "Run Targets - Northern Water and Cache La Poudre Pipeline"
 author: "ROSSyndicate"
-date: "`r Sys.Date()`"
-output:
-  html_document: default
-  pdf_document: default
 ---
 
 # Purpose
 
 This script loads all necessary packages to run the {targets} pipeline and then
 runs it! This pipeline organizes the location and polygon information for the NW
-and CLP projects (group a), collates the RS pulls (group c, the RS pulls are 
-currently completed in the Landsat-C2-SRST repository, nw-poudre-historical 
-branch and nw-er3z21-historical), calculates handoff coefficients (group d),
-applies handoff coefficients (group e), then separates the NW and CLP data and 
-saves the files to the ROSSyndicate Google Drive (group f).
+and CLP projects (group a), pulls and collates the RS pulls for NW and CLP 
+reservoirs (group b), ...., calculates handoff coefficients (group e),
+applies handoff coefficients (group f), then separates the NW and CLP data and 
+saves the files to the ROSSyndicate Google Drive (group g).
 
-To run this pipeline, you will need to have an .Renviron script in your root 
-directory (see the readme file for details) and have created a symlink called 'data' 
-that accesses B's OneDrive. 
+Please see the README in this repository for set up of Earth Engine and gcloud.
 
-Current settings:
-```{r, echo=FALSE}
-message("Northern Water and CLP RS pull date: ", Sys.getenv("nw_clp_pull_version_date"))
-message("Regional RS pull date: ", Sys.getenv("regional_pull_version_date"))
-message("Collation date: ", Sys.getenv("collation_date"))
-```
+Be sure to start a new session before running this file. This markdown is not meant
+to be knit.
 
 ## Install necessary packages
 
@@ -62,12 +51,16 @@ lapply(packages, package_installer)
 
 ## Set up python environment and authenticate EE
 
+Check to see if your conda environment is available, otherwise set up a conda 
+environment using reticulate.
+
 ```{r}
-source("b_RS_data_acquisition/py/pySetup.R")
+source("pySetup.R")
 ```
 
-And then authenticate EE. This has to match both your gcloud init settings and your
-config settings (especially the project you're running on.)
+And then authenticate EE. The account you use here has to match both your gcloud 
+init settings and your config settings (especially the earth engine project 
+you're running on).
 
 ```{python}
 import ee
@@ -77,11 +70,16 @@ ee.Authenticate()
 
 ## Run the targets pipeline and output a network graph.
 
+At this point, you can run any part of the pipeline. If you run the entire pipeline,
+it may take a few hours. At this time, the pipeline will only function through the -b-
+group.
+
 ```{r run_targets}
+
 library(targets)
 
-# run the pipeline
-tar_make()
+# # run the pipeline
+# tar_make()
 
 ```
 
