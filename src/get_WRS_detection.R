@@ -13,14 +13,14 @@
 #' 
 get_WRS_detection <- function(yaml) {
   extent = yaml$extent[1]
-  if (grepl('poly', extent)) {
-    return('polygon')
+  if (grepl("poly", extent)) {
+    return("polygon")
   } else {
-    if (grepl('site', extent)) {
-      return('site')
+    if (grepl("site", extent)) {
+      return("site")
     } else {
-      if (grepl('center', extent)) {
-        return('center')
+      if (grepl("center", extent)) {
+        return("center")
       }
     }
   }

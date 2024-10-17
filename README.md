@@ -8,22 +8,35 @@ Primary repository contact: B Steele <b dot steele at colostate dot edu>
 This repository is covered by the MIT use license. We request that all 
 downstream uses of this work be available to the public when possible.
 
-### Important notes:
+## Important notes:
 
-This repository uses a symlink data folder to the NASA-NW OneDrive data folder. 
+- This repository uses a symlink data folder to the NASA-NW OneDrive data folder. 
 Contact B for the link to this if needed.
 
-This workflow incorporates environment settings within an .Renviron document. You
-will need to create a .Renviron document in the root directory containing the
-following information, but with proper punctuation:
+- We recommend running the {targets} workflow from the run_targets.Rmd file.
 
-google_email = "the ROSS yndicate at gmail dot com"
+- In order to use this workflow, you must have a [Google Earth Engine account](https://earthengine.google.com/signup/) 
+and have configured a [Google Cloud Project](https://developers.google.com/earth-engine/cloud/projects) 
+and you will need to [download, install, and initialize gcloud](https://cloud.google.com/sdk/docs/install). 
 
-nw_clp_pull_version_date = "2023-12-07"
+- The Earth Engine workflow has been modified from the [Landsat_C2_SRST_template](https://github.com/rossyndicate/Landsat_C2_SRST_template)
+to be able to run the ee workflow in multiple subfolders without issues with 
+{targets} or Earth Engine.
 
-regional_pull_version_date = "2023-08-17"
+## Confirm `gcloud` function:
 
-collation_date = "2023-12-08"
+It is recommended to run the following command in your **zsh** terminal and 
+follow the prompts in  your browser to ensure that your gcloud is set up correctly.
+
+`earthengine authenticate`
+
+Follow the prompts in your browser. When completed in the browser, your terminal 
+will also read:
+
+`Successfully saved authorization token.`
+
+This token is valid for 7 days from the time of authentication. If this fails,
+see the [common issues](https://github.com/rossyndicate/ROSS_RS_mini_tools/blob/main/helps/CommonIssues.md) or contact B for help troubleshooting.
 
 ------------------------------------------------------------------------
 
@@ -40,11 +53,14 @@ for RS retrieval. The group of functions collates a few different polygon and
 point files into a single file of each type as needed for the RS workflow.
 
 
-_b_RS_data_acquisition_:
+_b_site_RS_data_acquisition_:
 
 This group of targets acquires the Landsat record for our focus lakes as part of 
 the Northern Water project, our internal Cache La Poudre lakes, as well as all
-lakes greater than 1 hectare in the CLP HUC12.
+lakes greater than 1 hectare in the CLP HUC12. This group of targets also collates
+the files of this pull and adds the metadata to create a singular file per extent
+and DSWE. In this case, we are only pulling sites and lake centers for DSWE1 
+(confident water).
 
 
 _c_historical_RS_data_collation_:

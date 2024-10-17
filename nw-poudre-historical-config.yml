@@ -19,7 +19,7 @@ local_settings:
 google_settings:
 - proj: "NW_Poudre_Historical" # this is a short name for file naming conventions. All output files will include this prefix.
 - google_email: "therossyndicate@gmail.com"
-- proj_folder: "NW_CLP_Landsat_v2024-09-12" # this is the folder name where the GEE data will be save to Google Drive. If it doesn't exist, it will be created.
+- proj_folder: "NW_CLP_Landsat_v2024-10-10" # this is the folder name where the GEE data will be save to Google Drive. If it doesn't exist, it will be created.
 - ee_proj: "ee-nasa-nw" # this is the ee project name you are running your pulls from
 
 # The following parameters are optional and have default values listed below. 
@@ -28,7 +28,7 @@ google_settings:
 temporal_settings: 
 - start_date: "1983-01-01" # earliest data of satellite data to be acquired; earliest data available is 1983-01-01
 - end_date: "today" # latest data of satellite data to be acquired; if 'today' is used, the date will be set to the current date
-- run_date: "2024-09-12" # date of run for versioning
+- run_date: "2024-10-10" # date of run for versioning
 
 spatial_settings: 
 - extent: "site" # options: "site", "polygon", "polycenter", "site+poly", "site+polygon+polycenter", "polygon+polycenter" - at this time lake and lake center can only be calculated for lakes in the US

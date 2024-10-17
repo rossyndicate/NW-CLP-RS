@@ -3,14 +3,16 @@
 #' @description 
 #' Function to read in yaml, reformat and pivot for easy use in scripts
 #' 
-#' @param yml_file user-specified file containing configuration details for the
-#' pull.
-#' @returns filepath for the .csv of the reformatted yaml file. Silently saves 
-#' the .csv in the `data_acquisition/in` directory path.
+#' @param yaml user-specified configuration file containing details for the
+#' pull - in this case, this refers to a target that has read/tracked the yaml 
+#' file
+#' @param parent_path parent filepath where the RS run is occurring
+#' @returns dataframe of unnested yaml file for remote sensing pull. Silently saves 
+#' the .csv in the `/run/` directory path if configured 
+#' for site acquisition.
 #' 
 #' 
-format_yaml <-  function(yml_file) {
-  yaml <-  read_yaml(yml_file)
+format_yaml <-  function(yaml, parent_path) {
   # create a nested tibble from the yaml file
   nested <-  map_dfr(names(yaml), 
                      function(x) {
@@ -33,7 +35,8 @@ format_yaml <-  function(yml_file) {
     select(desc, param) %>% 
     pivot_wider(names_from = desc, 
                 values_from = param)
-  write_csv(unnested, "data_acquisition/in/yml.csv")
-  "data_acquisition/in/yml.csv"
+  # save the file for the python run, return unnested
+  write_csv(unnested, file.path(parent_path, "run/yml.csv"))
+  unnested
 }
 

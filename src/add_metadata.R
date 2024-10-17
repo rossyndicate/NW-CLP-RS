@@ -5,18 +5,18 @@
 #' data for downstream use
 #'
 #' @param yaml contents of the yaml .csv file
-#' @param file_prefix specified string that matches the file group to collate
-#' @param version_identifier user-specified string to identify the RS pull these
-#' data are associated with
+#' @param parent_path parent filepath where the file collation is occurring
 #' @returns silently creates collated .feather files from 'mid' folder and 
-#' dumps into 'data'
+#' dumps into specified output path
 #' 
 #' 
 add_metadata <- function(yaml,
-                         file_prefix, 
-                         version_identifier) {
+                         parent_path) {
   
-  files <- list.files(file.path("data_acquisition/mid/"),
+  file_prefix <- yaml$proj
+  version_identifier <- yaml$run_date
+  
+  files <- list.files(file.path(parent_path, "mid"),
                       pattern = file_prefix,
                       full.names = TRUE) %>% 
     # and grab the right version
@@ -43,14 +43,19 @@ add_metadata <- function(yaml,
            IMAGE_QUALITY_TIRS, 
            SUN_AZIMUTH, 
            SUN_ELEVATION) 
+  metadata_light <- metadata_light %>%
+    # make sure that columns for join later are as character
+    mutate(across(all_of(c("WRS_PATH", 
+                           "WRS_ROW",
+                           "CLOUD_COVER",
+                           "IMAGE_QUALITY", 
+                           "IMAGE_QUALITY_TIRS", 
+                           "SUN_AZIMUTH", 
+                           "SUN_ELEVATION")),
+                         ~ as.character(.)))
   
   # get extent from yaml file
   extent <- unlist(str_split(yaml$extent, "\\+"))
-  
-  # make sure directory exists, create it if not
-  if(!dir.exists(file.path("data_out/"))) {
-    dir.create(file.path("data_out/"))
-  }
   
   map(extent, function(e){
     # store extent as string present in file names
@@ -80,10 +85,12 @@ add_metadata <- function(yaml,
         mutate(r_id = as.character(r_id))
     } else if (e == "polycenter") {
       if (yaml$polygon) { 
-        spatial_info <- read_csv("data_acquisition/out/user_polygon_withrowid.csv") %>% 
+        spatial_info <- read_csv(file.path(parent_path, 
+                                           "run/user_polygon_withrowid.csv")) %>% 
           mutate(r_id = as.character(r_id))
       } else {
-        spatial_info <- read_csv("data_acquisition/out/NHDPlus_polygon_centers.csv") %>% 
+        spatial_info <- read_csv(file.path(parent_path, 
+                                           "run/NHDPlus_polygon_centers.csv")) %>% 
           mutate(r_id = as.character(r_id))
       }
     } else if (e == "polygon") {
@@ -93,7 +100,8 @@ add_metadata <- function(yaml,
           st_drop_geometry() %>% 
           mutate(r_id = as.character(r_id))
       } else {
-        spatial_info <- read_csv('data_acquisition/out/NHDPlus_stats_lakes.csv') %>% 
+        spatial_info <- read_csv(file.path(parent_path, 
+                                           "run/NHDPlus_stats_lakes.csv")) %>% 
           mutate(r_id = as.character(r_id))
       }
     }
@@ -102,16 +110,16 @@ add_metadata <- function(yaml,
     # could also do this rowwise, but this method is a little faster
     df$r_id <- map_chr(.x = df$`system:index`, 
                        function(.x) {
-                         parsed <- str_split(.x, '_')
+                         parsed <- str_split(.x, "_")
                          last(unlist(parsed))
                        })
     df$system.index <- map_chr(.x = df$`system:index`, 
                                #function to grab the system index
                                function(.x) {
-                                 parsed <- str_split(.x, '_')
+                                 parsed <- str_split(.x, "_")
                                  str_len <- length(unlist(parsed))
                                  parsed_sub <- unlist(parsed)[1:(str_len-1)]
-                                 str_flatten(parsed_sub, collapse = '_')
+                                 str_flatten(parsed_sub, collapse = "_")
                                })
     
     # dswe info is stored differently in each mission group because of character length
@@ -135,11 +143,12 @@ add_metadata <- function(yaml,
       left_join(., spatial_info)
     
     # break out the DSWE 1 data
-    if (nrow(df %>% filter(DSWE == 'DSWE1')) > 0) {
+    if (nrow(df %>% filter(DSWE == "DSWE1")) > 0) {
       DSWE1 <- df %>%
-        filter(DSWE == 'DSWE1')
+        filter(DSWE == "DSWE1")
       write_feather(DSWE1,
-                    file.path("data_out/",
+                    file.path(parent_path,
+                              "out",
                               paste0(file_prefix,
                                      "_collated_DSWE1_",
                                      ext,
@@ -149,11 +158,12 @@ add_metadata <- function(yaml,
     } 
     
     # and the DSWE 1a data
-    if (nrow(df %>% filter(DSWE == 'DSWE1a')) > 0) {
+    if (nrow(df %>% filter(DSWE == "DSWE1a")) > 0) {
       DSWE1a <- df %>%
-        filter(DSWE == 'DSWE1a')
+        filter(DSWE == "DSWE1a")
       write_feather(DSWE1a,
-                    file.path("data_out",
+                    file.path(parent_path, 
+                              "out",
                               paste0(file_prefix,
                                      "_collated_DSWE1a_",
                                      ext, 
@@ -163,11 +173,12 @@ add_metadata <- function(yaml,
     }
     
     # and the DSWE 3 data
-    if (nrow(df %>% filter(DSWE == 'DSWE3')) > 0) {
+    if (nrow(df %>% filter(DSWE == "DSWE3")) > 0) {
       DSWE3 <- df %>%
-        filter(DSWE == 'DSWE3')
+        filter(DSWE == "DSWE3")
       write_feather(DSWE3,
-                    file.path("data_out",
+                    file.path(parent_path,
+                              "out",
                               paste0(file_prefix,
                                      "_collated_DSWE3_",
                                      ext,
@@ -178,11 +189,13 @@ add_metadata <- function(yaml,
   })
   
   # return the list of files from this process
-  list.files("data_out",
+  list.files(file.path(parent_path, "out"),
              pattern = file_prefix,
              full.names = TRUE) %>% 
-    #but make sure they are the specified version
+    # but make sure they are the specified version
     .[grepl(version_identifier, .)] %>% 
-    .[!grepl('filtered', .)]
+    # and make sure they don't contain 'filtered' which comes from a different 
+    # process
+    .[!grepl("filtered", .)]
   
 }
