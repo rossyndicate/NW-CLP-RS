@@ -51,6 +51,8 @@ b_site_RS_data <- list(
     }
   ),
   
+
+  # set up ee run configuration -----------------------------------------------
   
   # read and track the config file
   tar_file_read(
@@ -86,6 +88,9 @@ b_site_RS_data <- list(
     packages = c("readr", "sf")
   ),
   
+
+  # send the tasks to earth engine! -----------------------------------------
+  
   # run the Landsat pull as function per tile
   tar_target(
     name = b_eeRun,
@@ -108,6 +113,9 @@ b_site_RS_data <- list(
     },
     packages = "reticulate"
   ),
+  
+  
+  # download and collate files ----------------------------------------------
   
   # download all files
   tar_target(
