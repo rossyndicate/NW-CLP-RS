@@ -19,7 +19,11 @@ Contact B for the link to this if needed.
 and have configured a [Google Cloud Project](https://developers.google.com/earth-engine/cloud/projects) 
 and you will need to [download, install, and initialize gcloud](https://cloud.google.com/sdk/docs/install). 
 
-## Confirm `gcloud` function
+- The Earth Engine workflow has been modified from the [Landsat_C2_SRST_template](https://github.com/rossyndicate/Landsat_C2_SRST_template)
+to be able to run the ee workflow in multiple subfolders without issues with 
+{targets} or Earth Engine.
+
+## Confirm `gcloud` function:
 
 It is recommended to run the following command in your **zsh** terminal and 
 follow the prompts in  your browser to ensure that your gcloud is set up correctly.

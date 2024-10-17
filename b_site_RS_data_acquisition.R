@@ -19,7 +19,7 @@ site_yaml_file <- "nw-poudre-historical-config.yml"
 
 # Set up python virtual environment ---------------------------------------
 
-tar_source("b_site_RS_data_acquisition/py/pySetup.R")
+tar_source("pySetup.R")
 
 # Source functions --------------------------------------------------------
 
