@@ -19,7 +19,7 @@ yaml_file <- "nw-poudre-regional-config.yml"
 
 # Set up python virtual environment ---------------------------------------
 
-tar_source("c_regional_RS_data_acquisition/py/pySetup.R")
+tar_source("pySetup.R")
 
 
 # Source functions --------------------------------------------------------
