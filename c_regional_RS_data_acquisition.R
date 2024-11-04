@@ -34,9 +34,9 @@ tar_option_set(packages = c("tidyverse", "sf"))
 
 # target objects in workflow
 c_regional_RS_data <- list(
-
+  
   # check for proper directory structure ------------------------------------
-
+  
   tar_target(
     name = c_check_dir_structure,
     command = {
@@ -51,7 +51,7 @@ c_regional_RS_data <- list(
       })
     }
   ),
-
+  
   
   # set up ee run configuration -----------------------------------------------
   
@@ -67,16 +67,22 @@ c_regional_RS_data <- list(
   # load, format, save yml as a csv
   tar_target(
     name = c_yml,
-    command = format_yaml(yaml = c_config_file,
-                          parent_path = "c_regional_RS_data_acquisition"),
+    command = {
+      c_check_dir_structure
+      format_yaml(yaml = c_config_file,
+                  parent_path = "c_regional_RS_data_acquisition")
+    },
     packages = c("yaml", "tidyverse") #for some reason, you have to load TV.
   ),
   
   # load, format, save user locations as an updated csv called locs.csv
   tar_target(
     name = c_locs,
-    command = grab_locs(yaml = c_yml,
-                        parent_path = "c_regional_RS_data_acquisition")
+    command = {
+      c_check_dir_structure
+      grab_locs(yaml = c_yml,
+                parent_path = "c_regional_RS_data_acquisition")
+    }
   ),
   
   # get WRS tiles
@@ -115,9 +121,9 @@ c_regional_RS_data <- list(
     packages = "reticulate"
   ),
   
-
+  
   # download and collate files ----------------------------------------------
-
+  
   # download all files
   tar_target(
     name = c_download_files,
