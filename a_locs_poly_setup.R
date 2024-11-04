@@ -2,7 +2,6 @@
 
 tar_source("a_locs_poly_setup/src/")
 
-
 # Setting up the locations and polygon files for RS retrieval -------------
 
 # this collates a few different polygon and point files into a single
@@ -108,9 +107,9 @@ a_locs_poly_setup <- list(
     packages = "sf"
   ),
   
-
+  
   # combine NW/CLP polygons -------------------------------------------------
-
+  
   # here, we combine the NW and CLP polygons into a single file, condensing 
   # the metadata where needed 
   tar_target(
@@ -132,13 +131,14 @@ a_locs_poly_setup <- list(
     packages = "sf"
   ),
   
-
+  
   # calculate centers of the polygons ---------------------------------------
-
+  
   # from the polygons, we're going to calculate the center point for each of them
   tar_target(
     name = a_make_NW_CLP_centers,
-    command = get_POI_centers(polygons = a_NW_CLP_polygons),
+    command = get_POI_centers(polygons = a_NW_CLP_polygons,
+                              out_file = "NW_CLP_polygon_centers"),
     packages = c("tidyverse", "sf", "polylabelr")
   ),
   
@@ -150,7 +150,7 @@ a_locs_poly_setup <- list(
     packages = "sf"
   ),
   
-
+  
   # load NW station locations --------------------------------------------------
   
   # and now we'll read in the station location information for NW
@@ -212,7 +212,7 @@ a_locs_poly_setup <- list(
   
   
   # add ROSS_CLP label to data group ----------------------------------------
-
+  
   # since all the ROSS_CLP reservoirs are in NW_CLP centers and polygons files, 
   # we'll just add ROSS_CLP label to data group and make a new polygon target
   tar_target(
@@ -240,9 +240,9 @@ a_locs_poly_setup <- list(
     packages = c("tidyverse", "sf")
   ),
   
-
+  
   # pull out the ROSS_CLP centers -------------------------------------------
-
+  
   # and then we'll make the ROSS_CLP centers as a .csv
   tar_target(
     name = a_make_ROSS_CLP_centers,
@@ -265,7 +265,7 @@ a_locs_poly_setup <- list(
   
   
   # prep for RS pull --------------------------------------------------------
-
+  
   # we want the centers and the station locations to be in a single data set for 
   # use in the Landsat pull, and want to retain the metadata (aka, data group 
   # in this case)
@@ -290,6 +290,80 @@ a_locs_poly_setup <- list(
     name = a_collated_pts_to_csv,
     command = points_to_csv(points = a_collated_points, 
                             filename = "NW_CLP_all_points"),
+    packages = c("tidyverse", "sf")
+  ),
+  
+  # get EcoRegion L3 polygons ------------------------------------------------
+  
+  # we're going to pull ER L3 lake centers to create a localized handoff 
+  # coefficient. This is, in part, a side quest to see how the hand off
+  # coefficients change regionally (if at all)
+  
+  tar_target(
+    name = a_ecoregion_aoi,
+    command = {
+      temp_file <- tempfile(fileext = 'zip')
+      download.file("https://gaftp.epa.gov/EPADataCommons/ORD/Ecoregions/us/us_eco_l3.zip",
+                    destfile = temp_file)
+      temp_dir <- tempdir()
+      unzip(temp_file, exdir = temp_dir)
+      er_l3 <- read_sf(file.path(temp_dir, "us_eco_l3.shp"))
+      # filter for zone 21 only
+      er_l3 %>% filter(US_L3CODE == 21) %>% st_union()
+    },
+    packages = c("tidyverse", "sf")
+  ), 
+  
+  tar_target(
+    name = a_aoi_hucs,
+    command = get_huc(AOI = a_ecoregion_aoi,
+                      type = "huc04") %>% 
+      st_drop_geometry() %>% 
+      pull(huc4),
+    packages = c("nhdplusTools", "sf")
+  ),
+  
+  tar_target(
+    name = a_make_aoi_polygons,
+    command = get_polygons(HUC = a_aoi_hucs, 
+                           minimum_sqkm = 0.01, 
+                           ftypes = c(390, 436)),
+    packages = c("sf", "nhdplusTools", "tidyverse", "janitor"),
+    pattern = map(a_aoi_hucs)
+  ),
+  
+  tar_target(
+    name = a_aoi_polygons,
+    command = {
+      map(a_make_aoi_polygons,
+          read_sf) %>% 
+        bind_rows() %>% 
+        # there may be some tiny polygons that squeak through because there is 
+        # no minimum set for 1019 from processing the NW and CLP reservoirs
+        filter(area_sq_km >= 0.01) 
+    }
+  ),
+  
+  tar_target(
+    name = a_make_aoi_centers,
+    command = get_POI_centers(polygons = a_aoi_polygons,
+                              out_file = "er3z21_centers"),
+    packages = c("tidyverse", "sf", "polylabelr")
+  ),
+  
+  # and then track and load the centers file
+  tar_file_read(
+    name = a_aoi_centers,
+    command = a_make_aoi_centers,
+    read = read_sf(!!.x),
+    packages = "sf"
+  ),
+  
+  # and output a .csv for the RS pull
+  tar_target(
+    name = a_aoi_centers_to_csv,
+    command = points_to_csv(points = a_aoi_centers, 
+                            filename = "er3z21_centers"),
     packages = c("tidyverse", "sf")
   )
   

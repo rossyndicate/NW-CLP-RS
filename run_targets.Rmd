@@ -8,7 +8,8 @@ author: "ROSSyndicate"
 This script loads all necessary packages to run the {targets} pipeline and then
 runs it! This pipeline organizes the location and polygon information for the NW
 and CLP projects (group a), pulls and collates the RS pulls for NW and CLP 
-reservoirs (group b), ...., calculates handoff coefficients (group e),
+reservoirs (group b), pulls and collates RS pulls for all waterbodies in the 
+EcoRegion Level 3 Zone 21 AOI, ..., calculates handoff coefficients (group e),
 applies handoff coefficients (group f), then separates the NW and CLP data and 
 saves the files to the ROSSyndicate Google Drive (group g).
 
@@ -71,7 +72,7 @@ ee.Authenticate()
 ## Run the targets pipeline and output a network graph.
 
 At this point, you can run any part of the pipeline. If you run the entire pipeline,
-it may take a few hours. At this time, the pipeline will only function through the -b-
+it may take a few hours. At this time, the pipeline will only function through the -c-
 group.
 
 ```{r run_targets}
