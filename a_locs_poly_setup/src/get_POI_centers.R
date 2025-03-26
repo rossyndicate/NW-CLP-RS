@@ -71,5 +71,6 @@ get_POI_centers <- function(polygons, out_file) {
   poi_geo <- st_as_sf(poly_poi, coords = c("Longitude", "Latitude"), crs = st_crs(polygons)) %>% 
     st_transform(., "EPSG:4326") 
   write_sf(poi_geo, file.path("a_locs_poly_setup/out", paste0(out_file,".gpkg")))
-  file.path("a_locs_poly_setup/out", paste0(out_file,".gpkg"))
+  # return poi sf
+  poi_geo
 }

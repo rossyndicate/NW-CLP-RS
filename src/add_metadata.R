@@ -5,54 +5,34 @@
 #' data for downstream use
 #'
 #' @param yaml contents of the yaml .csv file
-#' @param parent_path parent filepath where the file collation is occurring
-#' @returns silently creates collated .feather files from 'mid' folder and 
-#' dumps into specified output path
+#' @param local_folder folder path where collated files are stored
+#' @param out_folder folder path where collated files with metadata should be stored
+#' @returns silently creates collated .feather files from 'local_folder' folder and 
+#' dumps into specified output path 'out_folder'
 #' 
 #' 
 add_metadata <- function(yaml,
-                         parent_path) {
+                         local_folder,
+                         out_folder) {
   
+  if (!dir.exists(out_folder)) { dir.create(out_folder, recursive = TRUE) }
+
   file_prefix <- yaml$proj
   version_identifier <- yaml$run_date
   
-  files <- list.files(file.path(parent_path, "mid"),
+  files <- list.files(local_folder,
                       pattern = file_prefix,
                       full.names = TRUE) %>% 
     # and grab the right version
     .[grepl(version_identifier, .)]
   
   # load the metadata
-  meta_file <- files[grepl("metadata", files)]
-  metadata <- read_feather(meta_file)
-  # do some metadata formatting
-  metadata_light <- metadata %>% 
-    # Landsat 4-7 and 8/9 store image quality differently, so here, we"re harmonizing this.
-    mutate(IMAGE_QUALITY = if_else(is.na(IMAGE_QUALITY), 
-                                   IMAGE_QUALITY_OLI, 
-                                   IMAGE_QUALITY)) %>% 
-    rename(system.index = `system:index`) %>% 
-    select(system.index, 
-           WRS_PATH, 
-           WRS_ROW, 
-           "mission" = SPACECRAFT_ID, 
-           "date" = DATE_ACQUIRED, 
-           "UTC_time" = SCENE_CENTER_TIME, 
-           CLOUD_COVER,
-           IMAGE_QUALITY, 
-           IMAGE_QUALITY_TIRS, 
-           SUN_AZIMUTH, 
-           SUN_ELEVATION) 
-  metadata_light <- metadata_light %>%
-    # make sure that columns for join later are as character
-    mutate(across(all_of(c("WRS_PATH", 
-                           "WRS_ROW",
-                           "CLOUD_COVER",
-                           "IMAGE_QUALITY", 
-                           "IMAGE_QUALITY_TIRS", 
-                           "SUN_AZIMUTH", 
-                           "SUN_ELEVATION")),
-                         ~ as.character(.)))
+  meta_files <- files[grepl("metadata", files)]
+  metadata <- meta_files %>% 
+    map(\(m) {
+      meta <- read_feather(m)
+    }) %>% 
+    bind_rows
   
   # get extent from yaml file
   extent <- unlist(str_split(yaml$extent, "\\+"))
@@ -60,23 +40,26 @@ add_metadata <- function(yaml,
   map(extent, function(e){
     # store extent as string present in file names
     if (e == "site") {
-      ext <- "point"
+      ext <- "site"
     } else if (e == "polycenter") {
       ext <- "center"
     } else {
       ext <- e
     }
     
-    # get file using ext
-    file <- files[grepl(ext, files)]
+    # get files using ext
+    data_files <- files[grepl(ext, files)]
     # load file
-    df <- read_feather(file) %>% 
-      mutate(mission = case_when(grepl("LT04", `system:index`) ~ "LANDSAT_4",
-                                 grepl("LT05", `system:index`) ~ "LANDSAT_5",
-                                 grepl("LE07", `system:index`) ~ "LANDSAT_7",
-                                 grepl("LC08", `system:index`) ~ "LANDSAT_8",
-                                 grepl("LC09", `system:index`) ~ "LANDSAT_9",
-                                 TRUE ~ NA_character_)) 
+    df <- data_files %>% 
+      map(\(d) read_feather(d) %>% 
+            mutate(mission = case_when(grepl("LT04", `system:index`) ~ "LANDSAT_4",
+                                       grepl("LT05", `system:index`) ~ "LANDSAT_5",
+                                       grepl("LE07", `system:index`) ~ "LANDSAT_7",
+                                       grepl("LC08", `system:index`) ~ "LANDSAT_8",
+                                       grepl("LC09", `system:index`) ~ "LANDSAT_9",
+                                       TRUE ~ NA_character_))
+      ) %>% 
+      bind_rows
     
     if (e == "site") {
       spatial_info <- read_csv(file.path(yaml$data_dir,
@@ -85,11 +68,11 @@ add_metadata <- function(yaml,
         mutate(r_id = as.character(r_id))
     } else if (e == "polycenter") {
       if (yaml$polygon) { 
-        spatial_info <- read_csv(file.path(parent_path, 
+        spatial_info <- read_csv(file.path(local_folder, 
                                            "run/user_polygon_withrowid.csv")) %>% 
           mutate(r_id = as.character(r_id))
       } else {
-        spatial_info <- read_csv(file.path(parent_path, 
+        spatial_info <- read_csv(file.path(local_folder, 
                                            "run/NHDPlus_polygon_centers.csv")) %>% 
           mutate(r_id = as.character(r_id))
       }
@@ -100,7 +83,7 @@ add_metadata <- function(yaml,
           st_drop_geometry() %>% 
           mutate(r_id = as.character(r_id))
       } else {
-        spatial_info <- read_csv(file.path(parent_path, 
+        spatial_info <- read_csv(file.path(local_folder, 
                                            "run/NHDPlus_stats_lakes.csv")) %>% 
           mutate(r_id = as.character(r_id))
       }
@@ -122,24 +105,9 @@ add_metadata <- function(yaml,
                                  str_flatten(parsed_sub, collapse = "_")
                                })
     
-    # dswe info is stored differently in each mission group because of character length
-    # so grab out mission-specific dswe info and use that to define dswe
-    mission_dswe <- df %>% 
-      group_by(mission) %>% 
-      slice(1) %>% 
-      ungroup()
-    dswe_loc <- as_tibble(str_locate(mission_dswe$source, "DSWE")) %>% 
-      rowid_to_column() %>% 
-      left_join(., mission_dswe %>% rowid_to_column()) %>% 
-      select(rowid, mission, start, end) %>% 
-      mutate(end = end + 2)
-    
     df <- df %>% 
-      select(-`system:index`) %>% 
-      left_join(., metadata_light) %>% 
-      left_join(., dswe_loc) %>% 
-      mutate(DSWE = str_sub(source, start, end), .by = mission) %>% 
-      mutate(DSWE = str_remove(DSWE, "_")) %>%
+      left_join(., metadata) %>% 
+      mutate(DSWE = str_extract(source, "DSWE\\d[a-zA-Z]?"), .by = source) %>% 
       left_join(., spatial_info)
     
     # break out the DSWE 1 data
@@ -147,8 +115,7 @@ add_metadata <- function(yaml,
       DSWE1 <- df %>%
         filter(DSWE == "DSWE1")
       write_feather(DSWE1,
-                    file.path(parent_path,
-                              "out",
+                    file.path(out_folder,
                               paste0(file_prefix,
                                      "_collated_DSWE1_",
                                      ext,
@@ -162,8 +129,7 @@ add_metadata <- function(yaml,
       DSWE1a <- df %>%
         filter(DSWE == "DSWE1a")
       write_feather(DSWE1a,
-                    file.path(parent_path, 
-                              "out",
+                    file.path(out_folder,
                               paste0(file_prefix,
                                      "_collated_DSWE1a_",
                                      ext, 
@@ -177,8 +143,7 @@ add_metadata <- function(yaml,
       DSWE3 <- df %>%
         filter(DSWE == "DSWE3")
       write_feather(DSWE3,
-                    file.path(parent_path,
-                              "out",
+                    file.path(out_folder,
                               paste0(file_prefix,
                                      "_collated_DSWE3_",
                                      ext,
@@ -189,7 +154,7 @@ add_metadata <- function(yaml,
   })
   
   # return the list of files from this process
-  list.files(file.path(parent_path, "out"),
+  list.files(out_folder,
              pattern = file_prefix,
              full.names = TRUE) %>% 
     # but make sure they are the specified version

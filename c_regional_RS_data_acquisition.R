@@ -4,23 +4,6 @@ library(reticulate)
 
 yaml_file <- "nw-poudre-regional-config.yml"
 
-# MUST READ ---------------------------------------------------------------
-
-# IMPORTANT NOTE:
-#
-# you must execute the command 'earthengine authenticate' in a zsh terminal
-# before initializing this workflow. See the repository README for complete
-# dependencies and troubleshooting.
-
-# RUNNING {TARGETS}:
-#
-# use the file 'run_targets.Rmd', which includes EE authentication.
-
-
-# Set up python virtual environment ---------------------------------------
-
-tar_source("pySetup.R")
-
 
 # Source functions --------------------------------------------------------
 
@@ -52,6 +35,23 @@ c_regional_RS_data <- list(
     }
   ),
   
+  tar_target(
+    name = c_check_Drive_regional,
+    command = {
+      config_check_drive_parent_folder
+      tryCatch({
+        drive_auth(c_yml$google_email)
+        drive_ls(paste(c_yml$proj_folder, c_yml$run_date, sep = "_v"))
+      }, error = function(e) {
+        # if the outpath doesn't exist, create it
+        drive_mkdir(name = paste(c_yml$proj_folder, c_yml$run_date, sep = "_v"),
+                    path = c_yml$drive_parent_folder)
+      })
+    },
+    packages = c("googledrive")
+  ),
+  
+  
   
   # set up ee run configuration -----------------------------------------------
   
@@ -72,7 +72,8 @@ c_regional_RS_data <- list(
       format_yaml(yaml = c_config_file,
                   parent_path = "c_regional_RS_data_acquisition")
     },
-    packages = c("yaml", "tidyverse") #for some reason, you have to load TV.
+    packages = c("yaml", "tidyverse"), 
+    cue = tar_cue("always")
   ),
   
   # load, format, save user locations as an updated csv called locs.csv
@@ -91,50 +92,91 @@ c_regional_RS_data <- list(
     command = get_WRS_tiles(detection_method = "site", 
                             yaml = c_yml, 
                             locs = c_locs,
-                            parent_path = "c_regional_RS_data_acquisition"),
-    packages = c("readr", "sf")
+                            parent_path = "c_regional_RS_data_acquisition")
   ),
   
+  # check to see that all sites and buffers are completely contained by each pathrow
+  # and assign wrs path-rows for all sites based on configuration buffer.
+  tar_target(
+    name = c_locs_filtered,
+    command = check_if_fully_within_pr(WRS_pathrow = c_WRS_tiles, 
+                                       locations = c_locs, 
+                                       parent_path = "c_regional_RS_data_acquisition",
+                                       yml = c_yml),
+    pattern = map(c_WRS_tiles),
+    packages = c("tidyverse", "sf", "arrow")
+  ),
   
   # send the tasks to earth engine! -----------------------------------------
   
   # run the Landsat pull as function per tile
   tar_target(
-    name = c_eeRun,
+    name = c_eeRun_regional,
     command = {
       c_yml
-      c_locs
+      c_locs_filtered
       run_GEE_per_tile(WRS_tile = c_WRS_tiles,
                        parent_path = "c_regional_RS_data_acquisition")
     },
     pattern = map(c_WRS_tiles),
-    packages = "reticulate"
+    packages = "reticulate",
+    deployment = "main"
   ),
   
   # wait for all earth engine tasks to be completed
   tar_target(
     name = c_ee_tasks_complete,
     command = {
-      c_eeRun
+      c_eeRun_regional
       source_python("c_regional_RS_data_acquisition/py/poi_wait_for_completion.py")
     },
-    packages = "reticulate"
+    packages = "reticulate",
+    deployment = "main"
   ),
   
   
   # download and collate files ----------------------------------------------
   
+  tar_target(
+    name = c_regional_contents,
+    command = {
+      # assure tasks complete
+      c_ee_tasks_complete
+      drive_auth(email = c_yml$google_email)
+      drive_folder <- paste0(c_yml$drive_parent_folder, 
+                             c_yml$proj_folder, 
+                             "_v", c_yml$run_date)
+      drive_ls(path = drive_folder) %>% 
+        select(name, id)
+    },
+    packages = c("tidyverse", "googledrive")
+  ),
+  
   # download all files
   tar_target(
     name = c_download_files,
-    command = {
-      c_ee_tasks_complete
-      download_csvs_from_drive(drive_folder_name = c_yml$proj_folder,
-                               google_email = c_yml$google_email,
-                               version_identifier = c_yml$run_date,
-                               parent_path = "c_regional_RS_data_acquisition")
-    },
+    command = download_csvs_from_drive(local_folder = "c_regional_RS_data_acquisition/down/",
+                                       yml = c_yml,
+                                       drive_contents = c_regional_contents),
     packages = c("tidyverse", "googledrive")
+  ),
+  
+  # detect dswe types
+  tar_target(
+    name = c_DSWE_types,
+    command = {
+      dswe = NULL
+      if (grepl("1", c_yml$DSWE_setting)) {
+        dswe = c(dswe, "DSWE1")
+      } 
+      if (grepl("1a", c_yml$DSWE_setting)) {
+        dswe = c(dswe, "DSWE1a")
+      } 
+      if (grepl("3", c_yml$DSWE_setting)) {
+        dswe = c(dswe, "DSWE3")
+      } 
+      dswe
+    }
   ),
   
   # collate all files
@@ -142,11 +184,13 @@ c_regional_RS_data <- list(
     name = c_make_collated_data_files,
     command = {
       c_download_files
-      collate_csvs_from_drive(file_prefix = c_yml$proj, 
-                              version_identifier = c_yml$run_date,
-                              parent_path = "c_regional_RS_data_acquisition")
+      collate_csvs_from_drive(local_folder = "c_regional_RS_data_acquisition/down/",
+                              yaml = c_yml,
+                              out_folder = "c_regional_RS_data_acquisition/mid/",
+                              dswe = c_DSWE_types)
     },
-    packages = c("tidyverse", "feather")
+    pattern = map(c_DSWE_types),
+    packages = c("data.table", "tidyverse", "arrow")
   ),
   
   # and collate the data with metadata
@@ -155,9 +199,10 @@ c_regional_RS_data <- list(
     command = {
       c_make_collated_data_files
       add_metadata(yaml = c_yml,
-                   parent_path = "c_regional_RS_data_acquisition")
+                   local_folder = file.path("c_regional_RS_data_acquisition/mid/", c_yml$run_date),
+                   out_folder = file.path("c_regional_RS_data_acquisition/out", c_yml$run_date))
     },
-    packages = c("tidyverse", "feather")
+    packages = c("tidyverse", "arrow")
   )
   
 )

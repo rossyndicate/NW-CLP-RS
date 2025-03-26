@@ -17,10 +17,12 @@ local_settings:
 - poly_file: "" # optional. name of the shapefile that contains the lake polygons. 
 
 google_settings:
-- proj: "NW-Poudre-Regional" # this is a short name for file naming conventions. All output files will include this prefix.
-- proj_folder: "LS-C2-SR-RegionalPoints-v2024-10-10" # this is the folder name where the GEE data will be save to Google Drive. If it doesn't exist, it will be created.
+- proj: "ER21_Landsat" # this is a short name for file naming conventions. All output files will include this prefix.
+- proj_folder: "LS_C2_RegionalPoints" # this is the folder name where the GEE data will be save to Google Drive. If it doesn't exist, it will be created.
 - ee_proj: "ee-nasa-nw" # this is the ee project name you are running your pulls from
 - google_email: "therossyndicate@gmail.com"
+- run_date: "2025-03-24"
+- drive_parent_folder: "~/NW_CLP_Project/"
 
 # The following parameters are optional and have default values listed below. 
 # If these key-values remain unaltered, date will be acquired for the entire satellite data record at the specified location only.
@@ -28,7 +30,6 @@ google_settings:
 temporal_settings: 
 - start_date: "1983-01-01" # earliest data of satellite data to be acquired; earliest data available is 1983-01-01
 - end_date: "today" # latest data of satellite data to be acquired; if 'today' is used, the date will be set to the current date
-- run_date: "2024-10-10"
 
 spatial_settings: 
 - extent: "site" # options: "site", "polygon", "polycenter", "site+poly", "site+polygon+polycenter", "polygon+polycenter" - at this time lake and lake center can only be calculated for lakes in the US
@@ -38,5 +39,5 @@ gee_settings:
 - cloud_filter: "True" # True or False - if True, scenes will be filtered by scene-level cloudy value provided in the metadata
 - cloud_thresh: 90 # scenes with a cloud value greater than this threshold will be filtered out
 - water_detection: "DSWE" # "DSWE" is currently the only option for water detection. Future iterations may include Peckel water instance or another method.
-- DSWE_setting: "1" # 1, 3, or 1+3. DSWE 1 only summarizes high confidence water pixels; DSWE 3 summarizes vegetated pixels. 
+- DSWE_setting: "1a" # 1, 3, or 1+3. DSWE 1 only summarizes high confidence water pixels; DSWE 3 summarizes vegetated pixels. 
 
