@@ -47,7 +47,8 @@ config_list <- list(
       drive_mkdir(str_sub(general_config$drive_parent_folder, 1, -2))  
     }),
     packages = "googledrive",
-    cue = tar_cue("always")
+    cue = tar_cue("always"),
+    deployment = "main"
   )
 )
 
@@ -56,11 +57,10 @@ tar_source(files = c(
   "a_locs_poly_setup.R",
   "b_site_RS_data_acquisition.R",
   "c_regional_RS_data_acquisition.R"
-))
-#    ,
-#   "d_baseline_QAQC.R",
+  ))
+#,  "d_baseline_QAQC.R",
 #   "e_calculate_handoff_coefficients.R",
-#    "f_apply_handoff_coefficients.R",
+#   "f_apply_handoff_coefficients.R",
 #   "g_separate_NW_CLP_data.R"
 # ))
 
@@ -70,7 +70,6 @@ c(config_list,
   b_site_RS_data,
   c_regional_RS_data
 )
-
 # ,
 # d_baseline_QAQC,
 # e_calculate_handoff_coefficients

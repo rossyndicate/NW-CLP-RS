@@ -48,7 +48,8 @@ c_regional_RS_data <- list(
                     path = c_yml$drive_parent_folder)
       })
     },
-    packages = c("googledrive")
+    packages = c("googledrive"),
+    deployment = "main"
   ),
   
   

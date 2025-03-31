@@ -487,10 +487,10 @@ rowid,permanent_identifier,comid,resolution,gnis_id,gnis_name,area_sq_km,reachco
 486,128076370,23001900243024,2,00177416,Horsetooth Reservoir,7.355,10190007002437,390,39009,1019,NW,NA,station,HT-DIX,HorsetoothReservoiratDixonCanyonDam,N,East,NA,206,40.5543,-105.1506
 487,128076370,23001900243024,2,00177416,Horsetooth Reservoir,7.355,10190007002437,390,39009,1019,NW,NA,station,HT-SOL,HorsetoothReservoiratSoldierCanyonDam,N,East,NA,205,40.5888,-105.1649
 488,128076370,23001900243024,2,00177416,Horsetooth Reservoir,7.355,10190007002437,390,39009,1019,NW,NA,station,HT-SPR,HorsetoothReservoiratSpringCanyonDam,N,East,NA,224,40.5292,-105.1456
-489,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,ROSS,NA,station,PTRR,Peterson Reservoir,NA,NA,Moving to match location during low periods,0,40.557137,-105.7923886
-490,128075859,23001900233302,2,00177279,Barnes Meadow Reservoir,0.404,10190007002370,390,39004,1019,"CLP, ROSS",NA,station,BRNR,Barnes Meadow Reservoir,NA,NA,Sampling location moved due to access issues,41,40.6001799,-105.8350026
-491,128076272,23001900246407,2,00202444,Long Draw Reservoir,1.37363516,10190007002472,390,39009,1019,"CLP, ROSS",NA,station,LNGR,Long Draw Reservoir,NA,NA,Moving to match location during low periods,166,40.5011373,-105.774453
-492,128075848,23001900232881,2,00198413,Chambers Lake,0.98574753,10190007025486,390,39009,1019,"CLP, ROSS",NA,station,CBRR,Chambers Lake,NA,NA,NA,54,40.6035,-105.8459
-493,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,ROSS,NA,station,JOER,Joe Wright Reservoir,NA,NA,Moving to match location during low periods,70,40.5558912,-105.8760268
-494,128075965,23001900256281,2,00177296,Comanche Reservoir,0.452,10190007002393,390,39004,1019,"CLP, ROSS",NA,station,COMR,Comanche Reservoir,NA,NA,Moving to match location during low periods,35,40.58479,-105.6507539
-495,128075977,23001900249983,2,00177295,Hourglass Reservoir,0.261,10190007002399,390,39004,1019,"CLP, ROSS",NA,station,HORR,Hourglass Reservoir,NA,NA,Moving to match location during low periods,61,40.581472,-105.632306
+489,128075859,23001900233302,2,00177279,Barnes Meadow Reservoir,0.404,10190007002370,390,39004,1019,"CLP, ROSS",NA,station,BRNR,Barnes Meadow Reservoir,NA,NA,Sampling location moved due to access issues,41,40.6001799,-105.8350026
+490,128075848,23001900232881,2,00198413,Chambers Lake,0.98574753,10190007025486,390,39009,1019,"CLP, ROSS",NA,station,CBRR,Chambers Lake,NA,NA,NA,54,40.6035,-105.8459
+491,128075965,23001900256281,2,00177296,Comanche Reservoir,0.452,10190007002393,390,39004,1019,"CLP, ROSS",NA,station,COMR,Comanche Reservoir,NA,NA,Moving to match location during low periods,56,40.5845854,-105.6465806
+492,128075977,23001900249983,2,00177295,Hourglass Reservoir,0.261,10190007002399,390,39004,1019,"CLP, ROSS",NA,station,HORR,Hourglass Reservoir,NA,NA,Moving to match location during low periods,61,40.581472,-105.632306
+493,128075992,23001900243458,2,00177277,Joe Wright Reservoir,0.604,10190007025481,390,39004,1019,"CLP, ROSS",NA,station,JOER,Joe Wright Reservoir,NA,NA,Moving to match location during low periods,36,40.55581,-105.87442
+494,128076272,23001900246407,2,00202444,Long Draw Reservoir,1.37363516,10190007002472,390,39009,1019,"CLP, ROSS",NA,station,LNGR,Long Draw Reservoir,NA,NA,Moving to match location during low periods,75,40.50097,-105.77294
+495,128076030,23001900250864,2,00177274,Peterson Lake,0.155,10190007002416,390,39009,1019,"CLP, ROSS",NA,station,PTRR,Peterson Reservoir,NA,NA,Moving to match location during low periods,87,40.55765,-105.79154

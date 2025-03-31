@@ -135,7 +135,7 @@ a_locs_poly_setup <- list(
   # in the lake and not specific to a sampling location
   tar_file_read(
     name = a_ROSS_CLP_file,
-    command = 'data/CLP/upper_poudre_lakes_v5.csv',
+    command = 'data/CLP/upper_poudre_lakes_v6.csv',
     read = read_csv(!!.x),
     packages = 'readr',
     cue = tar_cue("always")

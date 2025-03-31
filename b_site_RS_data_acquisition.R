@@ -60,7 +60,8 @@ b_site_RS_data <- list(
                     path = b_yml$drive_parent_folder)
       })
     },
-    packages = c("googledrive")
+    packages = c("googledrive"),
+    deployment = "main" # must be deployed on main for proper function with googledrive
   ),
   
   
