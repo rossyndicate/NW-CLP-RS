@@ -36,17 +36,17 @@ package_installer <- function(x) {
 List packages that need to be checked for install, and walk the function along them all.
 
 ```{r walk_package_installer}
-packages <- c("tidyverse",
-              "reticulate",
-              "targets",
-              "tarchetypes",
+packages <- c("arrow",
+              "cowplot",
+              "googledrive",
               "nhdplusTools",
               "polylabelr",
-              "sf",
               "readxl",
-              "googledrive",
-              "feather",
-              "cowplot")
+              "reticulate",
+              "sf",
+              "targets",
+              "tarchetypes",
+              "tidyverse")
 lapply(packages, package_installer)
 ```
 
