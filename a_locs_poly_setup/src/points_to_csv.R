@@ -14,10 +14,11 @@ points_to_csv <- function(points, filename){
   if(st_crs(points) != "EPSG:4326") {
     points <- st_transform(points, "EPSG:4326")
   }
+  st_coordinates(points)
   points_lat_long <- points %>% 
     rowwise() %>% 
-    mutate(Latitude = (geom[[1]][2]),
-           Longitude = (geom[[1]][1])) %>% 
+    mutate(Latitude = (geometry[[1]][2]),
+           Longitude = (geometry[[1]][1])) %>% 
     st_drop_geometry() %>% 
     rowid_to_column() 
   write_csv(points_lat_long, paste0("a_locs_poly_setup/out/", filename, ".csv"))
