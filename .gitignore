@@ -10,9 +10,7 @@ c_regional_RS_data_acquisition/mid/*
 c_regional_RS_data_acquisition/out/*
 c_regional_RS_data_acquisition/run/*
 c_regional_RS_data_acquisition/down/*
-d_historical_RS_data_collation/in/*
-d_historical_RS_data_collation/mid/*
-d_historical_RS_data_collation/out/*
+d_baseline_QAQC/out/*
 e_calculate_handoff_coefficients/mid/*
 e_calculate_handoff_coefficients/out/*
 e_calculate_handoff_coefficients/figs/*
@@ -22,6 +20,7 @@ f_apply_handoff_coefficients/figs/*
 g_separate_NW_CLP_data/out/*
 compare_masks/*
 
+# python venv folder
 env/*
 
 ## OneDrive Symlink

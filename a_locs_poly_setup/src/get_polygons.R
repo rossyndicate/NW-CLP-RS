@@ -10,7 +10,7 @@
 #' kilometers; if specified as NA_real_, no filter will be applied
 #' @param ftypes a list of FTYPE (3-digit) values to filter the waterbodies. 390 
 #' = lake/pond; 436 = res; 361 = playa
-#' @returns filepath for new {sf} file that contains the filtered polygons
+#' @returns file path to {sf} object as a geopackage that contains the filtered polygons
 #' 
 #' 
 #' 
@@ -53,6 +53,10 @@ get_polygons <-  function(HUC, minimum_sqkm, ftypes) {
       catch <- catch %>% 
         filter(huc8 == h8)
     }
+    # make sure catchment and wbd in same CRS
+    if (st_crs(wbd) != st_crs(catch)) {
+      catch <- st_transform(catch, st_crs(wbd))
+    }
     #filter for wbd in catchment, minimum size, and waterbody FTYPE
     huc_wbd <- wbd[catch,] 
     huc_wbd <- huc_wbd %>% 
@@ -61,6 +65,7 @@ get_polygons <-  function(HUC, minimum_sqkm, ftypes) {
                       "gnis_name", "area_sq_km", "reachcode", "ftype", "fcode", 
                       "vpuid")))
     write_sf(huc_wbd, paste0("a_locs_poly_setup/out/", huc_type, "_", HUC, "_NHDPlusHR_polygons.gpkg"), append = F)
-  }
-  return(paste0("a_locs_poly_setup/out/", huc_type, "_", HUC, "_NHDPlusHR_polygons.gpkg"))
+  } 
+  # return file path to gpkg
+  paste0("a_locs_poly_setup/out/", huc_type, "_", HUC, "_NHDPlusHR_polygons.gpkg")
 }
