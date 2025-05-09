@@ -113,7 +113,7 @@ if 'polycenter' in extent:
       'r_id': 'id'}))
     # load the shapefile into a Fiona object
     centers = csv_to_eeFeat(centers_csv, 'EPSG:4326')
-  else: #otherwise use the NHDPlus file
+  else: # otherwise use the NHDPlus file
     centers_csv = read_csv('c_regional_RS_data_acquisition/run/NHDPlus_polygon_centers.csv')
     centers_csv = (centers_csv.rename(columns={'poi_latitude': 'Latitude', 
       'poi_longitude': 'Longitude',
