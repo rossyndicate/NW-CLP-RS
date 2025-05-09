@@ -2015,7 +2015,7 @@ for e in extent:
                                               'pCount_swir1_glint', 'pCount_swir2_glint', 
                                               'pCount_nir_ir_glint', 'pCount_swir1_ir_glint', 'pCount_swir2_ir_glint',
                                               'prop_clouds','prop_hillShadow','mean_hillShade']))
-      #Send next task.                                        
+      # Send next task.                                        
       locs_dataOut_457_D1.start()
       print('Task sent: Landsat 4, 5, 7 DSWE 1 acquisitions for site configuration at tile ' + str(tiles))
       locs_out_457_D1a = locs_stack_ls457.map(lambda image: ref_pull_457_DSWE1a(image, feat)).flatten()
