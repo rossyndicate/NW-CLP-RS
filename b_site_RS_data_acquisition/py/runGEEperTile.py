@@ -136,7 +136,7 @@ wrs = (ee.FeatureCollection('projects/ee-ls-c2-srst/assets/WRS2_descending')
 wrs_path = int(tiles[:3])
 wrs_row = int(tiles[-3:])
 
-#grab images and apply scaling factors
+# grab images and apply scaling factors
 l7 = (ee.ImageCollection('LANDSAT/LE07/C02/T1_L2')
     .filter(ee.Filter.lt('CLOUD_COVER', ee.Number.parse(str(cloud_thresh))))
     .filterDate(yml_start, yml_end)
