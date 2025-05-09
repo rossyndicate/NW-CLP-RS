@@ -94,7 +94,7 @@ if 'polygon' in extent:
       shapes = ([ee.Geometry.Polygon(
         [[x[0], x[1]] for x in feature['geometry']['coordinates'][0]]
         ) for feature in src])
-  else: #otherwise use the NHDPlus file
+  else: # otherwise use the NHDPlus file
     # load the shapefile into a Fiona object
     with fiona.open('b_site_RS_data_acquisition/run/NHDPlus_polygon.shp') as src:
       shapes = ([ee.Geometry.Polygon(
