@@ -166,7 +166,7 @@ bns457 = (["Blue", "Green", "Red", "Nir", "Swir1", "Swir2",
   "pixel_qa", "opacity_qa", "radsat_qa", "SurfaceTemp"])
   
 
-#grab image stacks
+# grab image stacks
 l8 = (ee.ImageCollection('LANDSAT/LC08/C02/T1_L2')
     .filter(ee.Filter.lt('CLOUD_COVER', ee.Number.parse(str(cloud_thresh))))
     .filterDate(yml_start, yml_end)
