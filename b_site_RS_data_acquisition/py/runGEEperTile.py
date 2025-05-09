@@ -235,7 +235,7 @@ def apply_rad_mask(image):
       ee.Image with additional band called 'radsat', where pixels with a value 
       of 0 are saturated for at least one SR band and a value of 1 is not saturated
   """
-  #grab the radsat band
+  # grab the radsat band
   satQA = image.select('radsat_qa')
   # all must be non-saturated per pixel
   satMask = satQA.eq(0)
