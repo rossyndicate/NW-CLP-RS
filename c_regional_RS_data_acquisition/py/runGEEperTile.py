@@ -10,7 +10,7 @@ from pandas import read_csv
 yml = read_csv('c_regional_RS_data_acquisition/run/yml.csv')
 
 eeproj = yml['ee_proj'][0]
-#initialize GEE
+# initialize GEE
 ee.Initialize(project = eeproj)
 
 # get current tile
