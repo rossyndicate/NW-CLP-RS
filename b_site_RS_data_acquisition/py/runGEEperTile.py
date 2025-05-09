@@ -85,7 +85,7 @@ if 'site' in extent:
 
 
 if 'polygon' in extent:
-  #if polygon is in extent, check for shapefile
+  # if polygon is in extent, check for shapefile
   shapefile = yml['polygon'][0]
   # if shapefile provided by user 
   if shapefile == True:
