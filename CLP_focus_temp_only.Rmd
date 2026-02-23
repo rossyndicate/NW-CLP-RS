@@ -1,0 +1,99 @@
+---
+title: "CLP RS-
+derived Temperature Data"
+author: "ROSSyndicate"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(here)
+library(arrow)
+library(EDIutils)
+```
+
+# Purpose
+
+This document pulls in the CLP remote sensing surface temperature data from
+the 2024-10-10 pull and applies the AquaSat thermal handoff coefficients
+for use in CLP historical analyses.
+
+```{r}
+CLP_RS <- read_feather(here("b_site_RS_data_acquisition/out/NW_Poudre_Historical_collated_DSWE1_point_meta_v2024-10-10.feather")) %>% 
+  mutate(across(c(pCount_dswe1, pCount_dswe_gt0, prop_clouds, 
+                  med_SurfaceTemp, sd_SurfaceTemp),
+                ~ as.numeric(.))) %>% 
+  select(-any_of(ends_with(c("Red", "Blue", "Green", "Nir", "Swir1", "Swir2")))) %>% 
+  filter(pCount_dswe1/pCount_dswe_gt0 > .5 & 
+           pCount_dswe1 > 8 & 
+           prop_clouds == 0 &
+           CLOUD_COVER < 50 &
+           between(med_SurfaceTemp, 273.15, 313.15) &
+           # sd_SurfaceTemp < 1, 
+           grepl("CLP", data_group) &
+           between(month(date), 5, 10)) 
+
+# filter for waterbodies of interest
+these_res <- CLP_RS %>% 
+  filter(grepl("ROSS_CLP", data_group)) %>% 
+  pull(gnis_name) %>% 
+  unique() %>% 
+  .[!(. %in% c("Horsetooth Reservoir", 
+               "Shadow Mountain Lake",
+               "Grand Lake"))]
+
+CLP_filtered <- CLP_RS %>% 
+  filter(gnis_name %in% these_res)
+```
+
+Do a quick visualization:
+
+```{r}
+ggplot(CLP_filtered, aes(x = yday(date), y = med_SurfaceTemp, color = sd_SurfaceTemp)) +
+  geom_point() +
+  facet_grid(gnis_name ~ .) +
+  theme_bw()
+```
+
+And now, apply the AquaSat handoffs for temp data to harmonize 
+between missions.
+
+```{r}
+handoffs <- read_csv(read_data_entity(packageId = "edi.2114.1", 
+                           entityId = "ed5fbd7bdfadd91a4e1d00c2b0d7e433"                          
+                          )) %>% 
+  filter(band == "med_SurfaceTemp" & 
+           dswe == "DSWE1" &
+           method == "deming" &
+           sat_to == "LS7")
+
+# apply coefficients to timeseries data
+CLP_filtered <- CLP_filtered %>% 
+  mutate(sat_corr = case_when(mission == "LANDSAT_4" ~ "LS5", # landsat 4 is roughly the same as 5
+                         mission == "LANDSAT_5" ~ "LS5",
+                         mission == "LANDSAT_7" ~ "LS7",
+                         mission == "LANDSAT_8" ~ "LS8",
+                         mission == "LANDSAT_9" ~ "LS8", # landsat 9 is roughly the same as 8
+                         .default = NA_character_)) %>% 
+  left_join(., handoffs) %>% 
+  mutate(med_SurfaceTemp_corr = intercept + med_SurfaceTemp*slope)
+
+```
+
+And plot again to check.
+
+```{r}
+ggplot(CLP_filtered, aes(x = yday(date), y = med_SurfaceTemp_corr, color = sd_SurfaceTemp)) +
+  geom_point() +
+  facet_grid(gnis_name ~ .) +
+  theme_bw()
+```
+
+Export file
+
+```{r}
+write_parquet(CLP_filtered, here("../regional-clarity-RS-model/data/derived/remote_sensing/landsat_sdd/CLP_temp_estimate_v2024-10-10.parquet"))
+
+```
+
